@@ -1,0 +1,329 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_statemachine.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .ram_code,"ax",%progbits
+  18              	 .align 2
+  19              	 .global CCU80_0_IRQHandler
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	CCU80_0_IRQHandler:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c"
+   1:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**
+   2:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @file pmsm_foc_statemachine.c
+   3:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @date 2015-12-17
+   4:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+   5:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @cond
+   6:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+   7:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+   9:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * All rights reserved.
+  11:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  12:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * following conditions are met:
+  14:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  15:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   disclaimer.
+  17:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  18:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  21:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  24:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  32:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+  35:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  36:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @file pmsm_foc_statemachine.c
+  37:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @date 17 Dec, 2015
+  38:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @version 1.0.0
+  39:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  40:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  42:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  46:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * History
+  47:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  48:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * 17 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *      Initial version
+  50:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * @endcond
+  51:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  *
+  52:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  */
+  53:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  54:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**************************************************************************************************
+  55:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * HEADER FILES
+  56:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+  57:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  58:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #include <XMC1300.h>                      /* SFR declarations of the selected device */
+  59:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #include "pmsm_foc_statemachine.h"
+  60:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  61:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**************************************************************************************************
+  62:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * MACROS
+  63:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+  64:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define DEGREE_60       (10922U)                   /* 60° angle (0 ~ 2^16 represent electrical ang
+  65:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define RATIO_T0_111    (2U)                       /* = 2 for standard SVM. */
+  66:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define PERIOD_OF_PWM   ((uint16_t)PERIOD_REG + 1U) /* Period of a CCU8 PWM. */
+  67:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define RATIO_T0_111    (2U)                       /* = 2 for standard SVM.*/
+  68:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define CCU8_PERIOD_2ND  (PERIOD_REG - TZ_PZVX2-1)   // Second CCU83 period, for ADC trigger
+  69:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define SPEED_SS_THRESHOLD ((SPEED_HIGH_LIMIT * 3U) >> 2U)
+  70:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define FOC_EXIT_SPEED  (SPEED_LOW_LIMIT * 3)
+  71:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #define NON_REALTIME_RATE 64
+  72:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  73:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  74:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**************************************************************************************************
+  75:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * GLOBAL DATA
+  76:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+  77:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  78:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern MotorControlType Motor; /* Motor control information */
+  79:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern SVMType SVM; /* SVM information, such as sector 0 ~ 5 (A ~ F) in SVM space vector hexagon. *
+  80:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern FOCOutputType FOCOutput; /* Output for FOC LIB. */
+  81:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern FOCInputType FOCInput; /* Parameters input for FOC LIB. */
+  82:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern Car2PolType Car2Polar;
+  83:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern CurrentType Current; /* Motor current and current space vector. */
+  84:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern PLL_EstimatorType PLL_Estimator;
+  85:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern ADCType ADC;
+  86:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** extern const uint16_t Sinus60_tab[];  /* Sine LUT used for SVM calculations, array size 256 or 1024
+  87:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**************************************************************************************************
+  88:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * LOCAL ROUTINES
+  89:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  **************************************************************************************************
+  90:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  91:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void DirectFOCStartUp_CCU80_0_IRQHandler(void);
+  92:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void DirectFOCIQStartUp_CCU80_0_IRQHandler(void);
+  93:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void DirectFOCVQStartUp_CCU80_0_IRQHandler(void);
+  94:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void VF_FOC_CCU80_0_IRQHandler(void);
+  95:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void VF_ONLY_CCU80_0_IRQHandler(void);
+  96:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  97:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #if (MY_FOC_CONTROL_SCHEME == CONSTANT_TORQUE_DIRECT_FOC)
+  98:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /*
+  99:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * Periodic CCU80 Period Match Interrupt, function called every CCU8 PWM cycle
+ 100:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  * It is the state machine of Sensorless FOC
+ 101:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****  */
+ 102:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** RAM_ATTRIBUTE void DirectFOCIQStartUp_CCU80_0_IRQHandler(void)
+ 103:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** {
+  26              	 .loc 1 103 0
+  27              	 .cfi_startproc
+  28 0000 10B5     	 push {r4,lr}
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 4,-8
+  31              	 .cfi_offset 14,-4
+ 104:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 105:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 106:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   switch (Motor.State)
+  32              	 .loc 1 106 0
+  33 0002 184C     	 ldr r4,.L11
+  34 0004 E36A     	 ldr r3,[r4,#44]
+  35 0006 022B     	 cmp r3,#2
+  36 0008 28D0     	 beq .L3
+  37 000a 12D9     	 bls .L10
+  38 000c 032B     	 cmp r3,#3
+  39 000e 0DD0     	 beq .L6
+  40 0010 062B     	 cmp r3,#6
+  41 0012 20D1     	 bne .L2
+ 107:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 	{
+ 108:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****     case FOC_CLOSED_LOOP:
+ 109:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 110:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 111:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       if(SVM.SVM_Flag == SVM_USE_PZV)
+ 112:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       {
+ 113:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****         ADC34_TriggerSetting(&ADC);
+ 114:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****         ADC.Result_Flag = RESULTS_ADCTZ12;
+ 115:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       }
+ 116:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       else
+ 117:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       {
+ 118:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****         /* For next ADC interrupt, to read ADC results of standard SVM (4-segment).*/
+ 119:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****         ADC.Result_Flag = RESULTS_STANDARD_SVM;
+ 120:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       }
+ 121:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 122:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** #endif
+ 123:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 124:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       /* Execution time: 22us */
+ 125:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       //XMC_GPIO_SetOutputHigh(P1_2);
+ 126:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       FOC_Torque_Controller();                          /* Toggle LED in Main.c, CPU load = 28.2 us
+ 127:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       //XMC_GPIO_SetOutputLow(P1_2);
+ 128:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 129:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 130:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       /********************************** Misc_Works_of_FOC ();************************************
+ 131:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       Misc_Works_of_FOC();
+ 132:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 133:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 134:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** /**********************************   PWMSVM01_Update((Car2Polar.Vref32 >> CORDIC_SHIFT), (Car2Pola
+ 135:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 136:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       PWMSVM01_Update(Car2Polar.Vref32 >> CORDIC_SHIFT, Car2Polar.Vref_AngleQ31 >> 16U);
+ 137:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 138:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       /* Record SVM sector information. */
+ 139:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       FOCOutput.New_SVM_SectorNo = SVM.CurrentSectorNo;
+ 140:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 141:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****         break;
+ 142:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			case BRAKE_BOOTSTRAP:
+ 143:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			  /* Brake the motor before motor startup. Charge gate driver bootstrap capacitors (if any)*/
+ 144:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge ();
+ 145:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+ 146:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 147:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			case STOP_MOTOR:
+ 148:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 149:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				Stop_Motor ();
+ 150:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+ 151:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 152:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			case PRE_POSITIONING:
+ 153:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 154:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				DirectFOCRotor_Pre_Positioning ();
+  42              	 .loc 1 154 0
+  43 0014 FFF7FEFF 	 bl DirectFOCRotor_Pre_Positioning
+  44              	.LVL0:
+  45              	.L8:
+ 155:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+ 156:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 157:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			default:
+ 158:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				/* For trap protection if CCU8_TRAP_ENABLE (CCU8 TRAP functionality enabled)*/
+ 159:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				Error_Handling ();
+ 160:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 161:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+ 162:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 		}
+ 163:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 164:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   /* CCU4_Debug3Output(Current.I_U, 1, 11, Current.I_V, 1, 11); */
+ 165:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 166:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   /*
+ 167:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****    * Miscellaneous works in CCU80_0_IRQHandler, such as tasks that don't need real-time computing.
+ 168:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****    * Execution time: 1.65us
+ 169:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****    */
+ 170:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   /**********************************   Misc_Works_of_IRQ ();**************************************
+ 171:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 172:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   Misc_Works_of_IRQ ();
+  46              	 .loc 1 172 0
+  47 0018 FFF7FEFF 	 bl Misc_Works_of_IRQ
+  48              	.LVL1:
+ 173:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   Motor.speed_in_rpm = (Motor.Speed * SPEED_TO_RPM ) >> SCALE_SPEED_TO_RPM;
+  49              	 .loc 1 173 0
+  50 001c A268     	 ldr r2,[r4,#8]
+ 174:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 175:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** }
+  51              	 .loc 1 175 0
+  52              	 
+ 173:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****   Motor.speed_in_rpm = (Motor.Speed * SPEED_TO_RPM ) >> SCALE_SPEED_TO_RPM;
+  53              	 .loc 1 173 0
+  54 001e D300     	 lsl r3,r2,#3
+  55 0020 9B18     	 add r3,r3,r2
+  56 0022 9A01     	 lsl r2,r3,#6
+  57 0024 9B18     	 add r3,r3,r2
+  58 0026 DB0A     	 lsr r3,r3,#11
+  59 0028 2361     	 str r3,[r4,#16]
+  60              	 .loc 1 175 0
+  61 002a 10BD     	 pop {r4,pc}
+  62              	.L6:
+ 149:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+  63              	 .loc 1 149 0
+  64 002c FFF7FEFF 	 bl Stop_Motor
+  65              	.LVL2:
+ 150:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  66              	 .loc 1 150 0
+  67 0030 F2E7     	 b .L8
+  68              	.L10:
+ 106:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 	{
+  69              	 .loc 1 106 0
+  70 0032 002B     	 cmp r3,#0
+  71 0034 0FD1     	 bne .L2
+ 126:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c ****       //XMC_GPIO_SetOutputLow(P1_2);
+  72              	 .loc 1 126 0
+  73 0036 FFF7FEFF 	 bl FOC_Torque_Controller
+  74              	.LVL3:
+ 131:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  75              	 .loc 1 131 0
+  76 003a FFF7FEFF 	 bl Misc_Works_of_FOC
+  77              	.LVL4:
+ 136:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  78              	 .loc 1 136 0
+  79 003e 0A4B     	 ldr r3,.L11+4
+  80 0040 9A68     	 ldr r2,[r3,#8]
+  81 0042 D989     	 ldrh r1,[r3,#14]
+  82 0044 900B     	 lsr r0,r2,#14
+  83 0046 80B2     	 uxth r0,r0
+  84 0048 FFF7FEFF 	 bl PWMSVM01_Update
+  85              	.LVL5:
+ 139:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  86              	 .loc 1 139 0
+  87 004c 074B     	 ldr r3,.L11+8
+  88 004e 1A88     	 ldrh r2,[r3]
+  89 0050 074B     	 ldr r3,.L11+12
+  90 0052 5A83     	 strh r2,[r3,#26]
+ 141:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 			case BRAKE_BOOTSTRAP:
+  91              	 .loc 1 141 0
+  92 0054 E0E7     	 b .L8
+  93              	.L2:
+ 159:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+  94              	 .loc 1 159 0
+  95 0056 FFF7FEFF 	 bl Error_Handling
+  96              	.LVL6:
+ 161:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 		}
+  97              	 .loc 1 161 0
+  98 005a DDE7     	 b .L8
+  99              	.L3:
+ 144:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 				break;
+ 100              	 .loc 1 144 0
+ 101 005c FFF7FEFF 	 bl DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge
+ 102              	.LVL7:
+ 145:../PMSM_FOC/Interrupts/pmsm_foc_statemachine.c **** 
+ 103              	 .loc 1 145 0
+ 104 0060 DAE7     	 b .L8
+ 105              	.L12:
+ 106 0062 C046     	 .align 2
+ 107              	.L11:
+ 108 0064 00000000 	 .word Motor
+ 109 0068 00000000 	 .word Car2Polar
+ 110 006c 00000000 	 .word SVM
+ 111 0070 00000000 	 .word FOCOutput
+ 112              	 .cfi_endproc
+ 113              	.LFE201:
+ 115              	 .text
+ 116              	.Letext0:
+ 117              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 118              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 119              	 .file 4 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\midsys\\pmsm_foc_pwmsvm.h"
+ 120              	 .file 5 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\controlmodules\\pmsm_foc_functions.h"
+ 121              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 122              	 .file 7 "../PMSM_FOC/Interrupts/..\\ControlModules\\pmsm_foc_directfoc_startup.h"
+ 123              	 .file 8 "../PMSM_FOC/Interrupts/..\\ControlModules\\pmsm_foc_interface.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_statemachine.c
+    {standard input}:18     .ram_code:00000000 $t
+    {standard input}:23     .ram_code:00000000 CCU80_0_IRQHandler
+    {standard input}:108    .ram_code:00000064 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+DirectFOCRotor_Pre_Positioning
+Misc_Works_of_IRQ
+Stop_Motor
+FOC_Torque_Controller
+Misc_Works_of_FOC
+PWMSVM01_Update
+Error_Handling
+DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge
+Motor
+Car2Polar
+SVM
+FOCOutput

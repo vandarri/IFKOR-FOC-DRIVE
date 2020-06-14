@@ -1,0 +1,232 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "gpio.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.GPIO_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global GPIO_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	GPIO_Init:
+  24              	.LFB101:
+  25              	 .file 1 "../PMSM_FOC/MCUInit/gpio.c"
+   1:../PMSM_FOC/MCUInit/gpio.c **** /**
+   2:../PMSM_FOC/MCUInit/gpio.c ****  * @file gpio.c
+   3:../PMSM_FOC/MCUInit/gpio.c ****  * @date 2015-12-15
+   4:../PMSM_FOC/MCUInit/gpio.c ****  *
+   5:../PMSM_FOC/MCUInit/gpio.c ****  * @cond
+   6:../PMSM_FOC/MCUInit/gpio.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MCUInit/gpio.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MCUInit/gpio.c ****  *
+   9:../PMSM_FOC/MCUInit/gpio.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MCUInit/gpio.c ****  * All rights reserved.
+  11:../PMSM_FOC/MCUInit/gpio.c ****  *
+  12:../PMSM_FOC/MCUInit/gpio.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MCUInit/gpio.c ****  * following conditions are met:
+  14:../PMSM_FOC/MCUInit/gpio.c ****  *
+  15:../PMSM_FOC/MCUInit/gpio.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MCUInit/gpio.c ****  *   disclaimer.
+  17:../PMSM_FOC/MCUInit/gpio.c ****  *
+  18:../PMSM_FOC/MCUInit/gpio.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MCUInit/gpio.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MCUInit/gpio.c ****  *
+  21:../PMSM_FOC/MCUInit/gpio.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MCUInit/gpio.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MCUInit/gpio.c ****  *
+  24:../PMSM_FOC/MCUInit/gpio.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MCUInit/gpio.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MCUInit/gpio.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MCUInit/gpio.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MCUInit/gpio.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MCUInit/gpio.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MCUInit/gpio.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MCUInit/gpio.c ****  *
+  32:../PMSM_FOC/MCUInit/gpio.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MCUInit/gpio.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MCUInit/gpio.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MCUInit/gpio.c ****  *
+  36:../PMSM_FOC/MCUInit/gpio.c ****  * @file gpio.c
+  37:../PMSM_FOC/MCUInit/gpio.c ****  * @date 15 Dec, 2015
+  38:../PMSM_FOC/MCUInit/gpio.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MCUInit/gpio.c ****  *
+  40:../PMSM_FOC/MCUInit/gpio.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MCUInit/gpio.c ****  *
+  42:../PMSM_FOC/MCUInit/gpio.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MCUInit/gpio.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MCUInit/gpio.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MCUInit/gpio.c ****  *
+  46:../PMSM_FOC/MCUInit/gpio.c ****  * History
+  47:../PMSM_FOC/MCUInit/gpio.c ****  *
+  48:../PMSM_FOC/MCUInit/gpio.c ****  * 15 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MCUInit/gpio.c ****  *      Initial version
+  50:../PMSM_FOC/MCUInit/gpio.c ****  * @endcond
+  51:../PMSM_FOC/MCUInit/gpio.c ****  *
+  52:../PMSM_FOC/MCUInit/gpio.c ****  */
+  53:../PMSM_FOC/MCUInit/gpio.c **** 
+  54:../PMSM_FOC/MCUInit/gpio.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MCUInit/gpio.c ****  * HEADER FILES
+  56:../PMSM_FOC/MCUInit/gpio.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MCUInit/gpio.c **** #include <XMC1300.h>							/*SFR declarations of the selected device */
+  58:../PMSM_FOC/MCUInit/gpio.c **** #include "gpio.h"
+  59:../PMSM_FOC/MCUInit/gpio.c **** 
+  60:../PMSM_FOC/MCUInit/gpio.c **** /**************************************************************************************************
+  61:../PMSM_FOC/MCUInit/gpio.c ****  * DATA STRUCTURES
+  62:../PMSM_FOC/MCUInit/gpio.c ****  **************************************************************************************************
+  63:../PMSM_FOC/MCUInit/gpio.c **** /**
+  64:../PMSM_FOC/MCUInit/gpio.c ****  *  Data Structure initialization - GPIO Configuration for Gate Driver enable pin .
+  65:../PMSM_FOC/MCUInit/gpio.c ****  */
+  66:../PMSM_FOC/MCUInit/gpio.c **** XMC_GPIO_CONFIG_t IO_PadConfig_Pushpull  =
+  67:../PMSM_FOC/MCUInit/gpio.c **** {
+  68:../PMSM_FOC/MCUInit/gpio.c ****   .mode            = (XMC_GPIO_MODE_t)XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+  69:../PMSM_FOC/MCUInit/gpio.c ****   .output_level    = (XMC_GPIO_OUTPUT_LEVEL_t)ENABLE_LEVEL,
+  70:../PMSM_FOC/MCUInit/gpio.c **** 
+  71:../PMSM_FOC/MCUInit/gpio.c ****   .input_hysteresis= XMC_GPIO_INPUT_HYSTERESIS_STANDARD
+  72:../PMSM_FOC/MCUInit/gpio.c **** 
+  73:../PMSM_FOC/MCUInit/gpio.c **** };
+  74:../PMSM_FOC/MCUInit/gpio.c **** 
+  75:../PMSM_FOC/MCUInit/gpio.c **** 
+  76:../PMSM_FOC/MCUInit/gpio.c **** /**************************************************************************************************
+  77:../PMSM_FOC/MCUInit/gpio.c ****  * API IMPLEMENTATION
+  78:../PMSM_FOC/MCUInit/gpio.c ****  **************************************************************************************************
+  79:../PMSM_FOC/MCUInit/gpio.c **** 
+  80:../PMSM_FOC/MCUInit/gpio.c **** /* API to initialize GPIO pins used */
+  81:../PMSM_FOC/MCUInit/gpio.c **** void GPIO_Init(void)
+  82:../PMSM_FOC/MCUInit/gpio.c **** {
+  26              	 .loc 1 82 0
+  27              	 .cfi_startproc
+  28 0000 10B5     	 push {r4,lr}
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 4,-8
+  31              	 .cfi_offset 14,-4
+  83:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.11 as gate driver enable pin */
+  84:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_Init(INVERTER_EN_PIN, &IO_PadConfig_Pushpull);
+  32              	 .loc 1 84 0
+  33 0002 174C     	 ldr r4,.L2
+  34 0004 0B21     	 mov r1,#11
+  35 0006 201C     	 mov r0,r4
+  36 0008 164A     	 ldr r2,.L2+4
+  37 000a FFF7FEFF 	 bl XMC_GPIO_Init
+  38              	.LVL0:
+  85:../PMSM_FOC/MCUInit/gpio.c **** 
+  86:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.0	ALT5 CCU80.OUT00 */
+  87:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_U_HS_PIN, PHASE_U_HS_ALT_SELECT);
+  39              	 .loc 1 87 0
+  40 000e 201C     	 mov r0,r4
+  41 0010 0021     	 mov r1,#0
+  42 0012 A822     	 mov r2,#168
+  43 0014 FFF7FEFF 	 bl XMC_GPIO_SetMode
+  44              	.LVL1:
+  88:../PMSM_FOC/MCUInit/gpio.c **** 
+  89:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.1 ALT5 CCU80.OUT01 */
+  90:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_U_LS_PIN, PHASE_U_LS_ALT_SELECT);
+  45              	 .loc 1 90 0
+  46 0018 201C     	 mov r0,r4
+  47 001a 0121     	 mov r1,#1
+  48 001c A822     	 mov r2,#168
+  49 001e FFF7FEFF 	 bl XMC_GPIO_SetMode
+  50              	.LVL2:
+  91:../PMSM_FOC/MCUInit/gpio.c **** 
+  92:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.2 ALT7 CCU80.OUT10 */
+  93:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_V_HS_PIN, PHASE_V_HS_ALT_SELECT);
+  51              	 .loc 1 93 0
+  52 0022 201C     	 mov r0,r4
+  53 0024 0221     	 mov r1,#2
+  54 0026 B822     	 mov r2,#184
+  55 0028 FFF7FEFF 	 bl XMC_GPIO_SetMode
+  56              	.LVL3:
+  94:../PMSM_FOC/MCUInit/gpio.c **** 
+  95:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.3 ALT7 CCU80.OUT11 */
+  96:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_V_LS_PIN, PHASE_V_LS_ALT_SELECT);
+  57              	 .loc 1 96 0
+  58 002c 201C     	 mov r0,r4
+  59 002e 0321     	 mov r1,#3
+  60 0030 B822     	 mov r2,#184
+  61 0032 FFF7FEFF 	 bl XMC_GPIO_SetMode
+  62              	.LVL4:
+  97:../PMSM_FOC/MCUInit/gpio.c **** 
+  98:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.8 ALT5 CCU80.OUT20 */
+  99:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_W_HS_PIN, PHASE_W_HS_ALT_SELECT);
+  63              	 .loc 1 99 0
+  64 0036 201C     	 mov r0,r4
+  65 0038 0821     	 mov r1,#8
+  66 003a A822     	 mov r2,#168
+  67 003c FFF7FEFF 	 bl XMC_GPIO_SetMode
+  68              	.LVL5:
+ 100:../PMSM_FOC/MCUInit/gpio.c **** 
+ 101:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.9 ALT5 CCU80.OUT21 */
+ 102:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(PHASE_W_LS_PIN, PHASE_W_LS_ALT_SELECT);
+  69              	 .loc 1 102 0
+  70 0040 201C     	 mov r0,r4
+  71 0042 0921     	 mov r1,#9
+  72 0044 A822     	 mov r2,#168
+  73 0046 FFF7FEFF 	 bl XMC_GPIO_SetMode
+  74              	.LVL6:
+ 103:../PMSM_FOC/MCUInit/gpio.c **** 
+ 104:../PMSM_FOC/MCUInit/gpio.c **** 	/* P0.12 as CCU80 Trap input, internal pull-up */
+ 105:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode(TRAP_PIN, XMC_GPIO_MODE_INPUT_PULL_UP);
+  75              	 .loc 1 105 0
+  76 004a 201C     	 mov r0,r4
+  77 004c 0C21     	 mov r1,#12
+  78 004e 1022     	 mov r2,#16
+  79 0050 FFF7FEFF 	 bl XMC_GPIO_SetMode
+  80              	.LVL7:
+ 106:../PMSM_FOC/MCUInit/gpio.c **** 
+ 107:../PMSM_FOC/MCUInit/gpio.c **** 	XMC_GPIO_SetMode (TEST_PIN,XMC_GPIO_MODE_OUTPUT_PUSH_PULL);
+  81              	 .loc 1 107 0
+  82 0054 0448     	 ldr r0,.L2+8
+  83 0056 0421     	 mov r1,#4
+  84 0058 8022     	 mov r2,#128
+  85 005a FFF7FEFF 	 bl XMC_GPIO_SetMode
+  86              	.LVL8:
+ 108:../PMSM_FOC/MCUInit/gpio.c **** 
+ 109:../PMSM_FOC/MCUInit/gpio.c **** }
+  87              	 .loc 1 109 0
+  88              	 
+  89 005e 10BD     	 pop {r4,pc}
+  90              	.L3:
+  91              	 .align 2
+  92              	.L2:
+  93 0060 00000440 	 .word 1074003968
+  94 0064 00000000 	 .word .LANCHOR0
+  95 0068 00010440 	 .word 1074004224
+  96              	 .cfi_endproc
+  97              	.LFE101:
+  99              	 .global IO_PadConfig_Pushpull
+ 100              	 .section .data.IO_PadConfig_Pushpull,"aw",%progbits
+ 101              	 .align 2
+ 102              	 .set .LANCHOR0,.+0
+ 105              	IO_PadConfig_Pushpull:
+ 106 0000 80       	 .byte -128
+ 107 0001 00       	 .byte 0
+ 108 0002 0000     	 .space 2
+ 109 0004 01000000 	 .word 1
+ 110              	 .text
+ 111              	.Letext0:
+ 112              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 113              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 114              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_gpio.h"
+ 115              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_gpio.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gpio.c
+    {standard input}:18     .text.GPIO_Init:00000000 $t
+    {standard input}:23     .text.GPIO_Init:00000000 GPIO_Init
+    {standard input}:93     .text.GPIO_Init:00000060 $d
+    {standard input}:105    .data.IO_PadConfig_Pushpull:00000000 IO_PadConfig_Pushpull
+    {standard input}:101    .data.IO_PadConfig_Pushpull:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_GPIO_Init
+XMC_GPIO_SetMode

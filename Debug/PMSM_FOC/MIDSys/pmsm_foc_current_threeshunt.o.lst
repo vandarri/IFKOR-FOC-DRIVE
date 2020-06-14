@@ -1,0 +1,387 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_current_threeshunt.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.Get_Current_Bias,"ax",%progbits
+  18              	 .align 2
+  19              	 .global Get_Current_Bias
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	Get_Current_Bias:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c"
+   1:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /**
+   2:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @file pmsm_foc_current_threeshunt.c
+   3:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @date 2015-12-15
+   4:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+   5:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @cond
+   6:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+   9:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * All rights reserved.
+  11:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  12:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * following conditions are met:
+  14:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  15:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   disclaimer.
+  17:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  18:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  21:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  24:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  32:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  36:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @file pmsm_foc_current_threeshunt.c
+  37:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @date 15 Dec, 2015
+  38:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  40:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  42:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  46:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * History
+  47:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  48:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * 15 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *      Initial version
+  50:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * @endcond
+  51:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  *
+  52:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  */
+  53:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  54:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * HEADER FILES
+  56:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** #include <XMC1300.h>
+  58:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** #include "pmsm_foc_current_threeshunt.h"
+  59:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  60:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /**************************************************************************************************
+  61:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * MACROS
+  62:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  **************************************************************************************************
+  63:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** #define INIT_ADC_BIAS   (2048)
+  64:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  65:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /**************************************************************************************************
+  66:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * GLOBAL DATA
+  67:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** ***************************************************************************************************
+  68:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** extern ADCType ADC;
+  69:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  70:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /* Motor current and current space vector */
+  71:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** extern CurrentType Current;
+  72:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  73:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /**************************************************************************************************
+  74:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  * API IMPLEMENTATION
+  75:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****  **************************************************************************************************
+  76:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  77:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /* API to initialize value of 12-bit VADC bias, external amplifiers bias at about 2.5V */
+  78:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** void Get_Current_Bias(void)
+  79:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** {
+  26              	 .loc 1 79 0
+  27              	 .cfi_startproc
+  80:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	/* Init ADC bias */
+  81:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Bias = INIT_ADC_BIAS;
+  28              	 .loc 1 81 0
+  29 0000 8022     	 mov r2,#128
+  30 0002 054B     	 ldr r3,.L2
+  31 0004 1201     	 lsl r2,r2,#4
+  32 0006 DA62     	 str r2,[r3,#44]
+  82:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  83:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Bias_Iu = INIT_ADC_BIAS;
+  33              	 .loc 1 83 0
+  34 0008 9A60     	 str r2,[r3,#8]
+  84:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Bias_Iv = INIT_ADC_BIAS;
+  35              	 .loc 1 84 0
+  36 000a DA60     	 str r2,[r3,#12]
+  85:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Bias_Iw = INIT_ADC_BIAS;
+  37              	 .loc 1 85 0
+  38 000c 1A61     	 str r2,[r3,#16]
+  86:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  87:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Iu = INIT_ADC_BIAS;
+  39              	 .loc 1 87 0
+  40 000e 1A80     	 strh r2,[r3]
+  88:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Iv = INIT_ADC_BIAS;
+  41              	 .loc 1 88 0
+  42 0010 5A80     	 strh r2,[r3,#2]
+  89:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 	ADC.ADC_Iw = INIT_ADC_BIAS;
+  43              	 .loc 1 89 0
+  44 0012 9A80     	 strh r2,[r3,#4]
+  90:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  91:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  92:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** }
+  45              	 .loc 1 92 0
+  46              	 
+  47 0014 7047     	 bx lr
+  48              	.L3:
+  49 0016 C046     	 .align 2
+  50              	.L2:
+  51 0018 00000000 	 .word ADC
+  52              	 .cfi_endproc
+  53              	.LFE201:
+  55              	 .section .ram_code,"ax",%progbits
+  56              	 .align 2
+  57              	 .global Get_ADCPhaseCurrent
+  58              	 .code 16
+  59              	 .thumb_func
+  61              	Get_ADCPhaseCurrent:
+  62              	.LFB202:
+  93:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+  94:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** #if (CURRENT_SENSING ==  USER_THREE_SHUNT_SYNC_CONV)
+  95:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** /* API to read ADC result of the 3 shunt current */
+  96:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** RAM_ATTRIBUTE void Get_ADCPhaseCurrent(uint16_t Previous_SVM_SectorNo, uint16_t New_SVM_SectorNo,
+  97:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****                                        ADCType* const HandlePtr)
+  98:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** {
+  63              	 .loc 1 98 0
+  64              	 .cfi_startproc
+  65              	.LVL0:
+  66 0000 70B5     	 push {r4,r5,r6,lr}
+  67              	 .cfi_def_cfa_offset 16
+  68              	 .cfi_offset 4,-16
+  69              	 .cfi_offset 5,-12
+  70              	 .cfi_offset 6,-8
+  71              	 .cfi_offset 14,-4
+  99:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   uint16_t I1;
+ 100:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   uint16_t I2;
+ 101:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   uint16_t I3;
+ 102:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 103:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 104:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 105:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   /* Read current ADC (ADC synchronous conversion) */
+ 106:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   I1 = VADC_I1_GROUP->RES[VADC_I1_RESULT_REG];
+  72              	 .loc 1 106 0
+  73 0002 C024     	 mov r4,#192
+  74 0004 1C4E     	 ldr r6,.L29
+  75 0006 A400     	 lsl r4,r4,#2
+  76 0008 3359     	 ldr r3,[r6,r4]
+  77 000a 9DB2     	 uxth r5,r3
+  78              	.LVL1:
+ 107:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   I2 = VADC_I2_GROUP->RES[VADC_I2_RESULT_REG];
+  79              	 .loc 1 107 0
+  80 000c 1B4B     	 ldr r3,.L29+4
+  81 000e 1B59     	 ldr r3,[r3,r4]
+  82 0010 9CB2     	 uxth r4,r3
+  83              	.LVL2:
+ 108:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   I3 = VADC_I3_GROUP->RES[VADC_I3_RESULT_REG];
+  84              	 .loc 1 108 0
+  85 0012 C123     	 mov r3,#193
+  86 0014 9B00     	 lsl r3,r3,#2
+  87 0016 F358     	 ldr r3,[r6,r3]
+  88 0018 9BB2     	 uxth r3,r3
+  89              	.LVL3:
+ 109:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 110:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 111:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   /* 3-phase current reconstruction */
+ 112:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   switch (Previous_SVM_SectorNo)
+  90              	 .loc 1 112 0
+  91 001a 0228     	 cmp r0,#2
+  92 001c 17D8     	 bhi .L6
+  93 001e 0028     	 cmp r0,#0
+  94 0020 11D1     	 bne .L27
+  95              	.L8:
+ 113:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   {
+ 114:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     case 0:
+ 115:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     case 5:
+ 116:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       /* Sectors A and F. ADC sequences - Iw -> Iv -> Iu */
+ 117:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iu = I3;
+  96              	 .loc 1 117 0
+  97 0022 1380     	 strh r3,[r2]
+ 118:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iv = I2;
+  98              	 .loc 1 118 0
+  99 0024 5480     	 strh r4,[r2,#2]
+ 119:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iw = I1;
+ 100              	 .loc 1 119 0
+ 101 0026 9580     	 strh r5,[r2,#4]
+ 102              	.L9:
+ 120:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       break;
+ 121:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     case 1:
+ 122:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     case 2:
+ 123:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       /* Sectors B and C. ADC sequences - Iw -> Iu -> Iv */
+ 124:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iu = I2;
+ 125:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iv = I3;
+ 126:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iw = I1;
+ 127:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       break;
+ 128:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 129:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     default:
+ 130:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       /* Process for all other cases, Sectors D and E. ADC sequences - Iu -> Iv -> Iw */
+ 131:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iu = I1;
+ 132:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iv = I2;
+ 133:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iw = I3;
+ 134:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       break;
+ 135:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   }
+ 136:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 137:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   /* If SVM sector changed */
+ 138:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   if (New_SVM_SectorNo != Previous_SVM_SectorNo)
+ 103              	 .loc 1 138 0
+ 104 0028 8142     	 cmp r1,r0
+ 105 002a 0BD0     	 beq .L4
+ 139:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   {
+ 140:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     /* Rotating ADC alias */
+ 141:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     switch (New_SVM_SectorNo)
+ 106              	 .loc 1 141 0
+ 107 002c 0229     	 cmp r1,#2
+ 108 002e 1DD8     	 bhi .L12
+ 109 0030 0029     	 cmp r1,#0
+ 110 0032 12D1     	 bne .L28
+ 111              	.L14:
+ 142:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     {
+ 143:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       case 0:
+ 144:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       case 5:
+ 145:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****          /* Sectors A and F. ADC sequences - Iw -> Iv -> Iu */
+ 146:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G1->ALIAS = (((uint32_t)VADC_IU_G1_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IW_G1_CH
+ 112              	 .loc 1 146 0
+ 113 0034 B023     	 mov r3,#176
+ 114              	.LVL4:
+ 115 0036 1249     	 ldr r1,.L29+8
+ 116              	.LVL5:
+ 117              	.L23:
+ 147:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G0->ALIAS = (((uint32_t)VADC_IDC_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IV_G0_CHAN
+ 148:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         break;
+ 149:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 150:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       case 1:
+ 151:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       case 2:
+ 152:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         /*  Sectors B and C. ADC sequences - Iw -> Iu -> Iv */
+ 153:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G1->ALIAS = (((uint32_t)VADC_IV_G1_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IW_G1_CH
+ 154:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G0->ALIAS = (((uint32_t)VADC_IDC_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IU_G0_CHAN
+ 155:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         break;
+ 156:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 157:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       default:
+ 158:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         /* Process for all other cases, Sectors D and E. ADC sequences - Iu -> Iv -> Iw */
+ 159:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G1->ALIAS = (((uint32_t)VADC_IW_G1_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IU_G1_CH
+ 118              	 .loc 1 159 0
+ 119 0038 0F4A     	 ldr r2,.L29
+ 120              	.LVL6:
+ 121 003a D150     	 str r1,[r2,r3]
+ 160:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G0->ALIAS = (((uint32_t)VADC_IDC_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IV_G0_CHAN
+ 122              	 .loc 1 160 0
+ 123 003c 0421     	 mov r1,#4
+ 124 003e 0F4A     	 ldr r2,.L29+4
+ 125 0040 FF31     	 add r1,r1,#255
+ 126 0042 D150     	 str r1,[r2,r3]
+ 127              	.L4:
+ 161:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         break;
+ 162:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     }
+ 163:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   }
+ 164:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** }
+ 128              	 .loc 1 164 0
+ 129              	 
+ 130              	.LVL7:
+ 131              	.LVL8:
+ 132 0044 70BD     	 pop {r4,r5,r6,pc}
+ 133              	.LVL9:
+ 134              	.L27:
+ 124:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iv = I3;
+ 135              	 .loc 1 124 0
+ 136 0046 1480     	 strh r4,[r2]
+ 125:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iw = I1;
+ 137              	 .loc 1 125 0
+ 138 0048 5380     	 strh r3,[r2,#2]
+ 126:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       break;
+ 139              	 .loc 1 126 0
+ 140 004a 9580     	 strh r5,[r2,#4]
+ 127:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 141              	 .loc 1 127 0
+ 142 004c ECE7     	 b .L9
+ 143              	.L6:
+ 112:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   {
+ 144              	 .loc 1 112 0
+ 145 004e 0528     	 cmp r0,#5
+ 146 0050 E7D0     	 beq .L8
+ 131:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iv = I2;
+ 147              	 .loc 1 131 0
+ 148 0052 1580     	 strh r5,[r2]
+ 132:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       HandlePtr->ADC_Iw = I3;
+ 149              	 .loc 1 132 0
+ 150 0054 5480     	 strh r4,[r2,#2]
+ 133:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****       break;
+ 151              	 .loc 1 133 0
+ 152 0056 9380     	 strh r3,[r2,#4]
+ 134:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****   }
+ 153              	 .loc 1 134 0
+ 154 0058 E6E7     	 b .L9
+ 155              	.L28:
+ 153:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G0->ALIAS = (((uint32_t)VADC_IDC_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IU_G0_CHAN
+ 156              	 .loc 1 153 0
+ 157 005a B023     	 mov r3,#176
+ 158              	.LVL10:
+ 159 005c 0949     	 ldr r1,.L29+12
+ 160              	.LVL11:
+ 161 005e 064A     	 ldr r2,.L29
+ 162              	.LVL12:
+ 163 0060 D150     	 str r1,[r2,r3]
+ 154:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         break;
+ 164              	 .loc 1 154 0
+ 165 0062 0239     	 sub r1,r1,#2
+ 166 0064 054A     	 ldr r2,.L29+4
+ 167 0066 FF39     	 sub r1,r1,#255
+ 168 0068 D150     	 str r1,[r2,r3]
+ 155:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c **** 
+ 169              	 .loc 1 155 0
+ 170 006a EBE7     	 b .L4
+ 171              	.LVL13:
+ 172              	.L12:
+ 141:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****     {
+ 173              	 .loc 1 141 0
+ 174 006c 0529     	 cmp r1,#5
+ 175 006e E1D0     	 beq .L14
+ 159:../PMSM_FOC/MIDSys/pmsm_foc_current_threeshunt.c ****         VADC_G0->ALIAS = (((uint32_t)VADC_IDC_CHANNEL << VADC_G_ALIAS_ALIAS1_Pos) | VADC_IV_G0_CHAN
+ 176              	 .loc 1 159 0
+ 177 0070 C121     	 mov r1,#193
+ 178              	.LVL14:
+ 179 0072 B023     	 mov r3,#176
+ 180              	.LVL15:
+ 181 0074 8900     	 lsl r1,r1,#2
+ 182 0076 DFE7     	 b .L23
+ 183              	.L30:
+ 184              	 .align 2
+ 185              	.L29:
+ 186 0078 00080348 	 .word 1208158208
+ 187 007c 00040348 	 .word 1208157184
+ 188 0080 03040000 	 .word 1027
+ 189 0084 03020000 	 .word 515
+ 190              	 .cfi_endproc
+ 191              	.LFE202:
+ 193              	 .text
+ 194              	.Letext0:
+ 195              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 196              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 197              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 198              	 .file 5 "../PMSM_FOC/MIDSys/../MCUInit/adc.h"
+ 199              	 .file 6 "../PMSM_FOC/MIDSys/../ControlModules/..\\MIDSys\\pmsm_foc_pwmsvm.h"
+ 200              	 .file 7 "../PMSM_FOC/MIDSys/../ControlModules/pmsm_foc_functions.h"
+ 201              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_current_threeshunt.c
+    {standard input}:18     .text.Get_Current_Bias:00000000 $t
+    {standard input}:23     .text.Get_Current_Bias:00000000 Get_Current_Bias
+    {standard input}:51     .text.Get_Current_Bias:00000018 $d
+    {standard input}:56     .ram_code:00000000 $t
+    {standard input}:61     .ram_code:00000000 Get_ADCPhaseCurrent
+    {standard input}:186    .ram_code:00000078 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+ADC

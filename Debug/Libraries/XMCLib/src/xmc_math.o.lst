@@ -1,0 +1,1780 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "xmc_math.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_MATH_DIV_IsBusy,"ax",%progbits
+  18              	 .align 2
+  19              	 .global XMC_MATH_DIV_IsBusy
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	XMC_MATH_DIV_IsBusy:
+  24              	.LFB65:
+  25              	 .file 1 "../Libraries/XMCLib/src/xmc_math.c"
+   1:../Libraries/XMCLib/src/xmc_math.c **** 
+   2:../Libraries/XMCLib/src/xmc_math.c **** /**
+   3:../Libraries/XMCLib/src/xmc_math.c ****  * @file xmc_math.c
+   4:../Libraries/XMCLib/src/xmc_math.c ****  * @date 2015-10-09
+   5:../Libraries/XMCLib/src/xmc_math.c ****  *
+   6:../Libraries/XMCLib/src/xmc_math.c ****  * @cond
+   7:../Libraries/XMCLib/src/xmc_math.c ****  **********************************************************************************
+   8:../Libraries/XMCLib/src/xmc_math.c ****  * XMClib v2.1.0 - XMC Peripheral Driver Library
+   9:../Libraries/XMCLib/src/xmc_math.c ****  *
+  10:../Libraries/XMCLib/src/xmc_math.c ****  * Copyright (c) 2015, Infineon Technologies AG
+  11:../Libraries/XMCLib/src/xmc_math.c ****  * All rights reserved.                        
+  12:../Libraries/XMCLib/src/xmc_math.c ****  *                                             
+  13:../Libraries/XMCLib/src/xmc_math.c ****  * Redistribution and use in source and binary forms, with or without           
+  14:../Libraries/XMCLib/src/xmc_math.c ****  * modification,are permitted provided that the following conditions are met:   
+  15:../Libraries/XMCLib/src/xmc_math.c ****  *                                                                              
+  16:../Libraries/XMCLib/src/xmc_math.c ****  *   Redistributions of source code must retain the above copyright notice,      
+  17:../Libraries/XMCLib/src/xmc_math.c ****  *   this list of conditions and the following disclaimer.                        
+  18:../Libraries/XMCLib/src/xmc_math.c ****  * 
+  19:../Libraries/XMCLib/src/xmc_math.c ****  *   Redistributions in binary form must reproduce the above copyright notice,   
+  20:../Libraries/XMCLib/src/xmc_math.c ****  *   this list of conditions and the following disclaimer in the documentation    
+  21:../Libraries/XMCLib/src/xmc_math.c ****  *   and/or other materials provided with the distribution.                       
+  22:../Libraries/XMCLib/src/xmc_math.c ****  * 
+  23:../Libraries/XMCLib/src/xmc_math.c ****  *   Neither the name of the copyright holders nor the names of its contributors 
+  24:../Libraries/XMCLib/src/xmc_math.c ****  *   may be used to endorse or promote products derived from this software without
+  25:../Libraries/XMCLib/src/xmc_math.c ****  *   specific prior written permission.                                           
+  26:../Libraries/XMCLib/src/xmc_math.c ****  *                                                                              
+  27:../Libraries/XMCLib/src/xmc_math.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+  28:../Libraries/XMCLib/src/xmc_math.c ****  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    
+  29:../Libraries/XMCLib/src/xmc_math.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   
+  30:../Libraries/XMCLib/src/xmc_math.c ****  * ARE  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   
+  31:../Libraries/XMCLib/src/xmc_math.c ****  * LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         
+  32:../Libraries/XMCLib/src/xmc_math.c ****  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         
+  33:../Libraries/XMCLib/src/xmc_math.c ****  * SUBSTITUTE GOODS OR  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS    
+  34:../Libraries/XMCLib/src/xmc_math.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      
+  35:../Libraries/XMCLib/src/xmc_math.c ****  * CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)       
+  36:../Libraries/XMCLib/src/xmc_math.c ****  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   
+  37:../Libraries/XMCLib/src/xmc_math.c ****  * POSSIBILITY OF SUCH DAMAGE.                                                  
+  38:../Libraries/XMCLib/src/xmc_math.c ****  *                                                                              
+  39:../Libraries/XMCLib/src/xmc_math.c ****  * To improve the quality of the software, users are encouraged to share        
+  40:../Libraries/XMCLib/src/xmc_math.c ****  * modifications, enhancements or bug fixes with Infineon Technologies AG       
+  41:../Libraries/XMCLib/src/xmc_math.c ****  * dave@infineon.com).                                                          
+  42:../Libraries/XMCLib/src/xmc_math.c ****  **********************************************************************************
+  43:../Libraries/XMCLib/src/xmc_math.c ****  *
+  44:../Libraries/XMCLib/src/xmc_math.c ****  * Change History
+  45:../Libraries/XMCLib/src/xmc_math.c ****  * --------------
+  46:../Libraries/XMCLib/src/xmc_math.c ****  *
+  47:../Libraries/XMCLib/src/xmc_math.c ****  * 2015-06-20: 
+  48:../Libraries/XMCLib/src/xmc_math.c ****  *     - Removed version macros and declaration of GetDriverVersion API <br>
+  49:../Libraries/XMCLib/src/xmc_math.c ****  *     - Updated copyright and change history section.
+  50:../Libraries/XMCLib/src/xmc_math.c ****  *
+  51:../Libraries/XMCLib/src/xmc_math.c ****  * 2015-09-23: 
+  52:../Libraries/XMCLib/src/xmc_math.c ****  *     - Added SQRT functions
+  53:../Libraries/XMCLib/src/xmc_math.c ****  *
+  54:../Libraries/XMCLib/src/xmc_math.c ****  * 2015-10-08:
+  55:../Libraries/XMCLib/src/xmc_math.c ****  *     - Return values for sin(), cos(), sinh(), cosh(), arctan() are corrected.
+  56:../Libraries/XMCLib/src/xmc_math.c ****  *
+  57:../Libraries/XMCLib/src/xmc_math.c ****  * @endcond
+  58:../Libraries/XMCLib/src/xmc_math.c ****  *
+  59:../Libraries/XMCLib/src/xmc_math.c ****  */
+  60:../Libraries/XMCLib/src/xmc_math.c **** 
+  61:../Libraries/XMCLib/src/xmc_math.c **** /**
+  62:../Libraries/XMCLib/src/xmc_math.c ****  *
+  63:../Libraries/XMCLib/src/xmc_math.c ****  * @brief MATH driver - API implementation for XMC13 family MATH libraries. <br>
+  64:../Libraries/XMCLib/src/xmc_math.c ****  * 
+  65:../Libraries/XMCLib/src/xmc_math.c ****  * <b>Detailed description of file</b> <br>
+  66:../Libraries/XMCLib/src/xmc_math.c ****  * APIs provided in this file cover the following functional blocks of MATH: <br>
+  67:../Libraries/XMCLib/src/xmc_math.c ****  *
+  68:../Libraries/XMCLib/src/xmc_math.c ****  */
+  69:../Libraries/XMCLib/src/xmc_math.c **** 
+  70:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+  71:../Libraries/XMCLib/src/xmc_math.c ****  * HEADER FILES
+  72:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+  73:../Libraries/XMCLib/src/xmc_math.c **** #include <xmc_math.h>
+  74:../Libraries/XMCLib/src/xmc_math.c **** 
+  75:../Libraries/XMCLib/src/xmc_math.c **** #if defined (MATH)
+  76:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+  77:../Libraries/XMCLib/src/xmc_math.c ****  * MACROS
+  78:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+  79:../Libraries/XMCLib/src/xmc_math.c **** /* Reciprocal of Circular gain in XMC_MATH_Q0_23_t format ((2^23)/1.646760258121) */
+  80:../Libraries/XMCLib/src/xmc_math.c **** #define XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023       (0x4DBA76U)
+  81:../Libraries/XMCLib/src/xmc_math.c **** /* Reciprocal of Hyperbolic gain in XMC_MATH_Q1_22_t format ((2^22)/0.828159360960) */
+  82:../Libraries/XMCLib/src/xmc_math.c **** #define XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22    (0x4D47A1U)
+  83:../Libraries/XMCLib/src/xmc_math.c **** /* Signed division is selected */
+  84:../Libraries/XMCLib/src/xmc_math.c **** #define XMC_MATH_SIGNED_DIVISION                      ((uint32_t) 0 << MATH_DIVCON_USIGN_Pos)
+  85:../Libraries/XMCLib/src/xmc_math.c **** /* Unsigned division is selected */
+  86:../Libraries/XMCLib/src/xmc_math.c **** #define XMC_MATH_UNSIGNED_DIVISION                    ((uint32_t) 1 << MATH_DIVCON_USIGN_Pos)
+  87:../Libraries/XMCLib/src/xmc_math.c **** 
+  88:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+  89:../Libraries/XMCLib/src/xmc_math.c ****  * ENUMS
+  90:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+  91:../Libraries/XMCLib/src/xmc_math.c **** 
+  92:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+  93:../Libraries/XMCLib/src/xmc_math.c ****  * GLOBAL DATA
+  94:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+  95:../Libraries/XMCLib/src/xmc_math.c **** 
+  96:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+  97:../Libraries/XMCLib/src/xmc_math.c ****  * DATA STRUCTURES
+  98:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+  99:../Libraries/XMCLib/src/xmc_math.c **** 
+ 100:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+ 101:../Libraries/XMCLib/src/xmc_math.c ****  * LOCAL ROUTINES
+ 102:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+ 103:../Libraries/XMCLib/src/xmc_math.c **** 
+ 104:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+ 105:../Libraries/XMCLib/src/xmc_math.c ****  * API IMPLEMENTATION - Utility functions
+ 106:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+ 107:../Libraries/XMCLib/src/xmc_math.c **** 
+ 108:../Libraries/XMCLib/src/xmc_math.c **** /* Utility function to check if the DIV unit is busy */
+ 109:../Libraries/XMCLib/src/xmc_math.c **** bool XMC_MATH_DIV_IsBusy(void)
+ 110:../Libraries/XMCLib/src/xmc_math.c **** {
+  26              	 .loc 1 110 0
+  27              	 .cfi_startproc
+ 111:../Libraries/XMCLib/src/xmc_math.c ****   bool status;
+ 112:../Libraries/XMCLib/src/xmc_math.c ****   if (MATH->DIVST & MATH_DIVST_BSY_Msk)
+ 113:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 114:../Libraries/XMCLib/src/xmc_math.c ****     status = true;  /* DIV unit is busy running a division operation */ 
+ 115:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 116:../Libraries/XMCLib/src/xmc_math.c ****   else
+ 117:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 118:../Libraries/XMCLib/src/xmc_math.c ****     status = false; /* DIV unit is idle */ 
+ 119:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 120:../Libraries/XMCLib/src/xmc_math.c **** 
+ 121:../Libraries/XMCLib/src/xmc_math.c ****   return (status);
+  28              	 .loc 1 121 0
+  29 0000 0120     	 mov r0,#1
+ 112:../Libraries/XMCLib/src/xmc_math.c ****   {
+  30              	 .loc 1 112 0
+  31 0002 024B     	 ldr r3,.L2
+ 122:../Libraries/XMCLib/src/xmc_math.c **** }
+  32              	 .loc 1 122 0
+  33              	 
+ 112:../Libraries/XMCLib/src/xmc_math.c ****   {
+  34              	 .loc 1 112 0
+  35 0004 1B6B     	 ldr r3,[r3,#48]
+  36              	.LVL0:
+ 121:../Libraries/XMCLib/src/xmc_math.c **** }
+  37              	 .loc 1 121 0
+  38 0006 1840     	 and r0,r3
+  39              	 .loc 1 122 0
+  40 0008 7047     	 bx lr
+  41              	.L3:
+  42 000a C046     	 .align 2
+  43              	.L2:
+  44 000c 00000340 	 .word 1073938432
+  45              	 .cfi_endproc
+  46              	.LFE65:
+  48              	 .section .text.XMC_MATH_CORDIC_IsBusy,"ax",%progbits
+  49              	 .align 2
+  50              	 .global XMC_MATH_CORDIC_IsBusy
+  51              	 .code 16
+  52              	 .thumb_func
+  54              	XMC_MATH_CORDIC_IsBusy:
+  55              	.LFB66:
+ 123:../Libraries/XMCLib/src/xmc_math.c **** 
+ 124:../Libraries/XMCLib/src/xmc_math.c **** /* Utility function to check if the CORDIC unit is busy */
+ 125:../Libraries/XMCLib/src/xmc_math.c **** bool XMC_MATH_CORDIC_IsBusy(void)
+ 126:../Libraries/XMCLib/src/xmc_math.c **** {
+  56              	 .loc 1 126 0
+  57              	 .cfi_startproc
+ 127:../Libraries/XMCLib/src/xmc_math.c ****   bool status;
+ 128:../Libraries/XMCLib/src/xmc_math.c ****   if (MATH->STATC & MATH_STATC_BSY_Msk)
+ 129:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 130:../Libraries/XMCLib/src/xmc_math.c ****     status = true;  /* CORDIC unit is busy running an operation */  
+ 131:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 132:../Libraries/XMCLib/src/xmc_math.c ****   else
+ 133:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 134:../Libraries/XMCLib/src/xmc_math.c ****     status = false; /* CORDIC unit is idle */   
+ 135:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 136:../Libraries/XMCLib/src/xmc_math.c **** 
+ 137:../Libraries/XMCLib/src/xmc_math.c ****   return (status);
+  58              	 .loc 1 137 0
+  59 0000 0120     	 mov r0,#1
+ 128:../Libraries/XMCLib/src/xmc_math.c ****   {
+  60              	 .loc 1 128 0
+  61 0002 024B     	 ldr r3,.L5
+ 138:../Libraries/XMCLib/src/xmc_math.c **** }
+  62              	 .loc 1 138 0
+  63              	 
+ 128:../Libraries/XMCLib/src/xmc_math.c ****   {
+  64              	 .loc 1 128 0
+  65 0004 1B6C     	 ldr r3,[r3,#64]
+  66              	.LVL1:
+ 137:../Libraries/XMCLib/src/xmc_math.c **** }
+  67              	 .loc 1 137 0
+  68 0006 1840     	 and r0,r3
+  69              	 .loc 1 138 0
+  70 0008 7047     	 bx lr
+  71              	.L6:
+  72 000a C046     	 .align 2
+  73              	.L5:
+  74 000c 00000340 	 .word 1073938432
+  75              	 .cfi_endproc
+  76              	.LFE66:
+  78              	 .section .text.XMC_MATH_GetEventStatus,"ax",%progbits
+  79              	 .align 2
+  80              	 .global XMC_MATH_GetEventStatus
+  81              	 .code 16
+  82              	 .thumb_func
+  84              	XMC_MATH_GetEventStatus:
+  85              	.LFB67:
+ 139:../Libraries/XMCLib/src/xmc_math.c **** 
+ 140:../Libraries/XMCLib/src/xmc_math.c **** /* This functions returns the status of a requested event */
+ 141:../Libraries/XMCLib/src/xmc_math.c **** bool XMC_MATH_GetEventStatus(const XMC_MATH_EVENT_t event)
+ 142:../Libraries/XMCLib/src/xmc_math.c **** {
+  86              	 .loc 1 142 0
+  87              	 .cfi_startproc
+  88              	.LVL2:
+ 143:../Libraries/XMCLib/src/xmc_math.c ****   bool status;
+ 144:../Libraries/XMCLib/src/xmc_math.c ****   if (MATH->EVFR & (uint32_t) event)
+  89              	 .loc 1 144 0
+  90 0000 034B     	 ldr r3,.L8
+ 145:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 146:../Libraries/XMCLib/src/xmc_math.c ****     status = true; /* Requested event has been detected */
+ 147:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 148:../Libraries/XMCLib/src/xmc_math.c ****   else
+ 149:../Libraries/XMCLib/src/xmc_math.c ****   {
+ 150:../Libraries/XMCLib/src/xmc_math.c ****     status = false; /* Requested event has not been detected */
+ 151:../Libraries/XMCLib/src/xmc_math.c ****   }
+ 152:../Libraries/XMCLib/src/xmc_math.c ****   return (status);
+ 153:../Libraries/XMCLib/src/xmc_math.c **** }
+  91              	 .loc 1 153 0
+  92              	 
+ 144:../Libraries/XMCLib/src/xmc_math.c ****   {
+  93              	 .loc 1 144 0
+  94 0002 1B69     	 ldr r3,[r3,#16]
+  95              	.LVL3:
+  96 0004 1840     	 and r0,r3
+  97              	.LVL4:
+  98 0006 431E     	 sub r3,r0,#1
+  99 0008 9841     	 sbc r0,r0,r3
+ 100              	.LVL5:
+ 152:../Libraries/XMCLib/src/xmc_math.c **** }
+ 101              	 .loc 1 152 0
+ 102 000a C0B2     	 uxtb r0,r0
+ 103              	 .loc 1 153 0
+ 104 000c 7047     	 bx lr
+ 105              	.L9:
+ 106 000e C046     	 .align 2
+ 107              	.L8:
+ 108 0010 00000340 	 .word 1073938432
+ 109              	 .cfi_endproc
+ 110              	.LFE67:
+ 112              	 .section .text.__aeabi_uidiv,"ax",%progbits
+ 113              	 .align 2
+ 114              	 .global __aeabi_uidiv
+ 115              	 .code 16
+ 116              	 .thumb_func
+ 118              	__aeabi_uidiv:
+ 119              	.LFB68:
+ 154:../Libraries/XMCLib/src/xmc_math.c **** 
+ 155:../Libraries/XMCLib/src/xmc_math.c **** #ifndef XMC_MATH_DISABLE_DIV_ABI
+ 156:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+ 157:../Libraries/XMCLib/src/xmc_math.c ****  * API IMPLEMENTATION - aeabi routines
+ 158:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+ 159:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs unsigned integer division */
+ 160:../Libraries/XMCLib/src/xmc_math.c **** uint32_t __aeabi_uidiv(uint32_t dividend, uint32_t divisor)
+ 161:../Libraries/XMCLib/src/xmc_math.c **** {
+ 120              	 .loc 1 161 0
+ 121              	 .cfi_startproc
+ 122              	.LVL6:
+ 162:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_UNSIGNED_DIVISION;
+ 123              	 .loc 1 162 0
+ 124 0000 0422     	 mov r2,#4
+ 125 0002 034B     	 ldr r3,.L11
+ 163:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 164:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS     = divisor;
+ 165:../Libraries/XMCLib/src/xmc_math.c **** 
+ 166:../Libraries/XMCLib/src/xmc_math.c ****   return ((uint32_t) MATH->QUOT);
+ 167:../Libraries/XMCLib/src/xmc_math.c **** }
+ 126              	 .loc 1 167 0
+ 127              	 
+ 162:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_UNSIGNED_DIVISION;
+ 128              	 .loc 1 162 0
+ 129 0004 5A63     	 str r2,[r3,#52]
+ 163:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 130              	 .loc 1 163 0
+ 131 0006 1862     	 str r0,[r3,#32]
+ 164:../Libraries/XMCLib/src/xmc_math.c **** 
+ 132              	 .loc 1 164 0
+ 133 0008 5962     	 str r1,[r3,#36]
+ 166:../Libraries/XMCLib/src/xmc_math.c **** }
+ 134              	 .loc 1 166 0
+ 135 000a 986A     	 ldr r0,[r3,#40]
+ 136              	.LVL7:
+ 137              	 .loc 1 167 0
+ 138 000c 7047     	 bx lr
+ 139              	.L12:
+ 140 000e C046     	 .align 2
+ 141              	.L11:
+ 142 0010 00000340 	 .word 1073938432
+ 143              	 .cfi_endproc
+ 144              	.LFE68:
+ 146              	 .section .text.__aeabi_idiv,"ax",%progbits
+ 147              	 .align 2
+ 148              	 .global __aeabi_idiv
+ 149              	 .code 16
+ 150              	 .thumb_func
+ 152              	__aeabi_idiv:
+ 153              	.LFB69:
+ 168:../Libraries/XMCLib/src/xmc_math.c **** 
+ 169:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs signed integer division */
+ 170:../Libraries/XMCLib/src/xmc_math.c **** int32_t __aeabi_idiv(int32_t dividend, int32_t divisor)
+ 171:../Libraries/XMCLib/src/xmc_math.c **** {
+ 154              	 .loc 1 171 0
+ 155              	 .cfi_startproc
+ 156              	.LVL8:
+ 172:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_SIGNED_DIVISION;
+ 157              	 .loc 1 172 0
+ 158 0000 0022     	 mov r2,#0
+ 159 0002 034B     	 ldr r3,.L14
+ 173:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 174:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS     = divisor;
+ 175:../Libraries/XMCLib/src/xmc_math.c **** 
+ 176:../Libraries/XMCLib/src/xmc_math.c ****   return ((int32_t) MATH->QUOT);
+ 177:../Libraries/XMCLib/src/xmc_math.c **** }
+ 160              	 .loc 1 177 0
+ 161              	 
+ 172:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_SIGNED_DIVISION;
+ 162              	 .loc 1 172 0
+ 163 0004 5A63     	 str r2,[r3,#52]
+ 173:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 164              	 .loc 1 173 0
+ 165 0006 1862     	 str r0,[r3,#32]
+ 174:../Libraries/XMCLib/src/xmc_math.c **** 
+ 166              	 .loc 1 174 0
+ 167 0008 5962     	 str r1,[r3,#36]
+ 176:../Libraries/XMCLib/src/xmc_math.c **** }
+ 168              	 .loc 1 176 0
+ 169 000a 986A     	 ldr r0,[r3,#40]
+ 170              	.LVL9:
+ 171              	 .loc 1 177 0
+ 172 000c 7047     	 bx lr
+ 173              	.L15:
+ 174 000e C046     	 .align 2
+ 175              	.L14:
+ 176 0010 00000340 	 .word 1073938432
+ 177              	 .cfi_endproc
+ 178              	.LFE69:
+ 180              	 .section .text.__aeabi_uidivmod,"ax",%progbits
+ 181              	 .align 2
+ 182              	 .global __aeabi_uidivmod
+ 183              	 .code 16
+ 184              	 .thumb_func
+ 186              	__aeabi_uidivmod:
+ 187              	.LFB70:
+ 178:../Libraries/XMCLib/src/xmc_math.c **** 
+ 179:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs unsigned integer division modulo */
+ 180:../Libraries/XMCLib/src/xmc_math.c **** uint64_t __aeabi_uidivmod(uint32_t dividend, uint32_t divisor)
+ 181:../Libraries/XMCLib/src/xmc_math.c **** {
+ 188              	 .loc 1 181 0
+ 189              	 .cfi_startproc
+ 190              	.LVL10:
+ 182:../Libraries/XMCLib/src/xmc_math.c ****   uint64_t remainder;
+ 183:../Libraries/XMCLib/src/xmc_math.c **** 
+ 184:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_UNSIGNED_DIVISION;
+ 191              	 .loc 1 184 0
+ 192 0000 0422     	 mov r2,#4
+ 193 0002 034B     	 ldr r3,.L17
+ 185:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 186:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS     = divisor;
+ 187:../Libraries/XMCLib/src/xmc_math.c **** 
+ 188:../Libraries/XMCLib/src/xmc_math.c ****   remainder = ((uint64_t) MATH->RMD) << 32U;
+ 189:../Libraries/XMCLib/src/xmc_math.c ****   return (remainder | MATH->QUOT);
+ 190:../Libraries/XMCLib/src/xmc_math.c **** }
+ 194              	 .loc 1 190 0
+ 195              	 
+ 184:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 196              	 .loc 1 184 0
+ 197 0004 5A63     	 str r2,[r3,#52]
+ 185:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 198              	 .loc 1 185 0
+ 199 0006 1862     	 str r0,[r3,#32]
+ 186:../Libraries/XMCLib/src/xmc_math.c **** 
+ 200              	 .loc 1 186 0
+ 201 0008 5962     	 str r1,[r3,#36]
+ 188:../Libraries/XMCLib/src/xmc_math.c ****   return (remainder | MATH->QUOT);
+ 202              	 .loc 1 188 0
+ 203 000a D96A     	 ldr r1,[r3,#44]
+ 204              	.LVL11:
+ 189:../Libraries/XMCLib/src/xmc_math.c **** }
+ 205              	 .loc 1 189 0
+ 206 000c 986A     	 ldr r0,[r3,#40]
+ 207              	.LVL12:
+ 208              	 .loc 1 190 0
+ 209 000e 7047     	 bx lr
+ 210              	.L18:
+ 211              	 .align 2
+ 212              	.L17:
+ 213 0010 00000340 	 .word 1073938432
+ 214              	 .cfi_endproc
+ 215              	.LFE70:
+ 217              	 .section .text.__aeabi_idivmod,"ax",%progbits
+ 218              	 .align 2
+ 219              	 .global __aeabi_idivmod
+ 220              	 .code 16
+ 221              	 .thumb_func
+ 223              	__aeabi_idivmod:
+ 224              	.LFB71:
+ 191:../Libraries/XMCLib/src/xmc_math.c **** 
+ 192:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs signed integer division modulo */
+ 193:../Libraries/XMCLib/src/xmc_math.c **** int64_t __aeabi_idivmod(int32_t dividend, int32_t divisor)
+ 194:../Libraries/XMCLib/src/xmc_math.c **** {
+ 225              	 .loc 1 194 0
+ 226              	 .cfi_startproc
+ 227              	.LVL13:
+ 195:../Libraries/XMCLib/src/xmc_math.c ****   uint64_t remainder;
+ 196:../Libraries/XMCLib/src/xmc_math.c ****   uint64_t result;
+ 197:../Libraries/XMCLib/src/xmc_math.c **** 
+ 198:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON  = XMC_MATH_SIGNED_DIVISION;
+ 228              	 .loc 1 198 0
+ 229 0000 0022     	 mov r2,#0
+ 230 0002 034B     	 ldr r3,.L20
+ 199:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 200:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS     = divisor;
+ 201:../Libraries/XMCLib/src/xmc_math.c **** 
+ 202:../Libraries/XMCLib/src/xmc_math.c ****   remainder = ((uint64_t) MATH->RMD) << 32U;
+ 203:../Libraries/XMCLib/src/xmc_math.c ****   result    = (remainder | MATH->QUOT);
+ 204:../Libraries/XMCLib/src/xmc_math.c ****   return ((int64_t) result);
+ 205:../Libraries/XMCLib/src/xmc_math.c **** }
+ 231              	 .loc 1 205 0
+ 232              	 
+ 198:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 233              	 .loc 1 198 0
+ 234 0004 5A63     	 str r2,[r3,#52]
+ 199:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD     = dividend;
+ 235              	 .loc 1 199 0
+ 236 0006 1862     	 str r0,[r3,#32]
+ 200:../Libraries/XMCLib/src/xmc_math.c **** 
+ 237              	 .loc 1 200 0
+ 238 0008 5962     	 str r1,[r3,#36]
+ 202:../Libraries/XMCLib/src/xmc_math.c ****   result    = (remainder | MATH->QUOT);
+ 239              	 .loc 1 202 0
+ 240 000a D96A     	 ldr r1,[r3,#44]
+ 241              	.LVL14:
+ 203:../Libraries/XMCLib/src/xmc_math.c ****   return ((int64_t) result);
+ 242              	 .loc 1 203 0
+ 243 000c 986A     	 ldr r0,[r3,#40]
+ 244              	.LVL15:
+ 245              	 .loc 1 205 0
+ 246 000e 7047     	 bx lr
+ 247              	.L21:
+ 248              	 .align 2
+ 249              	.L20:
+ 250 0010 00000340 	 .word 1073938432
+ 251              	 .cfi_endproc
+ 252              	.LFE71:
+ 254              	 .section .text.XMC_MATH_CORDIC_Cos,"ax",%progbits
+ 255              	 .align 2
+ 256              	 .global XMC_MATH_CORDIC_Cos
+ 257              	 .code 16
+ 258              	 .thumb_func
+ 260              	XMC_MATH_CORDIC_Cos:
+ 261              	.LFB72:
+ 206:../Libraries/XMCLib/src/xmc_math.c **** #endif
+ 207:../Libraries/XMCLib/src/xmc_math.c **** 
+ 208:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+ 209:../Libraries/XMCLib/src/xmc_math.c ****  * API IMPLEMENTATION - Blocking functions
+ 210:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+ 211:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the cosine of a given angle in radians */
+ 212:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q0_23_t XMC_MATH_CORDIC_Cos(XMC_MATH_Q0_23_t angle_in_radians)
+ 213:../Libraries/XMCLib/src/xmc_math.c **** {
+ 262              	 .loc 1 213 0
+ 263              	 .cfi_startproc
+ 264              	.LVL16:
+ 214:../Libraries/XMCLib/src/xmc_math.c ****   int32_t result;
+ 215:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 265              	 .loc 1 215 0
+ 266 0000 0022     	 mov r2,#0
+ 216:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 267              	 .loc 1 216 0
+ 268 0002 0A21     	 mov r1,#10
+ 215:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 269              	 .loc 1 215 0
+ 270 0004 054B     	 ldr r3,.L23
+ 217:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 218:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t) angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 271              	 .loc 1 218 0
+ 272 0006 0002     	 lsl r0,r0,#8
+ 273              	.LVL17:
+ 215:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 274              	 .loc 1 215 0
+ 275 0008 1A64     	 str r2,[r3,#64]
+ 216:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 276              	 .loc 1 216 0
+ 277 000a 5964     	 str r1,[r3,#68]
+ 278              	 .loc 1 218 0
+ 279 000c 1865     	 str r0,[r3,#80]
+ 219:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U;  /* Clear register */
+ 280              	 .loc 1 219 0
+ 281 000e DA64     	 str r2,[r3,#76]
+ 220:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 282              	 .loc 1 220 0
+ 283 0010 034A     	 ldr r2,.L23+4
+ 221:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRX) >> MATH_CORRX_RESULT_Pos;
+ 222:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q0_23_t) result);
+ 223:../Libraries/XMCLib/src/xmc_math.c **** }
+ 284              	 .loc 1 223 0
+ 285              	 
+ 220:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 286              	 .loc 1 220 0
+ 287 0012 9A64     	 str r2,[r3,#72]
+ 221:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRX) >> MATH_CORRX_RESULT_Pos;
+ 288              	 .loc 1 221 0
+ 289 0014 586D     	 ldr r0,[r3,#84]
+ 290              	.LVL18:
+ 291 0016 0012     	 asr r0,r0,#8
+ 292              	.LVL19:
+ 293              	 .loc 1 223 0
+ 294 0018 7047     	 bx lr
+ 295              	.L24:
+ 296 001a C046     	 .align 2
+ 297              	.L23:
+ 298 001c 00000340 	 .word 1073938432
+ 299 0020 0076BA4D 	 .word 1304065536
+ 300              	 .cfi_endproc
+ 301              	.LFE72:
+ 303              	 .section .text.XMC_MATH_CORDIC_Sin,"ax",%progbits
+ 304              	 .align 2
+ 305              	 .global XMC_MATH_CORDIC_Sin
+ 306              	 .code 16
+ 307              	 .thumb_func
+ 309              	XMC_MATH_CORDIC_Sin:
+ 310              	.LFB73:
+ 224:../Libraries/XMCLib/src/xmc_math.c **** 
+ 225:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the sine of a given angle in radians */
+ 226:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q0_23_t XMC_MATH_CORDIC_Sin(XMC_MATH_Q0_23_t angle_in_radians)
+ 227:../Libraries/XMCLib/src/xmc_math.c **** {
+ 311              	 .loc 1 227 0
+ 312              	 .cfi_startproc
+ 313              	.LVL20:
+ 228:../Libraries/XMCLib/src/xmc_math.c ****   int32_t result;
+ 229:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 314              	 .loc 1 229 0
+ 315 0000 0022     	 mov r2,#0
+ 230:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 316              	 .loc 1 230 0
+ 317 0002 0A21     	 mov r1,#10
+ 229:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 318              	 .loc 1 229 0
+ 319 0004 054B     	 ldr r3,.L26
+ 231:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 232:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 320              	 .loc 1 232 0
+ 321 0006 0002     	 lsl r0,r0,#8
+ 322              	.LVL21:
+ 229:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 323              	 .loc 1 229 0
+ 324 0008 1A64     	 str r2,[r3,#64]
+ 230:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 325              	 .loc 1 230 0
+ 326 000a 5964     	 str r1,[r3,#68]
+ 327              	 .loc 1 232 0
+ 328 000c 1865     	 str r0,[r3,#80]
+ 233:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 329              	 .loc 1 233 0
+ 330 000e DA64     	 str r2,[r3,#76]
+ 234:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 331              	 .loc 1 234 0
+ 332 0010 034A     	 ldr r2,.L26+4
+ 235:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRY) >> MATH_CORRY_RESULT_Pos;
+ 236:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q0_23_t) result);
+ 237:../Libraries/XMCLib/src/xmc_math.c **** }
+ 333              	 .loc 1 237 0
+ 334              	 
+ 234:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 335              	 .loc 1 234 0
+ 336 0012 9A64     	 str r2,[r3,#72]
+ 235:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRY) >> MATH_CORRY_RESULT_Pos;
+ 337              	 .loc 1 235 0
+ 338 0014 986D     	 ldr r0,[r3,#88]
+ 339              	.LVL22:
+ 340 0016 0012     	 asr r0,r0,#8
+ 341              	.LVL23:
+ 342              	 .loc 1 237 0
+ 343 0018 7047     	 bx lr
+ 344              	.L27:
+ 345 001a C046     	 .align 2
+ 346              	.L26:
+ 347 001c 00000340 	 .word 1073938432
+ 348 0020 0076BA4D 	 .word 1304065536
+ 349              	 .cfi_endproc
+ 350              	.LFE73:
+ 352              	 .section .text.XMC_MATH_CORDIC_Tan,"ax",%progbits
+ 353              	 .align 2
+ 354              	 .global XMC_MATH_CORDIC_Tan
+ 355              	 .code 16
+ 356              	 .thumb_func
+ 358              	XMC_MATH_CORDIC_Tan:
+ 359              	.LFB74:
+ 238:../Libraries/XMCLib/src/xmc_math.c **** 
+ 239:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the tangent of a given angle in radians */
+ 240:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q0_11_t XMC_MATH_CORDIC_Tan(XMC_MATH_Q0_23_t angle_in_radians)
+ 241:../Libraries/XMCLib/src/xmc_math.c **** {
+ 360              	 .loc 1 241 0
+ 361              	 .cfi_startproc
+ 362              	.LVL24:
+ 242:../Libraries/XMCLib/src/xmc_math.c ****   uint32_t result;
+ 243:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 363              	 .loc 1 243 0
+ 364 0000 1C22     	 mov r2,#28
+ 365 0002 084B     	 ldr r3,.L29
+ 244:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 245:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = (uint32_t) 11 << MATH_DIVCON_DVSSRC_Pos;            /* Right Shifts Divisor by 11 
+ 246:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 247:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 366              	 .loc 1 247 0
+ 367 0004 0A21     	 mov r1,#10
+ 243:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 368              	 .loc 1 243 0
+ 369 0006 5A60     	 str r2,[r3,#4]
+ 245:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 370              	 .loc 1 245 0
+ 371 0008 B022     	 mov r2,#176
+ 372 000a 1205     	 lsl r2,r2,#20
+ 373 000c 5A63     	 str r2,[r3,#52]
+ 246:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 374              	 .loc 1 246 0
+ 375 000e 0022     	 mov r2,#0
+ 248:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 249:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ  = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 376              	 .loc 1 249 0
+ 377 0010 0002     	 lsl r0,r0,#8
+ 378              	.LVL25:
+ 246:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 379              	 .loc 1 246 0
+ 380 0012 1A64     	 str r2,[r3,#64]
+ 247:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 381              	 .loc 1 247 0
+ 382 0014 5964     	 str r1,[r3,#68]
+ 383              	 .loc 1 249 0
+ 384 0016 1865     	 str r0,[r3,#80]
+ 250:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY  = 0U; /* Clear register */
+ 385              	 .loc 1 250 0
+ 386 0018 DA64     	 str r2,[r3,#76]
+ 251:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 387              	 .loc 1 251 0
+ 388 001a 034A     	 ldr r2,.L29+4
+ 252:../Libraries/XMCLib/src/xmc_math.c ****   result       = MATH->QUOT;
+ 253:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q0_11_t) result);
+ 254:../Libraries/XMCLib/src/xmc_math.c **** }
+ 389              	 .loc 1 254 0
+ 390              	 
+ 251:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 391              	 .loc 1 251 0
+ 392 001c 9A64     	 str r2,[r3,#72]
+ 252:../Libraries/XMCLib/src/xmc_math.c ****   result       = MATH->QUOT;
+ 393              	 .loc 1 252 0
+ 394 001e 986A     	 ldr r0,[r3,#40]
+ 395              	.LVL26:
+ 396              	 .loc 1 254 0
+ 397 0020 7047     	 bx lr
+ 398              	.L30:
+ 399 0022 C046     	 .align 2
+ 400              	.L29:
+ 401 0024 00000340 	 .word 1073938432
+ 402 0028 0076BA4D 	 .word 1304065536
+ 403              	 .cfi_endproc
+ 404              	.LFE74:
+ 406              	 .section .text.XMC_MATH_CORDIC_ArcTan,"ax",%progbits
+ 407              	 .align 2
+ 408              	 .global XMC_MATH_CORDIC_ArcTan
+ 409              	 .code 16
+ 410              	 .thumb_func
+ 412              	XMC_MATH_CORDIC_ArcTan:
+ 413              	.LFB75:
+ 255:../Libraries/XMCLib/src/xmc_math.c **** 
+ 256:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the arc tangent of a given angle in radians */
+ 257:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q0_23_t XMC_MATH_CORDIC_ArcTan(XMC_MATH_Q8_15_t x, XMC_MATH_Q8_15_t y)
+ 258:../Libraries/XMCLib/src/xmc_math.c **** {
+ 414              	 .loc 1 258 0
+ 415              	 .cfi_startproc
+ 416              	.LVL27:
+ 417 0000 10B5     	 push {r4,lr}
+ 418              	 .cfi_def_cfa_offset 8
+ 419              	 .cfi_offset 4,-8
+ 420              	 .cfi_offset 14,-4
+ 259:../Libraries/XMCLib/src/xmc_math.c ****   uint32_t result;
+ 260:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 421              	 .loc 1 260 0
+ 422 0002 0022     	 mov r2,#0
+ 261:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR;
+ 423              	 .loc 1 261 0
+ 424 0004 0224     	 mov r4,#2
+ 260:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR;
+ 425              	 .loc 1 260 0
+ 426 0006 054B     	 ldr r3,.L32
+ 262:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = 0U; /* Clear register */
+ 263:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = ((uint32_t) y) << MATH_CORDY_DATA_Pos;
+ 427              	 .loc 1 263 0
+ 428 0008 0902     	 lsl r1,r1,#8
+ 429              	.LVL28:
+ 264:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = ((uint32_t) x) << MATH_CORDX_DATA_Pos;
+ 430              	 .loc 1 264 0
+ 431 000a 0002     	 lsl r0,r0,#8
+ 432              	.LVL29:
+ 260:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR;
+ 433              	 .loc 1 260 0
+ 434 000c 1A64     	 str r2,[r3,#64]
+ 261:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = 0U; /* Clear register */
+ 435              	 .loc 1 261 0
+ 436 000e 5C64     	 str r4,[r3,#68]
+ 262:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = 0U; /* Clear register */
+ 437              	 .loc 1 262 0
+ 438 0010 1A65     	 str r2,[r3,#80]
+ 263:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = ((uint32_t) x) << MATH_CORDX_DATA_Pos;
+ 439              	 .loc 1 263 0
+ 440 0012 D964     	 str r1,[r3,#76]
+ 441              	 .loc 1 264 0
+ 442 0014 9864     	 str r0,[r3,#72]
+ 265:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRZ) >> MATH_CORRZ_RESULT_Pos;
+ 443              	 .loc 1 265 0
+ 444 0016 D86D     	 ldr r0,[r3,#92]
+ 445              	.LVL30:
+ 266:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q0_23_t) result);
+ 267:../Libraries/XMCLib/src/xmc_math.c **** }
+ 446              	 .loc 1 267 0
+ 447              	 
+ 265:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRZ) >> MATH_CORRZ_RESULT_Pos;
+ 448              	 .loc 1 265 0
+ 449 0018 0012     	 asr r0,r0,#8
+ 450              	.LVL31:
+ 451              	 .loc 1 267 0
+ 452 001a 10BD     	 pop {r4,pc}
+ 453              	.L33:
+ 454              	 .align 2
+ 455              	.L32:
+ 456 001c 00000340 	 .word 1073938432
+ 457              	 .cfi_endproc
+ 458              	.LFE75:
+ 460              	 .section .text.XMC_MATH_CORDIC_Cosh,"ax",%progbits
+ 461              	 .align 2
+ 462              	 .global XMC_MATH_CORDIC_Cosh
+ 463              	 .code 16
+ 464              	 .thumb_func
+ 466              	XMC_MATH_CORDIC_Cosh:
+ 467              	.LFB76:
+ 268:../Libraries/XMCLib/src/xmc_math.c **** 
+ 269:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic cosine of a given angle in radians */
+ 270:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q1_22_t XMC_MATH_CORDIC_Cosh(XMC_MATH_Q0_23_t angle_in_radians)
+ 271:../Libraries/XMCLib/src/xmc_math.c **** {
+ 468              	 .loc 1 271 0
+ 469              	 .cfi_startproc
+ 470              	.LVL32:
+ 272:../Libraries/XMCLib/src/xmc_math.c ****   int32_t result;
+ 273:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 471              	 .loc 1 273 0
+ 472 0000 0022     	 mov r2,#0
+ 274:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 473              	 .loc 1 274 0
+ 474 0002 0E21     	 mov r1,#14
+ 273:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 475              	 .loc 1 273 0
+ 476 0004 054B     	 ldr r3,.L35
+ 275:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 276:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t) angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 477              	 .loc 1 276 0
+ 478 0006 0002     	 lsl r0,r0,#8
+ 479              	.LVL33:
+ 273:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 480              	 .loc 1 273 0
+ 481 0008 1A64     	 str r2,[r3,#64]
+ 274:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 482              	 .loc 1 274 0
+ 483 000a 5964     	 str r1,[r3,#68]
+ 484              	 .loc 1 276 0
+ 485 000c 1865     	 str r0,[r3,#80]
+ 277:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 486              	 .loc 1 277 0
+ 487 000e DA64     	 str r2,[r3,#76]
+ 278:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 488              	 .loc 1 278 0
+ 489 0010 034A     	 ldr r2,.L35+4
+ 279:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRX) >> MATH_CORRX_RESULT_Pos;
+ 280:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q1_22_t) result);
+ 281:../Libraries/XMCLib/src/xmc_math.c **** }
+ 490              	 .loc 1 281 0
+ 491              	 
+ 278:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 492              	 .loc 1 278 0
+ 493 0012 9A64     	 str r2,[r3,#72]
+ 279:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRX) >> MATH_CORRX_RESULT_Pos;
+ 494              	 .loc 1 279 0
+ 495 0014 586D     	 ldr r0,[r3,#84]
+ 496              	.LVL34:
+ 497 0016 0012     	 asr r0,r0,#8
+ 498              	.LVL35:
+ 499              	 .loc 1 281 0
+ 500 0018 7047     	 bx lr
+ 501              	.L36:
+ 502 001a C046     	 .align 2
+ 503              	.L35:
+ 504 001c 00000340 	 .word 1073938432
+ 505 0020 00A1474D 	 .word 1296539904
+ 506              	 .cfi_endproc
+ 507              	.LFE76:
+ 509              	 .section .text.XMC_MATH_CORDIC_Sinh,"ax",%progbits
+ 510              	 .align 2
+ 511              	 .global XMC_MATH_CORDIC_Sinh
+ 512              	 .code 16
+ 513              	 .thumb_func
+ 515              	XMC_MATH_CORDIC_Sinh:
+ 516              	.LFB77:
+ 282:../Libraries/XMCLib/src/xmc_math.c **** 
+ 283:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic sine of a given angle in radians */
+ 284:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q1_22_t XMC_MATH_CORDIC_Sinh(XMC_MATH_Q0_23_t angle_in_radians)
+ 285:../Libraries/XMCLib/src/xmc_math.c **** {
+ 517              	 .loc 1 285 0
+ 518              	 .cfi_startproc
+ 519              	.LVL36:
+ 286:../Libraries/XMCLib/src/xmc_math.c ****   int32_t result;
+ 287:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 520              	 .loc 1 287 0
+ 521 0000 0022     	 mov r2,#0
+ 288:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 522              	 .loc 1 288 0
+ 523 0002 0E21     	 mov r1,#14
+ 287:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 524              	 .loc 1 287 0
+ 525 0004 054B     	 ldr r3,.L38
+ 289:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 290:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 526              	 .loc 1 290 0
+ 527 0006 0002     	 lsl r0,r0,#8
+ 528              	.LVL37:
+ 287:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 529              	 .loc 1 287 0
+ 530 0008 1A64     	 str r2,[r3,#64]
+ 288:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 531              	 .loc 1 288 0
+ 532 000a 5964     	 str r1,[r3,#68]
+ 533              	 .loc 1 290 0
+ 534 000c 1865     	 str r0,[r3,#80]
+ 291:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 535              	 .loc 1 291 0
+ 536 000e DA64     	 str r2,[r3,#76]
+ 292:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 537              	 .loc 1 292 0
+ 538 0010 034A     	 ldr r2,.L38+4
+ 293:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRY) >> MATH_CORRY_RESULT_Pos;
+ 294:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q1_22_t) result);
+ 295:../Libraries/XMCLib/src/xmc_math.c **** }
+ 539              	 .loc 1 295 0
+ 540              	 
+ 292:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 541              	 .loc 1 292 0
+ 542 0012 9A64     	 str r2,[r3,#72]
+ 293:../Libraries/XMCLib/src/xmc_math.c ****   result      = ((int32_t)MATH->CORRY) >> MATH_CORRY_RESULT_Pos;
+ 543              	 .loc 1 293 0
+ 544 0014 986D     	 ldr r0,[r3,#88]
+ 545              	.LVL38:
+ 546 0016 0012     	 asr r0,r0,#8
+ 547              	.LVL39:
+ 548              	 .loc 1 295 0
+ 549 0018 7047     	 bx lr
+ 550              	.L39:
+ 551 001a C046     	 .align 2
+ 552              	.L38:
+ 553 001c 00000340 	 .word 1073938432
+ 554 0020 00A1474D 	 .word 1296539904
+ 555              	 .cfi_endproc
+ 556              	.LFE77:
+ 558              	 .section .text.XMC_MATH_CORDIC_Tanh,"ax",%progbits
+ 559              	 .align 2
+ 560              	 .global XMC_MATH_CORDIC_Tanh
+ 561              	 .code 16
+ 562              	 .thumb_func
+ 564              	XMC_MATH_CORDIC_Tanh:
+ 565              	.LFB78:
+ 296:../Libraries/XMCLib/src/xmc_math.c **** 
+ 297:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic tangent of a given angle in radians */
+ 298:../Libraries/XMCLib/src/xmc_math.c **** XMC_MATH_Q0_11_t XMC_MATH_CORDIC_Tanh(XMC_MATH_Q0_23_t angle_in_radians)
+ 299:../Libraries/XMCLib/src/xmc_math.c **** {
+ 566              	 .loc 1 299 0
+ 567              	 .cfi_startproc
+ 568              	.LVL40:
+ 300:../Libraries/XMCLib/src/xmc_math.c ****   uint32_t result;
+ 301:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 569              	 .loc 1 301 0
+ 570 0000 1C22     	 mov r2,#28
+ 571 0002 084B     	 ldr r3,.L41
+ 302:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 303:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = (uint32_t) 11 << MATH_DIVCON_DVSSRC_Pos;            /* Right Shifts Divisor by 11 
+ 304:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 305:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 572              	 .loc 1 305 0
+ 573 0004 0E21     	 mov r1,#14
+ 301:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 574              	 .loc 1 301 0
+ 575 0006 5A60     	 str r2,[r3,#4]
+ 303:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 576              	 .loc 1 303 0
+ 577 0008 B022     	 mov r2,#176
+ 578 000a 1205     	 lsl r2,r2,#20
+ 579 000c 5A63     	 str r2,[r3,#52]
+ 304:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 580              	 .loc 1 304 0
+ 581 000e 0022     	 mov r2,#0
+ 306:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 307:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ  = ((uint32_t) angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 582              	 .loc 1 307 0
+ 583 0010 0002     	 lsl r0,r0,#8
+ 584              	.LVL41:
+ 304:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 585              	 .loc 1 304 0
+ 586 0012 1A64     	 str r2,[r3,#64]
+ 305:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 587              	 .loc 1 305 0
+ 588 0014 5964     	 str r1,[r3,#68]
+ 589              	 .loc 1 307 0
+ 590 0016 1865     	 str r0,[r3,#80]
+ 308:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY  = 0U; /* Clear register */
+ 591              	 .loc 1 308 0
+ 592 0018 DA64     	 str r2,[r3,#76]
+ 309:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 593              	 .loc 1 309 0
+ 594 001a 034A     	 ldr r2,.L41+4
+ 310:../Libraries/XMCLib/src/xmc_math.c ****   result       = MATH->QUOT;
+ 311:../Libraries/XMCLib/src/xmc_math.c ****   return ((XMC_MATH_Q0_11_t) result);
+ 312:../Libraries/XMCLib/src/xmc_math.c **** }
+ 595              	 .loc 1 312 0
+ 596              	 
+ 309:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 597              	 .loc 1 309 0
+ 598 001c 9A64     	 str r2,[r3,#72]
+ 310:../Libraries/XMCLib/src/xmc_math.c ****   result       = MATH->QUOT;
+ 599              	 .loc 1 310 0
+ 600 001e 986A     	 ldr r0,[r3,#40]
+ 601              	.LVL42:
+ 602              	 .loc 1 312 0
+ 603 0020 7047     	 bx lr
+ 604              	.L42:
+ 605 0022 C046     	 .align 2
+ 606              	.L41:
+ 607 0024 00000340 	 .word 1073938432
+ 608 0028 00A1474D 	 .word 1296539904
+ 609              	 .cfi_endproc
+ 610              	.LFE78:
+ 612              	 .section .text.XMC_MATH_CORDIC_CosNB,"ax",%progbits
+ 613              	 .align 2
+ 614              	 .global XMC_MATH_CORDIC_CosNB
+ 615              	 .code 16
+ 616              	 .thumb_func
+ 618              	XMC_MATH_CORDIC_CosNB:
+ 619              	.LFB79:
+ 313:../Libraries/XMCLib/src/xmc_math.c **** 
+ 314:../Libraries/XMCLib/src/xmc_math.c **** /**************************************************************************************************
+ 315:../Libraries/XMCLib/src/xmc_math.c ****  * API IMPLEMENTATION - Non blocking functions
+ 316:../Libraries/XMCLib/src/xmc_math.c ****  **************************************************************************************************
+ 317:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the cosine of a given angle in radians */
+ 318:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_CosNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 319:../Libraries/XMCLib/src/xmc_math.c **** {
+ 620              	 .loc 1 319 0
+ 621              	 .cfi_startproc
+ 622              	.LVL43:
+ 320:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 623              	 .loc 1 320 0
+ 624 0000 0022     	 mov r2,#0
+ 321:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 625              	 .loc 1 321 0
+ 626 0002 0A21     	 mov r1,#10
+ 320:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 627              	 .loc 1 320 0
+ 628 0004 044B     	 ldr r3,.L44
+ 322:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 323:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t) angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 629              	 .loc 1 323 0
+ 630 0006 0002     	 lsl r0,r0,#8
+ 631              	.LVL44:
+ 320:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 632              	 .loc 1 320 0
+ 633 0008 1A64     	 str r2,[r3,#64]
+ 321:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 634              	 .loc 1 321 0
+ 635 000a 5964     	 str r1,[r3,#68]
+ 636              	 .loc 1 323 0
+ 637 000c 1865     	 str r0,[r3,#80]
+ 324:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U;  /* Clear register */
+ 638              	 .loc 1 324 0
+ 639 000e DA64     	 str r2,[r3,#76]
+ 325:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 640              	 .loc 1 325 0
+ 641 0010 024A     	 ldr r2,.L44+4
+ 326:../Libraries/XMCLib/src/xmc_math.c **** }
+ 642              	 .loc 1 326 0
+ 643              	 
+ 325:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 644              	 .loc 1 325 0
+ 645 0012 9A64     	 str r2,[r3,#72]
+ 646              	 .loc 1 326 0
+ 647 0014 7047     	 bx lr
+ 648              	.L45:
+ 649 0016 C046     	 .align 2
+ 650              	.L44:
+ 651 0018 00000340 	 .word 1073938432
+ 652 001c 0076BA4D 	 .word 1304065536
+ 653              	 .cfi_endproc
+ 654              	.LFE79:
+ 656              	 .section .text.XMC_MATH_CORDIC_SinNB,"ax",%progbits
+ 657              	 .align 2
+ 658              	 .global XMC_MATH_CORDIC_SinNB
+ 659              	 .code 16
+ 660              	 .thumb_func
+ 662              	XMC_MATH_CORDIC_SinNB:
+ 663              	.LFB80:
+ 327:../Libraries/XMCLib/src/xmc_math.c **** 
+ 328:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the sine of a given angle in radians */
+ 329:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_SinNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 330:../Libraries/XMCLib/src/xmc_math.c **** {
+ 664              	 .loc 1 330 0
+ 665              	 .cfi_startproc
+ 666              	.LVL45:
+ 331:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 667              	 .loc 1 331 0
+ 668 0000 0022     	 mov r2,#0
+ 332:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 669              	 .loc 1 332 0
+ 670 0002 0A21     	 mov r1,#10
+ 331:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 671              	 .loc 1 331 0
+ 672 0004 044B     	 ldr r3,.L47
+ 333:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 334:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 673              	 .loc 1 334 0
+ 674 0006 0002     	 lsl r0,r0,#8
+ 675              	.LVL46:
+ 331:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 676              	 .loc 1 331 0
+ 677 0008 1A64     	 str r2,[r3,#64]
+ 332:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 678              	 .loc 1 332 0
+ 679 000a 5964     	 str r1,[r3,#68]
+ 680              	 .loc 1 334 0
+ 681 000c 1865     	 str r0,[r3,#80]
+ 335:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 682              	 .loc 1 335 0
+ 683 000e DA64     	 str r2,[r3,#76]
+ 336:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 684              	 .loc 1 336 0
+ 685 0010 024A     	 ldr r2,.L47+4
+ 337:../Libraries/XMCLib/src/xmc_math.c **** }
+ 686              	 .loc 1 337 0
+ 687              	 
+ 336:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 688              	 .loc 1 336 0
+ 689 0012 9A64     	 str r2,[r3,#72]
+ 690              	 .loc 1 337 0
+ 691 0014 7047     	 bx lr
+ 692              	.L48:
+ 693 0016 C046     	 .align 2
+ 694              	.L47:
+ 695 0018 00000340 	 .word 1073938432
+ 696 001c 0076BA4D 	 .word 1304065536
+ 697              	 .cfi_endproc
+ 698              	.LFE80:
+ 700              	 .section .text.XMC_MATH_CORDIC_TanNB,"ax",%progbits
+ 701              	 .align 2
+ 702              	 .global XMC_MATH_CORDIC_TanNB
+ 703              	 .code 16
+ 704              	 .thumb_func
+ 706              	XMC_MATH_CORDIC_TanNB:
+ 707              	.LFB81:
+ 338:../Libraries/XMCLib/src/xmc_math.c **** 
+ 339:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the tangent of a given angle in radians */
+ 340:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_TanNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 341:../Libraries/XMCLib/src/xmc_math.c **** {
+ 708              	 .loc 1 341 0
+ 709              	 .cfi_startproc
+ 710              	.LVL47:
+ 342:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 711              	 .loc 1 342 0
+ 712 0000 1C22     	 mov r2,#28
+ 713 0002 074B     	 ldr r3,.L50
+ 343:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 344:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = (uint32_t) 11 << MATH_DIVCON_DVSSRC_Pos;            /* Right Shifts Divisor by 11 
+ 345:../Libraries/XMCLib/src/xmc_math.c **** 
+ 346:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 347:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 714              	 .loc 1 347 0
+ 715 0004 0A21     	 mov r1,#10
+ 342:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 716              	 .loc 1 342 0
+ 717 0006 5A60     	 str r2,[r3,#4]
+ 344:../Libraries/XMCLib/src/xmc_math.c **** 
+ 718              	 .loc 1 344 0
+ 719 0008 B022     	 mov r2,#176
+ 720 000a 1205     	 lsl r2,r2,#20
+ 721 000c 5A63     	 str r2,[r3,#52]
+ 346:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 722              	 .loc 1 346 0
+ 723 000e 0022     	 mov r2,#0
+ 348:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 349:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ  = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 724              	 .loc 1 349 0
+ 725 0010 0002     	 lsl r0,r0,#8
+ 726              	.LVL48:
+ 346:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR + \
+ 727              	 .loc 1 346 0
+ 728 0012 1A64     	 str r2,[r3,#64]
+ 347:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 729              	 .loc 1 347 0
+ 730 0014 5964     	 str r1,[r3,#68]
+ 731              	 .loc 1 349 0
+ 732 0016 1865     	 str r0,[r3,#80]
+ 350:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY  = 0U; /* Clear register */
+ 733              	 .loc 1 350 0
+ 734 0018 DA64     	 str r2,[r3,#76]
+ 351:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 735              	 .loc 1 351 0
+ 736 001a 024A     	 ldr r2,.L50+4
+ 352:../Libraries/XMCLib/src/xmc_math.c **** }
+ 737              	 .loc 1 352 0
+ 738              	 
+ 351:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_CIRCULAR_GAIN_IN_Q023 << MATH_CORDX_DATA_Pos;
+ 739              	 .loc 1 351 0
+ 740 001c 9A64     	 str r2,[r3,#72]
+ 741              	 .loc 1 352 0
+ 742 001e 7047     	 bx lr
+ 743              	.L51:
+ 744              	 .align 2
+ 745              	.L50:
+ 746 0020 00000340 	 .word 1073938432
+ 747 0024 0076BA4D 	 .word 1304065536
+ 748              	 .cfi_endproc
+ 749              	.LFE81:
+ 751              	 .section .text.XMC_MATH_CORDIC_ArcTanNB,"ax",%progbits
+ 752              	 .align 2
+ 753              	 .global XMC_MATH_CORDIC_ArcTanNB
+ 754              	 .code 16
+ 755              	 .thumb_func
+ 757              	XMC_MATH_CORDIC_ArcTanNB:
+ 758              	.LFB82:
+ 353:../Libraries/XMCLib/src/xmc_math.c **** 
+ 354:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the arc tangent of a given value */
+ 355:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_ArcTanNB(XMC_MATH_Q8_15_t x, XMC_MATH_Q8_15_t y)
+ 356:../Libraries/XMCLib/src/xmc_math.c **** {
+ 759              	 .loc 1 356 0
+ 760              	 .cfi_startproc
+ 761              	.LVL49:
+ 762 0000 10B5     	 push {r4,lr}
+ 763              	 .cfi_def_cfa_offset 8
+ 764              	 .cfi_offset 4,-8
+ 765              	 .cfi_offset 14,-4
+ 357:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 766              	 .loc 1 357 0
+ 767 0002 0022     	 mov r2,#0
+ 358:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR;
+ 768              	 .loc 1 358 0
+ 769 0004 0224     	 mov r4,#2
+ 357:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 770              	 .loc 1 357 0
+ 771 0006 044B     	 ldr r3,.L53
+ 359:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = 0U; /* Clear register */
+ 360:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = ((uint32_t) y) << MATH_CORDY_DATA_Pos;
+ 772              	 .loc 1 360 0
+ 773 0008 0902     	 lsl r1,r1,#8
+ 774              	.LVL50:
+ 361:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = ((uint32_t) x) << MATH_CORDX_DATA_Pos;
+ 775              	 .loc 1 361 0
+ 776 000a 0002     	 lsl r0,r0,#8
+ 777              	.LVL51:
+ 357:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR;
+ 778              	 .loc 1 357 0
+ 779 000c 1A64     	 str r2,[r3,#64]
+ 362:../Libraries/XMCLib/src/xmc_math.c **** }
+ 780              	 .loc 1 362 0
+ 781              	 
+ 358:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = 0U; /* Clear register */
+ 782              	 .loc 1 358 0
+ 783 000e 5C64     	 str r4,[r3,#68]
+ 359:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = ((uint32_t) y) << MATH_CORDY_DATA_Pos;
+ 784              	 .loc 1 359 0
+ 785 0010 1A65     	 str r2,[r3,#80]
+ 360:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = ((uint32_t) x) << MATH_CORDX_DATA_Pos;
+ 786              	 .loc 1 360 0
+ 787 0012 D964     	 str r1,[r3,#76]
+ 361:../Libraries/XMCLib/src/xmc_math.c **** }
+ 788              	 .loc 1 361 0
+ 789 0014 9864     	 str r0,[r3,#72]
+ 790              	 .loc 1 362 0
+ 791 0016 10BD     	 pop {r4,pc}
+ 792              	.L54:
+ 793              	 .align 2
+ 794              	.L53:
+ 795 0018 00000340 	 .word 1073938432
+ 796              	 .cfi_endproc
+ 797              	.LFE82:
+ 799              	 .section .text.XMC_MATH_CORDIC_CoshNB,"ax",%progbits
+ 800              	 .align 2
+ 801              	 .global XMC_MATH_CORDIC_CoshNB
+ 802              	 .code 16
+ 803              	 .thumb_func
+ 805              	XMC_MATH_CORDIC_CoshNB:
+ 806              	.LFB83:
+ 363:../Libraries/XMCLib/src/xmc_math.c **** 
+ 364:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic cosine of a given angle in radians */
+ 365:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_CoshNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 366:../Libraries/XMCLib/src/xmc_math.c **** {
+ 807              	 .loc 1 366 0
+ 808              	 .cfi_startproc
+ 809              	.LVL52:
+ 367:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 810              	 .loc 1 367 0
+ 811 0000 0022     	 mov r2,#0
+ 368:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 812              	 .loc 1 368 0
+ 813 0002 0E21     	 mov r1,#14
+ 367:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 814              	 .loc 1 367 0
+ 815 0004 044B     	 ldr r3,.L56
+ 369:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 370:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 816              	 .loc 1 370 0
+ 817 0006 0002     	 lsl r0,r0,#8
+ 818              	.LVL53:
+ 367:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 819              	 .loc 1 367 0
+ 820 0008 1A64     	 str r2,[r3,#64]
+ 368:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 821              	 .loc 1 368 0
+ 822 000a 5964     	 str r1,[r3,#68]
+ 823              	 .loc 1 370 0
+ 824 000c 1865     	 str r0,[r3,#80]
+ 371:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 825              	 .loc 1 371 0
+ 826 000e DA64     	 str r2,[r3,#76]
+ 372:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 827              	 .loc 1 372 0
+ 828 0010 024A     	 ldr r2,.L56+4
+ 373:../Libraries/XMCLib/src/xmc_math.c **** }
+ 829              	 .loc 1 373 0
+ 830              	 
+ 372:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 831              	 .loc 1 372 0
+ 832 0012 9A64     	 str r2,[r3,#72]
+ 833              	 .loc 1 373 0
+ 834 0014 7047     	 bx lr
+ 835              	.L57:
+ 836 0016 C046     	 .align 2
+ 837              	.L56:
+ 838 0018 00000340 	 .word 1073938432
+ 839 001c 00A1474D 	 .word 1296539904
+ 840              	 .cfi_endproc
+ 841              	.LFE83:
+ 843              	 .section .text.XMC_MATH_CORDIC_SinhNB,"ax",%progbits
+ 844              	 .align 2
+ 845              	 .global XMC_MATH_CORDIC_SinhNB
+ 846              	 .code 16
+ 847              	 .thumb_func
+ 849              	XMC_MATH_CORDIC_SinhNB:
+ 850              	.LFB84:
+ 374:../Libraries/XMCLib/src/xmc_math.c **** 
+ 375:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic sine of a given angle in radians */
+ 376:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_SinhNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 377:../Libraries/XMCLib/src/xmc_math.c **** {
+ 851              	 .loc 1 377 0
+ 852              	 .cfi_startproc
+ 853              	.LVL54:
+ 378:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 854              	 .loc 1 378 0
+ 855 0000 0022     	 mov r2,#0
+ 379:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 856              	 .loc 1 379 0
+ 857 0002 0E21     	 mov r1,#14
+ 378:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 858              	 .loc 1 378 0
+ 859 0004 044B     	 ldr r3,.L59
+ 380:../Libraries/XMCLib/src/xmc_math.c ****                 (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 381:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ = ((uint32_t)angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 860              	 .loc 1 381 0
+ 861 0006 0002     	 lsl r0,r0,#8
+ 862              	.LVL55:
+ 378:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 863              	 .loc 1 378 0
+ 864 0008 1A64     	 str r2,[r3,#64]
+ 379:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 865              	 .loc 1 379 0
+ 866 000a 5964     	 str r1,[r3,#68]
+ 867              	 .loc 1 381 0
+ 868 000c 1865     	 str r0,[r3,#80]
+ 382:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = 0U; /* Clear register */
+ 869              	 .loc 1 382 0
+ 870 000e DA64     	 str r2,[r3,#76]
+ 383:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 871              	 .loc 1 383 0
+ 872 0010 024A     	 ldr r2,.L59+4
+ 384:../Libraries/XMCLib/src/xmc_math.c **** }
+ 873              	 .loc 1 384 0
+ 874              	 
+ 383:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 875              	 .loc 1 383 0
+ 876 0012 9A64     	 str r2,[r3,#72]
+ 877              	 .loc 1 384 0
+ 878 0014 7047     	 bx lr
+ 879              	.L60:
+ 880 0016 C046     	 .align 2
+ 881              	.L59:
+ 882 0018 00000340 	 .word 1073938432
+ 883 001c 00A1474D 	 .word 1296539904
+ 884              	 .cfi_endproc
+ 885              	.LFE84:
+ 887              	 .section .text.XMC_MATH_CORDIC_TanhNB,"ax",%progbits
+ 888              	 .align 2
+ 889              	 .global XMC_MATH_CORDIC_TanhNB
+ 890              	 .code 16
+ 891              	 .thumb_func
+ 893              	XMC_MATH_CORDIC_TanhNB:
+ 894              	.LFB85:
+ 385:../Libraries/XMCLib/src/xmc_math.c **** 
+ 386:../Libraries/XMCLib/src/xmc_math.c **** /* This function computes the hyperbolic tangent of a given angle in radians */
+ 387:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_CORDIC_TanhNB(XMC_MATH_Q0_23_t angle_in_radians)
+ 388:../Libraries/XMCLib/src/xmc_math.c **** {
+ 895              	 .loc 1 388 0
+ 896              	 .cfi_startproc
+ 897              	.LVL56:
+ 389:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 898              	 .loc 1 389 0
+ 899 0000 1C22     	 mov r2,#28
+ 900 0002 074B     	 ldr r3,.L62
+ 390:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE;      /* Chain the results of CORDIC
+ 391:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = (uint32_t) 11 << MATH_DIVCON_DVSSRC_Pos;            /* Right Shifts Divisor by 11 
+ 392:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 393:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 901              	 .loc 1 393 0
+ 902 0004 0E21     	 mov r1,#14
+ 389:../Libraries/XMCLib/src/xmc_math.c ****   MATH->GLBCON = (uint32_t) XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE + \
+ 903              	 .loc 1 389 0
+ 904 0006 5A60     	 str r2,[r3,#4]
+ 391:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC  = 0U; /* Clear register */
+ 905              	 .loc 1 391 0
+ 906 0008 B022     	 mov r2,#176
+ 907 000a 1205     	 lsl r2,r2,#20
+ 908 000c 5A63     	 str r2,[r3,#52]
+ 392:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 909              	 .loc 1 392 0
+ 910 000e 0022     	 mov r2,#0
+ 394:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 395:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDZ  = ((uint32_t) angle_in_radians) << MATH_CORDZ_DATA_Pos;
+ 911              	 .loc 1 395 0
+ 912 0010 0002     	 lsl r0,r0,#8
+ 913              	.LVL57:
+ 392:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON    = (uint32_t) XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC + \
+ 914              	 .loc 1 392 0
+ 915 0012 1A64     	 str r2,[r3,#64]
+ 393:../Libraries/XMCLib/src/xmc_math.c ****                  (uint32_t) XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION;
+ 916              	 .loc 1 393 0
+ 917 0014 5964     	 str r1,[r3,#68]
+ 918              	 .loc 1 395 0
+ 919 0016 1865     	 str r0,[r3,#80]
+ 396:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY  = 0U; /* Clear register */
+ 920              	 .loc 1 396 0
+ 921 0018 DA64     	 str r2,[r3,#76]
+ 397:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 922              	 .loc 1 397 0
+ 923 001a 024A     	 ldr r2,.L62+4
+ 398:../Libraries/XMCLib/src/xmc_math.c **** }
+ 924              	 .loc 1 398 0
+ 925              	 
+ 397:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX  = XMC_MATH_RECIPROC_HYPERBOLIC_GAIN_IN_Q1_22 << MATH_CORDX_DATA_Pos;
+ 926              	 .loc 1 397 0
+ 927 001c 9A64     	 str r2,[r3,#72]
+ 928              	 .loc 1 398 0
+ 929 001e 7047     	 bx lr
+ 930              	.L63:
+ 931              	 .align 2
+ 932              	.L62:
+ 933 0020 00000340 	 .word 1073938432
+ 934 0024 00A1474D 	 .word 1296539904
+ 935              	 .cfi_endproc
+ 936              	.LFE85:
+ 938              	 .section .text.XMC_MATH_DIV_UnsignedDivNB,"ax",%progbits
+ 939              	 .align 2
+ 940              	 .global XMC_MATH_DIV_UnsignedDivNB
+ 941              	 .code 16
+ 942              	 .thumb_func
+ 944              	XMC_MATH_DIV_UnsignedDivNB:
+ 945              	.LFB86:
+ 399:../Libraries/XMCLib/src/xmc_math.c **** 
+ 400:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs division for given two unsigned arguments */
+ 401:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_DIV_UnsignedDivNB(uint32_t dividend, uint32_t divisor)
+ 402:../Libraries/XMCLib/src/xmc_math.c **** {
+ 946              	 .loc 1 402 0
+ 947              	 .cfi_startproc
+ 948              	.LVL58:
+ 403:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_UNSIGNED_DIVISION;
+ 949              	 .loc 1 403 0
+ 950 0000 0422     	 mov r2,#4
+ 951 0002 024B     	 ldr r3,.L65
+ 404:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 405:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS    = divisor;
+ 406:../Libraries/XMCLib/src/xmc_math.c **** }
+ 952              	 .loc 1 406 0
+ 953              	 
+ 403:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_UNSIGNED_DIVISION;
+ 954              	 .loc 1 403 0
+ 955 0004 5A63     	 str r2,[r3,#52]
+ 404:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 956              	 .loc 1 404 0
+ 957 0006 1862     	 str r0,[r3,#32]
+ 405:../Libraries/XMCLib/src/xmc_math.c **** }
+ 958              	 .loc 1 405 0
+ 959 0008 5962     	 str r1,[r3,#36]
+ 960              	 .loc 1 406 0
+ 961 000a 7047     	 bx lr
+ 962              	.L66:
+ 963              	 .align 2
+ 964              	.L65:
+ 965 000c 00000340 	 .word 1073938432
+ 966              	 .cfi_endproc
+ 967              	.LFE86:
+ 969              	 .section .text.XMC_MATH_DIV_SignedDivNB,"ax",%progbits
+ 970              	 .align 2
+ 971              	 .global XMC_MATH_DIV_SignedDivNB
+ 972              	 .code 16
+ 973              	 .thumb_func
+ 975              	XMC_MATH_DIV_SignedDivNB:
+ 976              	.LFB87:
+ 407:../Libraries/XMCLib/src/xmc_math.c **** 
+ 408:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs division for given two signed arguments */
+ 409:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_DIV_SignedDivNB(int32_t dividend, int32_t divisor)
+ 410:../Libraries/XMCLib/src/xmc_math.c **** {
+ 977              	 .loc 1 410 0
+ 978              	 .cfi_startproc
+ 979              	.LVL59:
+ 411:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_SIGNED_DIVISION;
+ 980              	 .loc 1 411 0
+ 981 0000 0022     	 mov r2,#0
+ 982 0002 024B     	 ldr r3,.L68
+ 412:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 413:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS    = divisor;
+ 414:../Libraries/XMCLib/src/xmc_math.c **** }
+ 983              	 .loc 1 414 0
+ 984              	 
+ 411:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_SIGNED_DIVISION;
+ 985              	 .loc 1 411 0
+ 986 0004 5A63     	 str r2,[r3,#52]
+ 412:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 987              	 .loc 1 412 0
+ 988 0006 1862     	 str r0,[r3,#32]
+ 413:../Libraries/XMCLib/src/xmc_math.c **** }
+ 989              	 .loc 1 413 0
+ 990 0008 5962     	 str r1,[r3,#36]
+ 991              	 .loc 1 414 0
+ 992 000a 7047     	 bx lr
+ 993              	.L69:
+ 994              	 .align 2
+ 995              	.L68:
+ 996 000c 00000340 	 .word 1073938432
+ 997              	 .cfi_endproc
+ 998              	.LFE87:
+ 1000              	 .section .text.XMC_MATH_DIV_UnsignedModNB,"ax",%progbits
+ 1001              	 .align 2
+ 1002              	 .global XMC_MATH_DIV_UnsignedModNB
+ 1003              	 .code 16
+ 1004              	 .thumb_func
+ 1006              	XMC_MATH_DIV_UnsignedModNB:
+ 1007              	.LFB88:
+ 415:../Libraries/XMCLib/src/xmc_math.c **** 
+ 416:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs modulo operation for given two unsigned arguments */
+ 417:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_DIV_UnsignedModNB(uint32_t dividend, uint32_t divisor)
+ 418:../Libraries/XMCLib/src/xmc_math.c **** {
+ 1008              	 .loc 1 418 0
+ 1009              	 .cfi_startproc
+ 1010              	.LVL60:
+ 419:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_UNSIGNED_DIVISION;
+ 1011              	 .loc 1 419 0
+ 1012 0000 0422     	 mov r2,#4
+ 1013 0002 024B     	 ldr r3,.L71
+ 420:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 421:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS    = divisor;
+ 422:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1014              	 .loc 1 422 0
+ 1015              	 
+ 419:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_UNSIGNED_DIVISION;
+ 1016              	 .loc 1 419 0
+ 1017 0004 5A63     	 str r2,[r3,#52]
+ 420:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 1018              	 .loc 1 420 0
+ 1019 0006 1862     	 str r0,[r3,#32]
+ 421:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1020              	 .loc 1 421 0
+ 1021 0008 5962     	 str r1,[r3,#36]
+ 1022              	 .loc 1 422 0
+ 1023 000a 7047     	 bx lr
+ 1024              	.L72:
+ 1025              	 .align 2
+ 1026              	.L71:
+ 1027 000c 00000340 	 .word 1073938432
+ 1028              	 .cfi_endproc
+ 1029              	.LFE88:
+ 1031              	 .section .text.XMC_MATH_DIV_SignedModNB,"ax",%progbits
+ 1032              	 .align 2
+ 1033              	 .global XMC_MATH_DIV_SignedModNB
+ 1034              	 .code 16
+ 1035              	 .thumb_func
+ 1037              	XMC_MATH_DIV_SignedModNB:
+ 1038              	.LFB89:
+ 423:../Libraries/XMCLib/src/xmc_math.c **** 
+ 424:../Libraries/XMCLib/src/xmc_math.c **** /* This function performs modulo operation for given two signed arguments */
+ 425:../Libraries/XMCLib/src/xmc_math.c **** void XMC_MATH_DIV_SignedModNB(int32_t dividend, int32_t divisor)
+ 426:../Libraries/XMCLib/src/xmc_math.c **** {
+ 1039              	 .loc 1 426 0
+ 1040              	 .cfi_startproc
+ 1041              	.LVL61:
+ 427:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_SIGNED_DIVISION;
+ 1042              	 .loc 1 427 0
+ 1043 0000 0022     	 mov r2,#0
+ 1044 0002 024B     	 ldr r3,.L74
+ 428:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 429:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVS    = divisor;
+ 430:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1045              	 .loc 1 430 0
+ 1046              	 
+ 427:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DIVCON = XMC_MATH_SIGNED_DIVISION;
+ 1047              	 .loc 1 427 0
+ 1048 0004 5A63     	 str r2,[r3,#52]
+ 428:../Libraries/XMCLib/src/xmc_math.c ****   MATH->DVD    = dividend;
+ 1049              	 .loc 1 428 0
+ 1050 0006 1862     	 str r0,[r3,#32]
+ 429:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1051              	 .loc 1 429 0
+ 1052 0008 5962     	 str r1,[r3,#36]
+ 1053              	 .loc 1 430 0
+ 1054 000a 7047     	 bx lr
+ 1055              	.L75:
+ 1056              	 .align 2
+ 1057              	.L74:
+ 1058 000c 00000340 	 .word 1073938432
+ 1059              	 .cfi_endproc
+ 1060              	.LFE89:
+ 1062              	 .section .text.XMC_MATH_CORDIC_Q15_Sqrt,"ax",%progbits
+ 1063              	 .align 2
+ 1064              	 .global XMC_MATH_CORDIC_Q15_Sqrt
+ 1065              	 .code 16
+ 1066              	 .thumb_func
+ 1068              	XMC_MATH_CORDIC_Q15_Sqrt:
+ 1069              	.LFB90:
+ 431:../Libraries/XMCLib/src/xmc_math.c **** 
+ 432:../Libraries/XMCLib/src/xmc_math.c **** int16_t XMC_MATH_CORDIC_Q15_Sqrt(int16_t x)
+ 433:../Libraries/XMCLib/src/xmc_math.c **** {
+ 1070              	 .loc 1 433 0
+ 1071              	 .cfi_startproc
+ 1072              	.LVL62:
+ 434:../Libraries/XMCLib/src/xmc_math.c ****   int32_t temp;
+ 435:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 1073              	 .loc 1 435 0
+ 1074 0000 0022     	 mov r2,#0
+ 1075 0002 0A4B     	 ldr r3,.L77
+ 436:../Libraries/XMCLib/src/xmc_math.c **** 
+ 437:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC |
+ 438:../Libraries/XMCLib/src/xmc_math.c ****                 XMC_MATH_CORDIC_ROTVEC_MODE_VECTORING;
+ 439:../Libraries/XMCLib/src/xmc_math.c **** 
+ 440:../Libraries/XMCLib/src/xmc_math.c ****   temp = (int32_t)x << 15; /* Q30 to handle numbers > 1.0 */
+ 1076              	 .loc 1 440 0
+ 1077 0004 C003     	 lsl r0,r0,#15
+ 1078              	.LVL63:
+ 435:../Libraries/XMCLib/src/xmc_math.c **** 
+ 1079              	 .loc 1 435 0
+ 1080 0006 1A64     	 str r2,[r3,#64]
+ 437:../Libraries/XMCLib/src/xmc_math.c ****                 XMC_MATH_CORDIC_ROTVEC_MODE_VECTORING;
+ 1081              	 .loc 1 437 0
+ 1082 0008 0632     	 add r2,r2,#6
+ 1083 000a 5A64     	 str r2,[r3,#68]
+ 441:../Libraries/XMCLib/src/xmc_math.c **** 
+ 442:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = (temp - 0x10000000U); /* x - 0.25 */
+ 1084              	 .loc 1 442 0
+ 1085 000c F022     	 mov r2,#240
+ 1086 000e 1206     	 lsl r2,r2,#24
+ 1087 0010 8218     	 add r2,r0,r2
+ 1088 0012 DA64     	 str r2,[r3,#76]
+ 443:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = (temp + 0x10000000U); /* x + 0.25 */
+ 1089              	 .loc 1 443 0
+ 1090 0014 8022     	 mov r2,#128
+ 1091 0016 5205     	 lsl r2,r2,#21
+ 1092 0018 9446     	 mov ip,r2
+ 1093 001a 6044     	 add r0,r0,ip
+ 1094 001c 9864     	 str r0,[r3,#72]
+ 444:../Libraries/XMCLib/src/xmc_math.c **** 
+ 445:../Libraries/XMCLib/src/xmc_math.c ****   return (int16_t)(((MATH->CORRX >> 14) * 39568) >> 16); /* Q16 * Q15 */
+ 1095              	 .loc 1 445 0
+ 1096 001e 586D     	 ldr r0,[r3,#84]
+ 1097 0020 034B     	 ldr r3,.L77+4
+ 1098 0022 800B     	 lsr r0,r0,#14
+ 1099 0024 5843     	 mul r0,r3
+ 446:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1100              	 .loc 1 446 0
+ 1101              	 
+ 445:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1102              	 .loc 1 445 0
+ 1103 0026 0014     	 asr r0,r0,#16
+ 1104              	 .loc 1 446 0
+ 1105 0028 7047     	 bx lr
+ 1106              	.L78:
+ 1107 002a C046     	 .align 2
+ 1108              	.L77:
+ 1109 002c 00000340 	 .word 1073938432
+ 1110 0030 909A0000 	 .word 39568
+ 1111              	 .cfi_endproc
+ 1112              	.LFE90:
+ 1114              	 .section .text.XMC_MATH_CORDIC_Q31_Sqrt,"ax",%progbits
+ 1115              	 .align 2
+ 1116              	 .global XMC_MATH_CORDIC_Q31_Sqrt
+ 1117              	 .code 16
+ 1118              	 .thumb_func
+ 1120              	XMC_MATH_CORDIC_Q31_Sqrt:
+ 1121              	.LFB91:
+ 447:../Libraries/XMCLib/src/xmc_math.c **** 
+ 448:../Libraries/XMCLib/src/xmc_math.c **** int32_t XMC_MATH_CORDIC_Q31_Sqrt(int32_t x)
+ 449:../Libraries/XMCLib/src/xmc_math.c **** {
+ 1122              	 .loc 1 449 0
+ 1123              	 .cfi_startproc
+ 1124              	.LVL64:
+ 450:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 1125              	 .loc 1 450 0
+ 1126 0000 0022     	 mov r2,#0
+ 1127 0002 094B     	 ldr r3,.L80
+ 451:../Libraries/XMCLib/src/xmc_math.c **** 
+ 452:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CON   = XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC |
+ 453:../Libraries/XMCLib/src/xmc_math.c ****                 XMC_MATH_CORDIC_ROTVEC_MODE_VECTORING;
+ 454:../Libraries/XMCLib/src/xmc_math.c **** 
+ 455:../Libraries/XMCLib/src/xmc_math.c ****   x >>= 1;  /* Q30 to handle numbers > 1.0 */
+ 1128              	 .loc 1 455 0
+ 1129 0004 4010     	 asr r0,r0,#1
+ 1130              	.LVL65:
+ 450:../Libraries/XMCLib/src/xmc_math.c ****   MATH->STATC = 0U; /* Clear register */
+ 1131              	 .loc 1 450 0
+ 1132 0006 1A64     	 str r2,[r3,#64]
+ 452:../Libraries/XMCLib/src/xmc_math.c ****                 XMC_MATH_CORDIC_ROTVEC_MODE_VECTORING;
+ 1133              	 .loc 1 452 0
+ 1134 0008 0632     	 add r2,r2,#6
+ 1135 000a 5A64     	 str r2,[r3,#68]
+ 1136              	.LVL66:
+ 456:../Libraries/XMCLib/src/xmc_math.c **** 
+ 457:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDY = (x - 0x10000000U); /* x - 0.25 */
+ 1137              	 .loc 1 457 0
+ 1138 000c F022     	 mov r2,#240
+ 1139 000e 1206     	 lsl r2,r2,#24
+ 1140 0010 8218     	 add r2,r0,r2
+ 1141 0012 DA64     	 str r2,[r3,#76]
+ 458:../Libraries/XMCLib/src/xmc_math.c ****   MATH->CORDX = (x + 0x10000000U); /* x + 0.25 */
+ 1142              	 .loc 1 458 0
+ 1143 0014 8022     	 mov r2,#128
+ 1144 0016 5205     	 lsl r2,r2,#21
+ 1145 0018 9446     	 mov ip,r2
+ 1146 001a 6044     	 add r0,r0,ip
+ 1147 001c 9864     	 str r0,[r3,#72]
+ 459:../Libraries/XMCLib/src/xmc_math.c **** 
+ 460:../Libraries/XMCLib/src/xmc_math.c ****   return ((MATH->CORRX >> 14) * 39568); /* Q16 * Q15 */
+ 1148              	 .loc 1 460 0
+ 1149 001e 586D     	 ldr r0,[r3,#84]
+ 1150 0020 024B     	 ldr r3,.L80+4
+ 1151 0022 800B     	 lsr r0,r0,#14
+ 1152 0024 5843     	 mul r0,r3
+ 461:../Libraries/XMCLib/src/xmc_math.c **** }
+ 1153              	 .loc 1 461 0
+ 1154              	 
+ 1155 0026 7047     	 bx lr
+ 1156              	.L81:
+ 1157              	 .align 2
+ 1158              	.L80:
+ 1159 0028 00000340 	 .word 1073938432
+ 1160 002c 909A0000 	 .word 39568
+ 1161              	 .cfi_endproc
+ 1162              	.LFE91:
+ 1164              	 .text
+ 1165              	.Letext0:
+ 1166              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1167              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1168              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 1169              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_math.h"
+ 1170              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc_math.c
+    {standard input}:18     .text.XMC_MATH_DIV_IsBusy:00000000 $t
+    {standard input}:23     .text.XMC_MATH_DIV_IsBusy:00000000 XMC_MATH_DIV_IsBusy
+    {standard input}:44     .text.XMC_MATH_DIV_IsBusy:0000000c $d
+    {standard input}:49     .text.XMC_MATH_CORDIC_IsBusy:00000000 $t
+    {standard input}:54     .text.XMC_MATH_CORDIC_IsBusy:00000000 XMC_MATH_CORDIC_IsBusy
+    {standard input}:74     .text.XMC_MATH_CORDIC_IsBusy:0000000c $d
+    {standard input}:79     .text.XMC_MATH_GetEventStatus:00000000 $t
+    {standard input}:84     .text.XMC_MATH_GetEventStatus:00000000 XMC_MATH_GetEventStatus
+    {standard input}:108    .text.XMC_MATH_GetEventStatus:00000010 $d
+    {standard input}:113    .text.__aeabi_uidiv:00000000 $t
+    {standard input}:118    .text.__aeabi_uidiv:00000000 __aeabi_uidiv
+    {standard input}:142    .text.__aeabi_uidiv:00000010 $d
+    {standard input}:147    .text.__aeabi_idiv:00000000 $t
+    {standard input}:152    .text.__aeabi_idiv:00000000 __aeabi_idiv
+    {standard input}:176    .text.__aeabi_idiv:00000010 $d
+    {standard input}:181    .text.__aeabi_uidivmod:00000000 $t
+    {standard input}:186    .text.__aeabi_uidivmod:00000000 __aeabi_uidivmod
+    {standard input}:213    .text.__aeabi_uidivmod:00000010 $d
+    {standard input}:218    .text.__aeabi_idivmod:00000000 $t
+    {standard input}:223    .text.__aeabi_idivmod:00000000 __aeabi_idivmod
+    {standard input}:250    .text.__aeabi_idivmod:00000010 $d
+    {standard input}:255    .text.XMC_MATH_CORDIC_Cos:00000000 $t
+    {standard input}:260    .text.XMC_MATH_CORDIC_Cos:00000000 XMC_MATH_CORDIC_Cos
+    {standard input}:298    .text.XMC_MATH_CORDIC_Cos:0000001c $d
+    {standard input}:304    .text.XMC_MATH_CORDIC_Sin:00000000 $t
+    {standard input}:309    .text.XMC_MATH_CORDIC_Sin:00000000 XMC_MATH_CORDIC_Sin
+    {standard input}:347    .text.XMC_MATH_CORDIC_Sin:0000001c $d
+    {standard input}:353    .text.XMC_MATH_CORDIC_Tan:00000000 $t
+    {standard input}:358    .text.XMC_MATH_CORDIC_Tan:00000000 XMC_MATH_CORDIC_Tan
+    {standard input}:401    .text.XMC_MATH_CORDIC_Tan:00000024 $d
+    {standard input}:407    .text.XMC_MATH_CORDIC_ArcTan:00000000 $t
+    {standard input}:412    .text.XMC_MATH_CORDIC_ArcTan:00000000 XMC_MATH_CORDIC_ArcTan
+    {standard input}:456    .text.XMC_MATH_CORDIC_ArcTan:0000001c $d
+    {standard input}:461    .text.XMC_MATH_CORDIC_Cosh:00000000 $t
+    {standard input}:466    .text.XMC_MATH_CORDIC_Cosh:00000000 XMC_MATH_CORDIC_Cosh
+    {standard input}:504    .text.XMC_MATH_CORDIC_Cosh:0000001c $d
+    {standard input}:510    .text.XMC_MATH_CORDIC_Sinh:00000000 $t
+    {standard input}:515    .text.XMC_MATH_CORDIC_Sinh:00000000 XMC_MATH_CORDIC_Sinh
+    {standard input}:553    .text.XMC_MATH_CORDIC_Sinh:0000001c $d
+    {standard input}:559    .text.XMC_MATH_CORDIC_Tanh:00000000 $t
+    {standard input}:564    .text.XMC_MATH_CORDIC_Tanh:00000000 XMC_MATH_CORDIC_Tanh
+    {standard input}:607    .text.XMC_MATH_CORDIC_Tanh:00000024 $d
+    {standard input}:613    .text.XMC_MATH_CORDIC_CosNB:00000000 $t
+    {standard input}:618    .text.XMC_MATH_CORDIC_CosNB:00000000 XMC_MATH_CORDIC_CosNB
+    {standard input}:651    .text.XMC_MATH_CORDIC_CosNB:00000018 $d
+    {standard input}:657    .text.XMC_MATH_CORDIC_SinNB:00000000 $t
+    {standard input}:662    .text.XMC_MATH_CORDIC_SinNB:00000000 XMC_MATH_CORDIC_SinNB
+    {standard input}:695    .text.XMC_MATH_CORDIC_SinNB:00000018 $d
+    {standard input}:701    .text.XMC_MATH_CORDIC_TanNB:00000000 $t
+    {standard input}:706    .text.XMC_MATH_CORDIC_TanNB:00000000 XMC_MATH_CORDIC_TanNB
+    {standard input}:746    .text.XMC_MATH_CORDIC_TanNB:00000020 $d
+    {standard input}:752    .text.XMC_MATH_CORDIC_ArcTanNB:00000000 $t
+    {standard input}:757    .text.XMC_MATH_CORDIC_ArcTanNB:00000000 XMC_MATH_CORDIC_ArcTanNB
+    {standard input}:795    .text.XMC_MATH_CORDIC_ArcTanNB:00000018 $d
+    {standard input}:800    .text.XMC_MATH_CORDIC_CoshNB:00000000 $t
+    {standard input}:805    .text.XMC_MATH_CORDIC_CoshNB:00000000 XMC_MATH_CORDIC_CoshNB
+    {standard input}:838    .text.XMC_MATH_CORDIC_CoshNB:00000018 $d
+    {standard input}:844    .text.XMC_MATH_CORDIC_SinhNB:00000000 $t
+    {standard input}:849    .text.XMC_MATH_CORDIC_SinhNB:00000000 XMC_MATH_CORDIC_SinhNB
+    {standard input}:882    .text.XMC_MATH_CORDIC_SinhNB:00000018 $d
+    {standard input}:888    .text.XMC_MATH_CORDIC_TanhNB:00000000 $t
+    {standard input}:893    .text.XMC_MATH_CORDIC_TanhNB:00000000 XMC_MATH_CORDIC_TanhNB
+    {standard input}:933    .text.XMC_MATH_CORDIC_TanhNB:00000020 $d
+    {standard input}:939    .text.XMC_MATH_DIV_UnsignedDivNB:00000000 $t
+    {standard input}:944    .text.XMC_MATH_DIV_UnsignedDivNB:00000000 XMC_MATH_DIV_UnsignedDivNB
+    {standard input}:965    .text.XMC_MATH_DIV_UnsignedDivNB:0000000c $d
+    {standard input}:970    .text.XMC_MATH_DIV_SignedDivNB:00000000 $t
+    {standard input}:975    .text.XMC_MATH_DIV_SignedDivNB:00000000 XMC_MATH_DIV_SignedDivNB
+    {standard input}:996    .text.XMC_MATH_DIV_SignedDivNB:0000000c $d
+    {standard input}:1001   .text.XMC_MATH_DIV_UnsignedModNB:00000000 $t
+    {standard input}:1006   .text.XMC_MATH_DIV_UnsignedModNB:00000000 XMC_MATH_DIV_UnsignedModNB
+    {standard input}:1027   .text.XMC_MATH_DIV_UnsignedModNB:0000000c $d
+    {standard input}:1032   .text.XMC_MATH_DIV_SignedModNB:00000000 $t
+    {standard input}:1037   .text.XMC_MATH_DIV_SignedModNB:00000000 XMC_MATH_DIV_SignedModNB
+    {standard input}:1058   .text.XMC_MATH_DIV_SignedModNB:0000000c $d
+    {standard input}:1063   .text.XMC_MATH_CORDIC_Q15_Sqrt:00000000 $t
+    {standard input}:1068   .text.XMC_MATH_CORDIC_Q15_Sqrt:00000000 XMC_MATH_CORDIC_Q15_Sqrt
+    {standard input}:1109   .text.XMC_MATH_CORDIC_Q15_Sqrt:0000002c $d
+    {standard input}:1115   .text.XMC_MATH_CORDIC_Q31_Sqrt:00000000 $t
+    {standard input}:1120   .text.XMC_MATH_CORDIC_Q31_Sqrt:00000000 XMC_MATH_CORDIC_Q31_Sqrt
+    {standard input}:1159   .text.XMC_MATH_CORDIC_Q31_Sqrt:00000028 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,255 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "mcuinit.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.PMSM_FOC_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global PMSM_FOC_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	PMSM_FOC_Init:
+  24              	.LFB249:
+  25              	 .file 1 "../PMSM_FOC/MCUInit/mcuinit.c"
+   1:../PMSM_FOC/MCUInit/mcuinit.c **** /**
+   2:../PMSM_FOC/MCUInit/mcuinit.c ****  * @file mcuinit.c
+   3:../PMSM_FOC/MCUInit/mcuinit.c ****  * @date 2015-12-16
+   4:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+   5:../PMSM_FOC/MCUInit/mcuinit.c ****  * @cond
+   6:../PMSM_FOC/MCUInit/mcuinit.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MCUInit/mcuinit.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+   9:../PMSM_FOC/MCUInit/mcuinit.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MCUInit/mcuinit.c ****  * All rights reserved.
+  11:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  12:../PMSM_FOC/MCUInit/mcuinit.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MCUInit/mcuinit.c ****  * following conditions are met:
+  14:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  15:../PMSM_FOC/MCUInit/mcuinit.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MCUInit/mcuinit.c ****  *   disclaimer.
+  17:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  18:../PMSM_FOC/MCUInit/mcuinit.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MCUInit/mcuinit.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  21:../PMSM_FOC/MCUInit/mcuinit.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MCUInit/mcuinit.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  24:../PMSM_FOC/MCUInit/mcuinit.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MCUInit/mcuinit.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MCUInit/mcuinit.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MCUInit/mcuinit.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MCUInit/mcuinit.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MCUInit/mcuinit.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MCUInit/mcuinit.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  32:../PMSM_FOC/MCUInit/mcuinit.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MCUInit/mcuinit.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MCUInit/mcuinit.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  36:../PMSM_FOC/MCUInit/mcuinit.c ****  * @file mcuinit.c
+  37:../PMSM_FOC/MCUInit/mcuinit.c ****  * @date 16 Dec, 2015
+  38:../PMSM_FOC/MCUInit/mcuinit.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  40:../PMSM_FOC/MCUInit/mcuinit.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  42:../PMSM_FOC/MCUInit/mcuinit.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MCUInit/mcuinit.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MCUInit/mcuinit.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  46:../PMSM_FOC/MCUInit/mcuinit.c ****  * History
+  47:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  48:../PMSM_FOC/MCUInit/mcuinit.c ****  * 16 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MCUInit/mcuinit.c ****  *      Initial version
+  50:../PMSM_FOC/MCUInit/mcuinit.c ****  * @endcond
+  51:../PMSM_FOC/MCUInit/mcuinit.c ****  *
+  52:../PMSM_FOC/MCUInit/mcuinit.c ****  */
+  53:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  54:../PMSM_FOC/MCUInit/mcuinit.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MCUInit/mcuinit.c ****  * HEADER FILES
+  56:../PMSM_FOC/MCUInit/mcuinit.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MCUInit/mcuinit.c **** #include <XMC1300.h>							/* SFR declarations of the selected device */
+  58:../PMSM_FOC/MCUInit/mcuinit.c **** #include "mcuinit.h"
+  59:../PMSM_FOC/MCUInit/mcuinit.c **** #include "..\Configuration\pmsm_foc_user_mcuhwconfig.h"
+  60:../PMSM_FOC/MCUInit/mcuinit.c **** #include "..\Configuration\pmsm_foc_uCProbe_parameters.h"
+  61:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  62:../PMSM_FOC/MCUInit/mcuinit.c **** #define PMSM_FOC_SETTLING_TIME    0x7FFFF
+  63:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  64:../PMSM_FOC/MCUInit/mcuinit.c **** /**************************************************************************************************
+  65:../PMSM_FOC/MCUInit/mcuinit.c ****  * API IMPLEMENTATION
+  66:../PMSM_FOC/MCUInit/mcuinit.c ****  **************************************************************************************************
+  67:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  68:../PMSM_FOC/MCUInit/mcuinit.c **** /* API to initialize MCU and peripherals for motor control */
+  69:../PMSM_FOC/MCUInit/mcuinit.c **** void PMSM_FOC_Init(void)
+  70:../PMSM_FOC/MCUInit/mcuinit.c **** {
+  26              	 .loc 1 70 0
+  27              	 .cfi_startproc
+  28 0000 00B5     	 push {lr}
+  29              	 .cfi_def_cfa_offset 4
+  30              	 .cfi_offset 14,-4
+  31 0002 83B0     	 sub sp,sp,#12
+  32              	 .cfi_def_cfa_offset 16
+  71:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  72:../PMSM_FOC/MCUInit/mcuinit.c ****   volatile uint32_t delay_counter;
+  73:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  74:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Reset configuration, clock configuration */
+  75:../PMSM_FOC/MCUInit/mcuinit.c ****   Reset_Clock_Init();
+  33              	 .loc 1 75 0
+  34 0004 FFF7FEFF 	 bl Reset_Clock_Init
+  35              	.LVL0:
+  76:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  77:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Hardware Settling down Timing*/
+  78:../PMSM_FOC/MCUInit/mcuinit.c ****   for(delay_counter = 0; delay_counter < PMSM_FOC_SETTLING_TIME; delay_counter++);
+  36              	 .loc 1 78 0
+  37 0008 0023     	 mov r3,#0
+  38 000a 0193     	 str r3,[sp,#4]
+  39 000c 0199     	 ldr r1,[sp,#4]
+  40 000e 124B     	 ldr r3,.L8
+  41 0010 1A1C     	 mov r2,r3
+  42 0012 9942     	 cmp r1,r3
+  43 0014 05D8     	 bhi .L3
+  44              	.L4:
+  45              	 .loc 1 78 0 is_stmt 0 discriminator 3
+  46 0016 019B     	 ldr r3,[sp,#4]
+  47 0018 0133     	 add r3,r3,#1
+  48 001a 0193     	 str r3,[sp,#4]
+  49 001c 019B     	 ldr r3,[sp,#4]
+  50 001e 9342     	 cmp r3,r2
+  51 0020 F9D9     	 bls .L4
+  52              	.L3:
+  79:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  80:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init CCU8 */
+  81:../PMSM_FOC/MCUInit/mcuinit.c ****   CCU8_Init();
+  53              	 .loc 1 81 0 is_stmt 1
+  54 0022 FFF7FEFF 	 bl CCU8_Init
+  55              	.LVL1:
+  82:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  83:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init CCU4 for debug, PWM speed adjustment, or FG / RD */
+  84:../PMSM_FOC/MCUInit/mcuinit.c ****   CCU4_Init();
+  56              	 .loc 1 84 0
+  57 0026 FFF7FEFF 	 bl CCU4_Init
+  58              	.LVL2:
+  85:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  86:../PMSM_FOC/MCUInit/mcuinit.c ****   #if(UART_ENABLE != USIC_DISABLED_ALL)
+  87:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init UART */
+  88:../PMSM_FOC/MCUInit/mcuinit.c ****   UART_Init();
+  59              	 .loc 1 88 0
+  60 002a FFF7FEFF 	 bl UART_Init
+  61              	.LVL3:
+  89:../PMSM_FOC/MCUInit/mcuinit.c ****   #endif
+  90:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init MATH Unit (i.e.: CORDIC Coprocessor and Divider Unit DIV) */
+  91:../PMSM_FOC/MCUInit/mcuinit.c ****   MATH_Init();
+  62              	 .loc 1 91 0
+  63 002e FFF7FEFF 	 bl MATH_Init
+  64              	.LVL4:
+  92:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  93:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init GPIOs */
+  94:../PMSM_FOC/MCUInit/mcuinit.c ****   GPIO_Init();
+  65              	 .loc 1 94 0
+  66 0032 FFF7FEFF 	 bl GPIO_Init
+  67              	.LVL5:
+  95:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  96:../PMSM_FOC/MCUInit/mcuinit.c ****   UART_TX_String("\r\nInfineon FOC\r\n");
+  68              	 .loc 1 96 0
+  69 0036 0948     	 ldr r0,.L8+4
+  70 0038 FFF7FEFF 	 bl UART_TX_String
+  71              	.LVL6:
+  97:../PMSM_FOC/MCUInit/mcuinit.c **** 
+  98:../PMSM_FOC/MCUInit/mcuinit.c ****   /*  Init variables for motor control. Before start motor, brake the motor in case it is running *
+  99:../PMSM_FOC/MCUInit/mcuinit.c ****   MotorControl_Init();
+  72              	 .loc 1 99 0
+  73 003c FFF7FEFF 	 bl MotorControl_Init
+  74              	.LVL7:
+ 100:../PMSM_FOC/MCUInit/mcuinit.c **** 
+ 101:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init ADC, for current sensing, ADC of DC link Vdc (and POT). Do at later stage of the init */
+ 102:../PMSM_FOC/MCUInit/mcuinit.c ****   ADC_Init();
+  75              	 .loc 1 102 0
+  76 0040 FFF7FEFF 	 bl ADC_Init
+  77              	.LVL8:
+ 103:../PMSM_FOC/MCUInit/mcuinit.c ****   ADC_DCLink_Init();
+  78              	 .loc 1 103 0
+  79 0044 FFF7FEFF 	 bl ADC_DCLink_Init
+  80              	.LVL9:
+ 104:../PMSM_FOC/MCUInit/mcuinit.c ****   ADC_Pot_Init();
+  81              	 .loc 1 104 0
+  82 0048 FFF7FEFF 	 bl ADC_Pot_Init
+  83              	.LVL10:
+ 105:../PMSM_FOC/MCUInit/mcuinit.c **** 
+ 106:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Init WDT */
+ 107:../PMSM_FOC/MCUInit/mcuinit.c ****   WDT_Init();
+  84              	 .loc 1 107 0
+  85 004c FFF7FEFF 	 bl WDT_Init
+  86              	.LVL11:
+ 108:../PMSM_FOC/MCUInit/mcuinit.c **** 
+ 109:../PMSM_FOC/MCUInit/mcuinit.c ****   /* Synchronous start of CAPCOM modules, e.g.: CCU8x, and or CCU4x */
+ 110:../PMSM_FOC/MCUInit/mcuinit.c ****   CCUx_SynStart();
+  87              	 .loc 1 110 0
+  88 0050 FFF7FEFF 	 bl CCUx_SynStart
+  89              	.LVL12:
+ 111:../PMSM_FOC/MCUInit/mcuinit.c **** 
+ 112:../PMSM_FOC/MCUInit/mcuinit.c **** }
+  90              	 .loc 1 112 0
+  91 0054 03B0     	 add sp,sp,#12
+  92              	 
+  93 0056 00BD     	 pop {pc}
+  94              	.L9:
+  95              	 .align 2
+  96              	.L8:
+  97 0058 FEFF0700 	 .word 524286
+  98 005c 00000000 	 .word .LC0
+  99              	 .cfi_endproc
+ 100              	.LFE249:
+ 102              	 .section .rodata.str1.4,"aMS",%progbits,1
+ 103              	 .align 2
+ 104              	.LC0:
+ 105 0000 0D0A496E 	 .ascii "\015\012Infineon FOC\015\012\000"
+ 105      66696E65 
+ 105      6F6E2046 
+ 105      4F430D0A 
+ 105      00
+ 106 0011 000000   	 .text
+ 107              	.Letext0:
+ 108              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 109              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 110              	 .file 4 "../PMSM_FOC/MCUInit/clock.h"
+ 111              	 .file 5 "../PMSM_FOC/MCUInit/ccu8.h"
+ 112              	 .file 6 "../PMSM_FOC/MCUInit/ccu4.h"
+ 113              	 .file 7 "../PMSM_FOC/MCUInit/uart.h"
+ 114              	 .file 8 "../PMSM_FOC/MCUInit/math_init.h"
+ 115              	 .file 9 "../PMSM_FOC/MCUInit/gpio.h"
+ 116              	 .file 10 "../PMSM_FOC/MCUInit/..\\Configuration\\pmsm_foc_uCProbe_parameters.h"
+ 117              	 .file 11 "../PMSM_FOC/MCUInit/adc.h"
+ 118              	 .file 12 "../PMSM_FOC/MCUInit/wdt.h"
+ 119              	 .file 13 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 mcuinit.c
+    {standard input}:18     .text.PMSM_FOC_Init:00000000 $t
+    {standard input}:23     .text.PMSM_FOC_Init:00000000 PMSM_FOC_Init
+    {standard input}:97     .text.PMSM_FOC_Init:00000058 $d
+    {standard input}:103    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Reset_Clock_Init
+CCU8_Init
+CCU4_Init
+UART_Init
+MATH_Init
+GPIO_Init
+UART_TX_String
+MotorControl_Init
+ADC_Init
+ADC_DCLink_Init
+ADC_Pot_Init
+WDT_Init
+CCUx_SynStart

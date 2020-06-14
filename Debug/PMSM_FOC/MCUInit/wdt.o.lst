@@ -1,0 +1,157 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "wdt.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.WDT_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global WDT_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	WDT_Init:
+  24              	.LFB57:
+  25              	 .file 1 "../PMSM_FOC/MCUInit/wdt.c"
+   1:../PMSM_FOC/MCUInit/wdt.c **** /**
+   2:../PMSM_FOC/MCUInit/wdt.c ****  * @file wdt.c
+   3:../PMSM_FOC/MCUInit/wdt.c ****  * @date 2015-12-16
+   4:../PMSM_FOC/MCUInit/wdt.c ****  *
+   5:../PMSM_FOC/MCUInit/wdt.c ****  * @cond
+   6:../PMSM_FOC/MCUInit/wdt.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MCUInit/wdt.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MCUInit/wdt.c ****  *
+   9:../PMSM_FOC/MCUInit/wdt.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MCUInit/wdt.c ****  * All rights reserved.
+  11:../PMSM_FOC/MCUInit/wdt.c ****  *
+  12:../PMSM_FOC/MCUInit/wdt.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MCUInit/wdt.c ****  * following conditions are met:
+  14:../PMSM_FOC/MCUInit/wdt.c ****  *
+  15:../PMSM_FOC/MCUInit/wdt.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MCUInit/wdt.c ****  *   disclaimer.
+  17:../PMSM_FOC/MCUInit/wdt.c ****  *
+  18:../PMSM_FOC/MCUInit/wdt.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MCUInit/wdt.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MCUInit/wdt.c ****  *
+  21:../PMSM_FOC/MCUInit/wdt.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MCUInit/wdt.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MCUInit/wdt.c ****  *
+  24:../PMSM_FOC/MCUInit/wdt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MCUInit/wdt.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MCUInit/wdt.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MCUInit/wdt.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MCUInit/wdt.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MCUInit/wdt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MCUInit/wdt.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MCUInit/wdt.c ****  *
+  32:../PMSM_FOC/MCUInit/wdt.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MCUInit/wdt.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MCUInit/wdt.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MCUInit/wdt.c ****  *
+  36:../PMSM_FOC/MCUInit/wdt.c ****  * @file wdt.c
+  37:../PMSM_FOC/MCUInit/wdt.c ****  * @date 16 Dec, 2015
+  38:../PMSM_FOC/MCUInit/wdt.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MCUInit/wdt.c ****  *
+  40:../PMSM_FOC/MCUInit/wdt.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MCUInit/wdt.c ****  *
+  42:../PMSM_FOC/MCUInit/wdt.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MCUInit/wdt.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MCUInit/wdt.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MCUInit/wdt.c ****  *
+  46:../PMSM_FOC/MCUInit/wdt.c ****  * History
+  47:../PMSM_FOC/MCUInit/wdt.c ****  *
+  48:../PMSM_FOC/MCUInit/wdt.c ****  * 16 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MCUInit/wdt.c ****  *      Initial version
+  50:../PMSM_FOC/MCUInit/wdt.c ****  * @endcond
+  51:../PMSM_FOC/MCUInit/wdt.c ****  *
+  52:../PMSM_FOC/MCUInit/wdt.c ****  */
+  53:../PMSM_FOC/MCUInit/wdt.c **** 
+  54:../PMSM_FOC/MCUInit/wdt.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MCUInit/wdt.c ****  * HEADER FILES
+  56:../PMSM_FOC/MCUInit/wdt.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MCUInit/wdt.c **** 
+  58:../PMSM_FOC/MCUInit/wdt.c **** #include <XMC1300.h>              /* SFR declarations of the selected device */
+  59:../PMSM_FOC/MCUInit/wdt.c **** #include "wdt.h"
+  60:../PMSM_FOC/MCUInit/wdt.c **** 
+  61:../PMSM_FOC/MCUInit/wdt.c **** /**************************************************************************************************
+  62:../PMSM_FOC/MCUInit/wdt.c ****  * DATA STRUCTURES
+  63:../PMSM_FOC/MCUInit/wdt.c ****  **************************************************************************************************
+  64:../PMSM_FOC/MCUInit/wdt.c **** 
+  65:../PMSM_FOC/MCUInit/wdt.c **** /*
+  66:../PMSM_FOC/MCUInit/wdt.c ****  * Data Structure initialization - Watchdog Timer Configuration.
+  67:../PMSM_FOC/MCUInit/wdt.c ****  */
+  68:../PMSM_FOC/MCUInit/wdt.c **** #define WDT_TIME_LOWER  0U    /* 0ms, WDT lower bound value. WDT clock @ 32.768 kHz. */
+  69:../PMSM_FOC/MCUInit/wdt.c **** #define WDT_TIME_UPPER  327U    /*
+  70:../PMSM_FOC/MCUInit/wdt.c ****                                  * 10ms, WDT upper bound value. No service WDT within this time,
+  71:../PMSM_FOC/MCUInit/wdt.c ****                                  * will trigger system reset.
+  72:../PMSM_FOC/MCUInit/wdt.c ****                                  */
+  73:../PMSM_FOC/MCUInit/wdt.c **** 
+  74:../PMSM_FOC/MCUInit/wdt.c **** XMC_WDT_CONFIG_t wdt_init =
+  75:../PMSM_FOC/MCUInit/wdt.c **** {
+  76:../PMSM_FOC/MCUInit/wdt.c ****   .wdt_ctr = (uint8_t)WDT_CTR_ENB_Msk,
+  77:../PMSM_FOC/MCUInit/wdt.c ****   .window_lower_bound = WDT_TIME_LOWER,
+  78:../PMSM_FOC/MCUInit/wdt.c ****   .window_upper_bound = WDT_TIME_UPPER
+  79:../PMSM_FOC/MCUInit/wdt.c **** };
+  80:../PMSM_FOC/MCUInit/wdt.c **** 
+  81:../PMSM_FOC/MCUInit/wdt.c **** /**************************************************************************************************
+  82:../PMSM_FOC/MCUInit/wdt.c ****  * API IMPLEMENTATION
+  83:../PMSM_FOC/MCUInit/wdt.c ****  **************************************************************************************************
+  84:../PMSM_FOC/MCUInit/wdt.c **** 
+  85:../PMSM_FOC/MCUInit/wdt.c **** /* API to initialize and enable watchdog timer */
+  86:../PMSM_FOC/MCUInit/wdt.c **** void WDT_Init(void)
+  87:../PMSM_FOC/MCUInit/wdt.c **** {
+  26              	 .loc 1 87 0
+  27              	 .cfi_startproc
+  28 0000 08B5     	 push {r3,lr}
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 3,-8
+  31              	 .cfi_offset 14,-4
+  88:../PMSM_FOC/MCUInit/wdt.c ****   XMC_WDT_Init(&wdt_init);
+  32              	 .loc 1 88 0
+  33 0002 0248     	 ldr r0,.L2
+  34 0004 FFF7FEFF 	 bl XMC_WDT_Init
+  35              	.LVL0:
+  89:../PMSM_FOC/MCUInit/wdt.c **** }
+  36              	 .loc 1 89 0
+  37              	 
+  38 0008 08BD     	 pop {r3,pc}
+  39              	.L3:
+  40 000a C046     	 .align 2
+  41              	.L2:
+  42 000c 00000000 	 .word .LANCHOR0
+  43              	 .cfi_endproc
+  44              	.LFE57:
+  46              	 .global wdt_init
+  47              	 .section .data.wdt_init,"aw",%progbits
+  48              	 .align 2
+  49              	 .set .LANCHOR0,.+0
+  52              	wdt_init:
+  53 0000 47010000 	 .word 327
+  54 0004 00000000 	 .word 0
+  55 0008 01000000 	 .word 1
+  56              	 .text
+  57              	.Letext0:
+  58              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  59              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  60              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_wdt.h"
+  61              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 wdt.c
+    {standard input}:18     .text.WDT_Init:00000000 $t
+    {standard input}:23     .text.WDT_Init:00000000 WDT_Init
+    {standard input}:42     .text.WDT_Init:0000000c $d
+    {standard input}:52     .data.wdt_init:00000000 wdt_init
+    {standard input}:48     .data.wdt_init:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_WDT_Init

@@ -1,0 +1,445 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "math_init.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.MATH_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global MATH_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	MATH_Init:
+  24              	.LFB65:
+  25              	 .file 1 "../PMSM_FOC/MCUInit/math_init.c"
+   1:../PMSM_FOC/MCUInit/math_init.c **** /**
+   2:../PMSM_FOC/MCUInit/math_init.c ****  * @file math_init.c
+   3:../PMSM_FOC/MCUInit/math_init.c ****  * @date 2015-12-15
+   4:../PMSM_FOC/MCUInit/math_init.c ****  *
+   5:../PMSM_FOC/MCUInit/math_init.c ****  * @cond
+   6:../PMSM_FOC/MCUInit/math_init.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MCUInit/math_init.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MCUInit/math_init.c ****  *
+   9:../PMSM_FOC/MCUInit/math_init.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MCUInit/math_init.c ****  * All rights reserved.
+  11:../PMSM_FOC/MCUInit/math_init.c ****  *
+  12:../PMSM_FOC/MCUInit/math_init.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MCUInit/math_init.c ****  * following conditions are met:
+  14:../PMSM_FOC/MCUInit/math_init.c ****  *
+  15:../PMSM_FOC/MCUInit/math_init.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MCUInit/math_init.c ****  *   disclaimer.
+  17:../PMSM_FOC/MCUInit/math_init.c ****  *
+  18:../PMSM_FOC/MCUInit/math_init.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MCUInit/math_init.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MCUInit/math_init.c ****  *
+  21:../PMSM_FOC/MCUInit/math_init.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MCUInit/math_init.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MCUInit/math_init.c ****  *
+  24:../PMSM_FOC/MCUInit/math_init.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MCUInit/math_init.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MCUInit/math_init.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MCUInit/math_init.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MCUInit/math_init.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MCUInit/math_init.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MCUInit/math_init.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MCUInit/math_init.c ****  *
+  32:../PMSM_FOC/MCUInit/math_init.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MCUInit/math_init.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MCUInit/math_init.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MCUInit/math_init.c ****  *
+  36:../PMSM_FOC/MCUInit/math_init.c ****  * @file math_init.c
+  37:../PMSM_FOC/MCUInit/math_init.c ****  * @date 15 Dec, 2015
+  38:../PMSM_FOC/MCUInit/math_init.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MCUInit/math_init.c ****  *
+  40:../PMSM_FOC/MCUInit/math_init.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MCUInit/math_init.c ****  *
+  42:../PMSM_FOC/MCUInit/math_init.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MCUInit/math_init.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MCUInit/math_init.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MCUInit/math_init.c ****  *
+  46:../PMSM_FOC/MCUInit/math_init.c ****  * History
+  47:../PMSM_FOC/MCUInit/math_init.c ****  *
+  48:../PMSM_FOC/MCUInit/math_init.c ****  * 15 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MCUInit/math_init.c ****  *      Initial version
+  50:../PMSM_FOC/MCUInit/math_init.c ****  * @endcond
+  51:../PMSM_FOC/MCUInit/math_init.c ****  *
+  52:../PMSM_FOC/MCUInit/math_init.c ****  */
+  53:../PMSM_FOC/MCUInit/math_init.c **** 
+  54:../PMSM_FOC/MCUInit/math_init.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MCUInit/math_init.c ****  * HEADER FILES
+  56:../PMSM_FOC/MCUInit/math_init.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MCUInit/math_init.c **** 
+  58:../PMSM_FOC/MCUInit/math_init.c **** #include <XMC1300.h>              /* SFR declarations of the selected device */
+  59:../PMSM_FOC/MCUInit/math_init.c **** #include "math_init.h"
+  60:../PMSM_FOC/MCUInit/math_init.c **** 
+  61:../PMSM_FOC/MCUInit/math_init.c **** /**************************************************************************************************
+  62:../PMSM_FOC/MCUInit/math_init.c ****  * MACROS
+  63:../PMSM_FOC/MCUInit/math_init.c ****  **************************************************************************************************
+  64:../PMSM_FOC/MCUInit/math_init.c **** 
+  65:../PMSM_FOC/MCUInit/math_init.c **** #define VECTORING_MODE  0x62U   /*
+  66:../PMSM_FOC/MCUInit/math_init.c ****                                  * For CORDIC control register: Circular Vectoring Mode (default).
+  67:../PMSM_FOC/MCUInit/math_init.c ****                                  * MPS: Divide by 2 (default).
+  68:../PMSM_FOC/MCUInit/math_init.c ****                                  */
+  69:../PMSM_FOC/MCUInit/math_init.c **** 
+  70:../PMSM_FOC/MCUInit/math_init.c **** /**************************************************************************************************
+  71:../PMSM_FOC/MCUInit/math_init.c ****  * API IMPLEMENTATION
+  72:../PMSM_FOC/MCUInit/math_init.c ****  **************************************************************************************************
+  73:../PMSM_FOC/MCUInit/math_init.c **** /* API to initialize MATH Module */
+  74:../PMSM_FOC/MCUInit/math_init.c **** void MATH_Init(void)
+  75:../PMSM_FOC/MCUInit/math_init.c **** {
+  26              	 .loc 1 75 0
+  27              	 .cfi_startproc
+  28              	.LBB4:
+  29              	.LBB5:
+  30              	 .file 2 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_math.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @file xmc_math.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @date 2015-10-09
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @cond
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **********************************************************************************
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMClib v2.1.0 - XMC Peripheral Driver Library
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * All rights reserved.                        
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *                                             
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Redistribution and use in source and binary forms, with or without           
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * modification,are permitted provided that the following conditions are met:   
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *                                                                              
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   Redistributions of source code must retain the above copyright notice,      
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   this list of conditions and the following disclaimer.                        
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   Redistributions in binary form must reproduce the above copyright notice,   
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   this list of conditions and the following disclaimer in the documentation    
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   and/or other materials provided with the distribution.                       
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   Neither the name of the copyright holders nor the names of its contributors 
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   may be used to endorse or promote products derived from this software without
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *   specific prior written permission.                                           
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *                                                                              
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * ARE  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * SUBSTITUTE GOODS OR  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS    
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)       
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * POSSIBILITY OF SUCH DAMAGE.                                                  
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *                                                                              
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * To improve the quality of the software, users are encouraged to share        
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * modifications, enhancements or bug fixes with Infineon Technologies AG       
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * dave@infineon.com).                                                          
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **********************************************************************************
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Change History
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * --------------
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 2015-06-20: 
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *     - Removed version macros and declaration of GetDriverVersion API <br>
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *     - Updated copyright and change history section.
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 2015-08-25: 
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *     - XMC_MATH_ClearEvent() API is updated to set the event clear flag bit. <br>
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 2015-09-23: 
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *     - Added SQRT functions
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 2015-10-08:
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *     - Return values for sin(), cos(), sinh(), cosh(), arctan() are corrected.
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @endcond 
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #ifndef XMC_MATH_H
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #define XMC_MATH_H
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #ifdef __cplusplus
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** extern "C" {
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #endif
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * HEADER FILES
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #include <xmc_common.h>
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #if defined(MATH)
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #include <xmc_scu.h>
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @addtogroup XMClib
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @{
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @addtogroup MATH
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @{
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief MATH Coprocessor (MATH) driver for the XMC1302 microcontroller family <br>
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * 
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * The MATH Coprocessor (MATH) module comprises of two independent sub-blocks to support the CPU in
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * computations: a Divider Unit (DIV) for signed and unsigned 32-bit division operations and a CORD
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * (COrdinate Rotation DIgital Computer) Coprocessor for computation of trigonometric, linear or hy
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * MATH driver features:
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# CORDIC Coprocessor is used for computation of trigonometric and hyperbolic functions
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# Supports result chaining between the Divider Unit and CORDIC Coprocessor
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# All MATH APIs are available in <B>Blocking</B> and <B>non-blocking</B> modes. Non-blocking AP
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# 32bit signed and unsigned division implementations available for __aeabi_uidiv(), __aeabi_idi
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# Divider and CORDIC unit busy status can be checked by XMC_MATH_DIV_IsBusy() and XMC_MATH_CORD
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * -# Individual APIs available to return the result of each non-blocking MATH function
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * <B>Note:</B> <br>
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * All non-blocking MATH APIs are not atomic and hence occurence of interrupts during the normal ex
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * these APIs may lead to erroneous results. User has to exercise caution while using these APIs.
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Example: 
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Execution of divide instruction (/) in an ISR during the normal execution of non-blocking APIs m
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * TYPE DEFINITIONS
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief This typedef is used for Input and Output Data representation in blocking & non-blocking 
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMC_MATH_Q0_23_t => 1 Signed bit, 0 Integer bits, 23 fraction bits.
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef int32_t XMC_MATH_Q0_23_t;
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief This typedef is used for Input Data representation in blocking & non-blocking functions.
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMC_MATH_Q8_15_t => 1 Signed bit, 8 Integer bits, 15 fraction bits.
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef int32_t XMC_MATH_Q8_15_t;
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief This typedef is used for Output Data representation in blocking & non-blocking functions.
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMC_MATH_Q1_22_t => 1 Signed bit, 1 Integer bits, 22 fraction bits.
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef int32_t XMC_MATH_Q1_22_t;
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief This typedef is used for Output Data representation in blocking & non-blocking functions.
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMC_MATH_Q0_11_t => 1 Signed bit, 0 Integer bits, 11 fraction bits.
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef int32_t XMC_MATH_Q0_11_t;
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * MACROS
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /* Utility macros */
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #define XMC_MATH_Q0_23(x) ((XMC_MATH_Q0_23_t)(((x) >= 0) ? ((x) * (1 << 23) + 0.5) : ((x) * (1 << 2
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** #define XMC_MATH_Q0_11(x) ((XMC_MATH_Q0_11_t)(((x) >= 0) ? ((x) * (1 << 11) + 0.5) : ((x) * (1 << 1
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * ENUMS
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief Service request events for the DIV and CORDIC modules
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_EVENT
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_EVENT_DIV_END_OF_CALC    = 1U, /**< Divider end of calculation event */
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_EVENT_DIV_ERROR          = 2U, /**< Divider error event */
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_EVENT_CORDIC_END_OF_CALC = 4U, /**< CORDIC end of calculation event */
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_EVENT_CORDIC_ERROR       = 8U  /**< CORDIC error event */
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_EVENT_t;
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief Dividend Register Result Chaining
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_DIV_DVDRC
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_DISABLED        = 0U << MATH_GLBCON_DVDRC_Pos, /**< No result chaining is sele
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_QUOT_IS_SOURCE  = 1U << MATH_GLBCON_DVDRC_Pos, /**< QUOT register is the selec
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_RMD_IS_SOURCE   = 2U << MATH_GLBCON_DVDRC_Pos, /**< RMD register is the select
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_CORRX_IS_SOURCE = 3U << MATH_GLBCON_DVDRC_Pos, /**< CORRX is the selected sour
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_CORRY_IS_SOURCE = 4U << MATH_GLBCON_DVDRC_Pos, /**< CORRY is the selected sour
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVDRC_CORRZ_IS_SOURCE = 5U << MATH_GLBCON_DVDRC_Pos  /**< CORRZ is the selected sour
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_DIV_DVDRC_t;
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief Divisor Register Result Chaining
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_DIV_DVSRC
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_DISABLED        = 0U << MATH_GLBCON_DVSRC_Pos, /**< No result chaining is sele
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_QUOT_IS_SOURCE  = 1U << MATH_GLBCON_DVSRC_Pos, /**< QUOT register is the selec
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_RMD_IS_SOURCE   = 2U << MATH_GLBCON_DVSRC_Pos, /**< RMD register is the select
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_CORRX_IS_SOURCE = 3U << MATH_GLBCON_DVSRC_Pos, /**< CORRX is the selected sour
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_CORRY_IS_SOURCE = 4U << MATH_GLBCON_DVSRC_Pos, /**< CORRY is the selected sour
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_DIV_DVSRC_CORRZ_IS_SOURCE = 5U << MATH_GLBCON_DVSRC_Pos  /**< CORRZ is the selected sour
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_DIV_DVSRC_t;
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief CORDX Register Result Chaining
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_CORDXRC
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDXRC_DISABLED       = 0U << MATH_GLBCON_CORDXRC_Pos, /**< No result chaining i
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDXRC_QUOT_IS_SOURCE = 1U << MATH_GLBCON_CORDXRC_Pos, /**< QUOT register is the
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDXRC_RMD_IS_SOURCE  = 2U << MATH_GLBCON_CORDXRC_Pos  /**< RMD register is the 
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_CORDXRC_t;
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief CORDY Register Result Chaining
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_CORDYRC
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDYRC_DISABLED       = 0U << MATH_GLBCON_CORDYRC_Pos, /**< No result chaining i
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDYRC_QUOT_IS_SOURCE = 1U << MATH_GLBCON_CORDYRC_Pos, /**< QUOT register is the
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDYRC_RMD_IS_SOURCE  = 2U << MATH_GLBCON_CORDYRC_Pos  /**< RMD register is the 
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_CORDYRC_t;
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief CORDZ Register Result Chaining
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_CORDZRC
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDZRC_DISABLED       = 0U << MATH_GLBCON_CORDZRC_Pos, /**< No result chaining i
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDZRC_QUOT_IS_SOURCE = 1U << MATH_GLBCON_CORDZRC_Pos, /**< QUOT register is the
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_CORDZRC_RMD_IS_SOURCE  = 2U << MATH_GLBCON_CORDZRC_Pos  /**< RMD register is the 
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_CORDZRC_t;
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief CORDIC operating mode
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_OPERATING_MODE
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_OPERATING_MODE_LINEAR     = 0U << MATH_CON_MODE_Pos,    /**< Linear mode */
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_OPERATING_MODE_CIRCULAR   = 1U << MATH_CON_MODE_Pos,    /**< Circular mode */
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_OPERATING_MODE_HYPERBOLIC = 3U << MATH_CON_MODE_Pos     /**< Hyperbolic mode */
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_OPERATING_MODE_t;
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief Rotation vectoring selection
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_ROTVEC_MODE
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_ROTVEC_MODE_VECTORING     = 0U << MATH_CON_ROTVEC_Pos,  /**< Vectoring mode */
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_ROTVEC_MODE_ROTATION      = 1U << MATH_CON_ROTVEC_Pos   /**< Rotation mode */
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_ROTVEC_MODE_t;
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @brief Calculated value of CORRX and CORRY are each divided by this factor to yield the result.
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** typedef enum XMC_MATH_CORDIC_MAGNITUDE
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_MAGNITUDE_DIVBY1 = 0U << MATH_CON_MPS_Pos,              /**< Divide by 1 */
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_MAGNITUDE_DIVBY2 = 1U << MATH_CON_MPS_Pos,              /**< Divide by 2 */
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_MATH_CORDIC_MAGNITUDE_DIVBY4 = 2U << MATH_CON_MPS_Pos,              /**< Divide by 4 */
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** } XMC_MATH_CORDIC_MAGNITUDE_t;
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * DATA STRUCTURES
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**************************************************************************************************
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * API Prototypes - General
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  **************************************************************************************************
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** 
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** /**
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * @return None
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * \par<b>Description:</b><br>
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * Enables the Math module by un-gating the clock.
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * \par
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * MATH coprocessor's clock is enabled by setting \a MATH bit of \a CGATCLR0 register.
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * \par<b>Related APIs:</b><BR>
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  * XMC_MATH_Disable()\n\n\n
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  *
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****  */
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** __STATIC_INLINE void XMC_MATH_Enable(void)
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h **** {
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   /* Un-gates clock to the MATH kernel */
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_math.h ****   XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_MATH);
+  31              	 .loc 2 268 0
+  32 0000 8020     	 mov r0,#128
+  33              	.LBE5:
+  34              	.LBE4:
+  35              	 .loc 1 75 0
+  36 0002 08B5     	 push {r3,lr}
+  37              	 .cfi_def_cfa_offset 8
+  38              	 .cfi_offset 3,-8
+  39              	 .cfi_offset 14,-4
+  40              	.LBB7:
+  41              	.LBB6:
+  42              	 .loc 2 268 0
+  43 0004 4000     	 lsl r0,r0,#1
+  44 0006 FFF7FEFF 	 bl XMC_SCU_CLOCK_UngatePeripheralClock
+  45              	.LVL0:
+  46              	.LBE6:
+  47              	.LBE7:
+  76:../PMSM_FOC/MCUInit/math_init.c ****   /* Disable bit protection */
+  77:../PMSM_FOC/MCUInit/math_init.c ****   XMC_MATH_Enable();
+  78:../PMSM_FOC/MCUInit/math_init.c **** 
+  79:../PMSM_FOC/MCUInit/math_init.c ****   /* Default CORDIC setting so far. No result chaining is selected */
+  80:../PMSM_FOC/MCUInit/math_init.c ****   MATH->GLBCON = 0x00U;
+  48              	 .loc 1 80 0
+  49 000a 0022     	 mov r2,#0
+  81:../PMSM_FOC/MCUInit/math_init.c **** 
+  82:../PMSM_FOC/MCUInit/math_init.c ****   /* Setting to Vector Mode */
+  83:../PMSM_FOC/MCUInit/math_init.c ****   MATH->CON = VECTORING_MODE;
+  50              	 .loc 1 83 0
+  51 000c 6221     	 mov r1,#98
+  80:../PMSM_FOC/MCUInit/math_init.c **** 
+  52              	 .loc 1 80 0
+  53 000e 024B     	 ldr r3,.L2
+  84:../PMSM_FOC/MCUInit/math_init.c **** 
+  85:../PMSM_FOC/MCUInit/math_init.c ****   /* Data control: No Keep*/
+  86:../PMSM_FOC/MCUInit/math_init.c ****   MATH->STATC = 0x00U; /* Data control: No Keep.*/
+  87:../PMSM_FOC/MCUInit/math_init.c **** 
+  88:../PMSM_FOC/MCUInit/math_init.c **** }
+  54              	 .loc 1 88 0
+  55              	 
+  80:../PMSM_FOC/MCUInit/math_init.c **** 
+  56              	 .loc 1 80 0
+  57 0010 5A60     	 str r2,[r3,#4]
+  83:../PMSM_FOC/MCUInit/math_init.c **** 
+  58              	 .loc 1 83 0
+  59 0012 5964     	 str r1,[r3,#68]
+  86:../PMSM_FOC/MCUInit/math_init.c **** 
+  60              	 .loc 1 86 0
+  61 0014 1A64     	 str r2,[r3,#64]
+  62              	 .loc 1 88 0
+  63 0016 08BD     	 pop {r3,pc}
+  64              	.L3:
+  65              	 .align 2
+  66              	.L2:
+  67 0018 00000340 	 .word 1073938432
+  68              	 .cfi_endproc
+  69              	.LFE65:
+  71              	 .text
+  72              	.Letext0:
+  73              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  74              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  75              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+  76              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_scu.h"
+  77              	 .file 7 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+  78              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_scu.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 math_init.c
+    {standard input}:18     .text.MATH_Init:00000000 $t
+    {standard input}:23     .text.MATH_Init:00000000 MATH_Init
+    {standard input}:67     .text.MATH_Init:00000018 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_SCU_CLOCK_UngatePeripheralClock

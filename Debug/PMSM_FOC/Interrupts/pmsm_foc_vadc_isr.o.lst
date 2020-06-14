@@ -1,0 +1,134 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_vadc_isr.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.VADC_Source_IRQHandler,"ax",%progbits
+  18              	 .align 2
+  19              	 .global VADC_Source_IRQHandler
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	VADC_Source_IRQHandler:
+  24              	.LFB183:
+  25              	 .file 1 "../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c"
+   1:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** /**
+   2:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * @file pmsm_foc_vadc_isr.cc
+   3:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * @date 2016-06-14
+   4:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+   5:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * @cond
+   6:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  **************************************************************************************************
+   7:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+   9:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * All rights reserved.
+  11:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  12:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * following conditions are met:
+  14:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  15:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   disclaimer.
+  17:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  18:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  21:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  24:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  32:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  **************************************************************************************************
+  35:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  36:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * Change History
+  37:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * --------------
+  38:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  39:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * 2016-06-14:
+  40:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *     - Initial <br>
+  41:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * @endcond
+  42:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  *
+  43:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  */
+  44:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  45:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** /**************************************************************************************************
+  46:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * HEADER FILES
+  47:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  **************************************************************************************************
+  48:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** #include <XMC1300.h>    /* SFR declarations of the selected device */
+  49:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** #include "adc.h"
+  50:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  51:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** /**************************************************************************************************
+  52:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * GLOBAL DATA
+  53:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** ***************************************************************************************************
+  54:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** extern ADCType ADC;                             /* ADC results, trigger positions. */
+  55:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  56:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** /**************************************************************************************************
+  57:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  * API IMPLEMENTATION
+  58:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****  **************************************************************************************************
+  59:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  60:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  61:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** void VADC_Source_IRQHandler(void)
+  62:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** {
+  26              	 .loc 1 62 0
+  27              	 .cfi_startproc
+  63:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+  64:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   if(ADC.Result_Flag == RESULTS_ADCTZ12)
+  65:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   {
+  66:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_ResultTz1 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1];
+  67:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_ResultTz2 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1];
+  68:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.Result_Flag = RESULTS_ADC34;
+  69:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     XMC_GPIO_SetOutputHigh (P1_5);
+  70:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   }
+  71:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   else if(ADC.Result_Flag == RESULTS_ADC34)
+  72:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   {
+  73:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result3 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1];
+  74:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result4 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1];
+  75:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.Result_Flag = RESULTS_ADCTZ12;
+  76:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  77:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result1 = (ADC.ADC_Result3 - ADC.ADC_ResultTz1) << 3;
+  78:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result2 = (ADC.ADC_Result4 - ADC.ADC_ResultTz2) << 3;
+  79:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     XMC_GPIO_SetOutputHigh (P1_5);
+  80:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   }
+  81:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   else
+  82:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   {
+  83:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result1 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1] - ADC.ADC_Bias;
+  84:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result2 = (uint16_t)VADC_ISS_GROUP->RES[VADC_IDC_SS_RESULT_REG_FIFO1] - ADC.ADC_Bias;
+  85:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result1 <<= 4;
+  86:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****     ADC.ADC_Result2 <<= 4;
+  87:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   }
+  88:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** 
+  89:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c ****   //XMC_GPIO_SetOutputHigh (P1_5);
+  90:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** #endif
+  91:../PMSM_FOC/Interrupts/pmsm_foc_vadc_isr.c **** }
+  28              	 .loc 1 91 0
+  29              	 
+  30 0000 7047     	 bx lr
+  31              	 .cfi_endproc
+  32              	.LFE183:
+  34 0002 C046     	 .text
+  35              	.Letext0:
+  36              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  37              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  38              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_vadc_isr.c
+    {standard input}:18     .text.VADC_Source_IRQHandler:00000000 $t
+    {standard input}:23     .text.VADC_Source_IRQHandler:00000000 VADC_Source_IRQHandler
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

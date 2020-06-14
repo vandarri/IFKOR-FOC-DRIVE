@@ -1,0 +1,415 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_ctrap_isr.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.CCU80_1_IRQHandler,"ax",%progbits
+  18              	 .align 2
+  19              	 .global CCU80_1_IRQHandler
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	CCU80_1_IRQHandler:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c"
+   1:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** /**
+   2:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @file pmsm_foc_ctrap_isr.c
+   3:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @date 2015-12-23
+   4:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+   5:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @cond
+   6:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  **************************************************************************************************
+   7:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+   9:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * All rights reserved.
+  11:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  12:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * following conditions are met:
+  14:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  15:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   disclaimer.
+  17:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  18:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  21:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  24:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  32:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  **************************************************************************************************
+  35:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  36:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @file pmsm_foc_ctrap_isr.c
+  37:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @date 23 Dec, 2015
+  38:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @version 1.0.0
+  39:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  40:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  42:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  46:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * History
+  47:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  48:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * 23 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *      Initial version
+  50:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * @endcond
+  51:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  *
+  52:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  */
+  53:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  54:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** /**************************************************************************************************
+  55:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * HEADER FILES
+  56:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  **************************************************************************************************
+  57:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  58:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** #include <XMC1300.h>                      /* SFR declarations of the selected device */
+  59:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** #include "pmsm_foc_error_handling.h"
+  60:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  61:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** /**************************************************************************************************
+  62:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * GLOBAL DATA
+  63:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  **************************************************************************************************
+  64:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  65:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** extern MotorControlType Motor; /* Motor control information */
+  66:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  67:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** /**************************************************************************************************
+  68:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  * API IMPLEMENTATION
+  69:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****  **************************************************************************************************
+  70:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  71:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** /* Trap protection interrupt, e.g.: for over-current protection, triggered by CCU8x Event2 */
+  72:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** void Trap_Protection_INT(void)
+  73:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** {
+  26              	 .loc 1 73 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  29              	.LBB4:
+  30              	.LBB5:
+  31              	 .file 2 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-10-09
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   *************************************************************************************************
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.0 - XMC Peripheral Driver Library 
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+  32              	 .loc 2 234 0
+  33 0000 8022     	 mov r2,#128
+  34              	.LBE5:
+  35              	.LBE4:
+  36              	 .loc 1 73 0
+  37 0002 08B5     	 push {r3,lr}
+  38              	 .cfi_def_cfa_offset 8
+  39              	 .cfi_offset 3,-8
+  40              	 .cfi_offset 14,-4
+  41              	.LBB7:
+  42              	.LBB6:
+  43              	 .loc 2 234 0
+  44 0004 044B     	 ldr r3,.L2
+  45 0006 1205     	 lsl r2,r2,#20
+  46 0008 5A60     	 str r2,[r3,#4]
+  47              	.LBE6:
+  48              	.LBE7:
+  74:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****   XMC_GPIO_SetOutputLevel(INVERTER_EN_PIN, DISABLE_LEVEL); /* Disable gate driver. */
+  75:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  76:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****   Motor.State = TRAP_PROTECTION; /*
+  49              	 .loc 1 76 0
+  50 000a 0922     	 mov r2,#9
+  51 000c 034B     	 ldr r3,.L2+4
+  77:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****                                   * Next PWM cycles, go to trap protection, until MCU reset / POR
+  78:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****                                   * to resume normal motor operation.
+  79:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****                                   */
+  80:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  81:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****   UART_TX_String("\r\n\nCCU8 Trap!!");
+  52              	 .loc 1 81 0
+  53 000e 0448     	 ldr r0,.L2+8
+  76:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c ****                                   * Next PWM cycles, go to trap protection, until MCU reset / POR
+  54              	 .loc 1 76 0
+  55 0010 DA62     	 str r2,[r3,#44]
+  82:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  83:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** } /* End of CCU80_1_IRQHandler () */
+  56              	 .loc 1 83 0
+  57              	 
+  81:../PMSM_FOC/Interrupts/pmsm_foc_ctrap_isr.c **** 
+  58              	 .loc 1 81 0
+  59 0012 FFF7FEFF 	 bl UART_TX_String
+  60              	.LVL1:
+  61              	 .loc 1 83 0
+  62 0016 08BD     	 pop {r3,pc}
+  63              	.L3:
+  64              	 .align 2
+  65              	.L2:
+  66 0018 00000440 	 .word 1074003968
+  67 001c 00000000 	 .word Motor
+  68 0020 00000000 	 .word .LC1
+  69              	 .cfi_endproc
+  70              	.LFE201:
+  72              	 .section .rodata.str1.4,"aMS",%progbits,1
+  73              	 .align 2
+  74              	.LC1:
+  75 0000 0D0A0A43 	 .ascii "\015\012\012CCU8 Trap!!\000"
+  75      43553820 
+  75      54726170 
+  75      212100
+  76 000f 00       	 .text
+  77              	.Letext0:
+  78              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  79              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  80              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_gpio.h"
+  81              	 .file 6 "../PMSM_FOC/Interrupts/..\\ControlModules\\..\\MIDSys\\pmsm_foc_pwmsvm.h"
+  82              	 .file 7 "../PMSM_FOC/Interrupts/..\\ControlModules\\pmsm_foc_functions.h"
+  83              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+  84              	 .file 9 "../PMSM_FOC/Interrupts/..\\ControlModules\\..\\MCUInit\\uart.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_ctrap_isr.c
+    {standard input}:18     .text.CCU80_1_IRQHandler:00000000 $t
+    {standard input}:23     .text.CCU80_1_IRQHandler:00000000 CCU80_1_IRQHandler
+    {standard input}:66     .text.CCU80_1_IRQHandler:00000018 $d
+    {standard input}:73     .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+UART_TX_String
+Motor

@@ -1,0 +1,2407 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_torque_ctrl.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .ram_code,"ax",%progbits
+  18              	 .align 2
+  19              	 .global FOC_Torque_Controller
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	FOC_Torque_Controller:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c"
+   1:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /**
+   2:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @file pmsm_foc_torque_ctrl.c
+   3:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @date 2016-06-01
+   4:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+   5:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @cond
+   6:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  **************************************************************************************************
+   7:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+   9:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * All rights reserved.
+  11:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  12:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * following conditions are met:
+  14:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  15:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   disclaimer.
+  17:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  18:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  21:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  24:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  32:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  **************************************************************************************************
+  35:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  36:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @file pmsm_foc_torque_ctrl.c
+  37:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @date 01 Jun, 2016
+  38:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @version 1.0.0
+  39:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  40:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  42:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  46:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * History
+  47:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  48:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * 01 Jun 2016 Version 1.0.0 <br>:
+  49:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *      Initial version
+  50:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * @endcond
+  51:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  *
+  52:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  */
+  53:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  54:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /**************************************************************************************************
+  55:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * HEADER FILES
+  56:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  **************************************************************************************************
+  57:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** #include "pmsm_foc_torque_ctrl.h"
+  58:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  59:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /**************************************************************************************************
+  60:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  * GLOBAL DATA
+  61:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****  **************************************************************************************************
+  62:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* ADC results, trigger positions. */
+  63:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern ADCType ADC;
+  64:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* Motor control information */
+  65:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern MotorControlType Motor;
+  66:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* SVM information, such as sector 0 ~ 5 (A ~ F) in SVM space vector hexagon. */
+  67:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern SVMType SVM;
+  68:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* Speed PI controller.*/
+  69:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern PI_Coefs_Type PI_Speed;
+  70:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /*Torque / Iq PI controller.*/
+  71:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern PI_Coefs_Type PI_Torque;
+  72:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* Flux /Id PI controller.*/
+  73:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern PI_Coefs_Type PI_Flux;
+  74:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern uint32_t * NEW_SHS0_CALOC1;
+  75:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern Car2PolType Car2Polar;
+  76:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern PLL_EstimatorType PLL_Estimator;
+  77:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern ClarkeTransformType Clarke_Transform;
+  78:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern ParkTransformType Park_Transform;
+  79:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* PLL rotor speed PI controller. */
+  80:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern PI_Coefs_Type PI_PLL;
+  81:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /*  Parameters input for FOC LIB.*/
+  82:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern FOCInputType FOCInput;
+  83:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* Output for FOC LIB.*/
+  84:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern FOCOutputType FOCOutput;
+  85:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* Motor current and current space vector.*/
+  86:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** extern CurrentType Current;
+  87:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  88:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /* CORDIC: Circular Vectoring Mode (default). MPS: Divide by 2 (default).*/
+  89:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** #define CORDIC_VECTORING_MODE   (0x62)
+  90:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** /*  CORDIC: Circular Rotation Mode. MPS: Divide by 2 (default).*/
+  91:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** #define CORDIC_ROTATION_MODE    (0x6A)
+  92:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  93:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  94:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** #if(MY_FOC_CONTROL_SCHEME == CONSTANT_TORQUE_DIRECT_FOC)
+  95:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** __attribute__((section(".ram_code")))  void FOC_Torque_Controller (void)
+  96:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** {
+  26              	 .loc 1 96 0
+  27              	 .cfi_startproc
+  28 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+  29              	 .cfi_def_cfa_offset 20
+  30              	 .cfi_offset 4,-20
+  31              	 .cfi_offset 5,-16
+  32              	 .cfi_offset 6,-12
+  33              	 .cfi_offset 7,-8
+  34              	 .cfi_offset 14,-4
+  35 0002 4546     	 mov r5,r8
+  36 0004 5746     	 mov r7,r10
+  37 0006 4E46     	 mov r6,r9
+  97:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  98:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /********************************** Get_ADCPhaseCurrent(FOCOutput.Previous_SVM_SectorNo, FOCOutpu
+  99:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Get_ADCPhaseCurrent(FOCOutput.Previous_SVM_SectorNo, FOCOutput.New_SVM_SectorNo, &ADC);
+  38              	 .loc 1 99 0
+  39 0008 954B     	 ldr r3,.L50
+  96:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  40              	 .loc 1 96 0
+  41 000a E0B4     	 push {r5,r6,r7}
+  42              	 .cfi_def_cfa_offset 32
+  43              	 .cfi_offset 8,-32
+  44              	 .cfi_offset 9,-28
+  45              	 .cfi_offset 10,-24
+  46              	 .loc 1 99 0
+  47 000c 9846     	 mov r8,r3
+  48 000e 954C     	 ldr r4,.L50+4
+  49 0010 1A1C     	 mov r2,r3
+  96:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+  50              	 .loc 1 96 0
+  51 0012 82B0     	 sub sp,sp,#8
+  52              	 .cfi_def_cfa_offset 40
+  53              	 .loc 1 99 0
+  54 0014 208B     	 ldrh r0,[r4,#24]
+  55 0016 618B     	 ldrh r1,[r4,#26]
+  56 0018 FFF7FEFF 	 bl Get_ADCPhaseCurrent
+  57              	.LVL0:
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 101:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 102:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /********************************** Current_Reconstruction(ADC.ADC_Iu, ADC.ADC_Iv, ADC.ADC_Iw, &C
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Current_Reconstruction(ADC.ADC_Iu, ADC.ADC_Iv, ADC.ADC_Iw, &Current);
+  58              	 .loc 1 103 0
+  59 001c 4346     	 mov r3,r8
+  60 001e 924E     	 ldr r6,.L50+8
+  61 0020 1888     	 ldrh r0,[r3]
+  62 0022 9A88     	 ldrh r2,[r3,#4]
+  63 0024 5988     	 ldrh r1,[r3,#2]
+  64 0026 331C     	 mov r3,r6
+  65 0028 FFF7FEFF 	 bl Current_Reconstruction
+  66              	.LVL1:
+ 104:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 105:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Motor.Speed = PLL_Estimator.RotorSpeed_In;
+  67              	 .loc 1 105 0
+  68 002c 8F4D     	 ldr r5,.L50+12
+  69 002e 904B     	 ldr r3,.L50+16
+  70 0030 2A69     	 ldr r2,[r5,#16]
+ 106:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /* Motor reference speed */
+ 107:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   FOCInput.Ref_Speed = Motor.Ref_Speed;
+  71              	 .loc 1 107 0
+  72 0032 904F     	 ldr r7,.L50+20
+ 105:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /* Motor reference speed */
+  73              	 .loc 1 105 0
+  74 0034 9A60     	 str r2,[r3,#8]
+  75              	 .loc 1 107 0
+  76 0036 5B68     	 ldr r3,[r3,#4]
+  77              	.LBB42:
+  78              	.LBB43:
+  79              	 .file 2 "../PMSM_FOC/ControlModules/pmsm_foc_functions.h"
+   1:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+   2:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @file pmsm_foc_functions.h
+   3:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @date 2015-06-29
+   4:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+   5:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @cond
+   6:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *******************************************************************************
+   7:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+   9:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * All rights reserved.
+  11:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  12:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * following conditions are met:
+  14:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  15:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   disclaimer.
+  17:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  18:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  21:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  24:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  32:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  **************************************************************************************************
+  35:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  36:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @file pmsm_foc_functions.h
+  37:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @date 29 Jun, 2015
+  38:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @version 1.0.0
+  39:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  40:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  42:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  46:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * History
+  47:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  48:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * 29 Jun 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Initial version
+  50:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @endcond
+  51:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+  52:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+  53:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  54:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #ifndef PMSM_FOC_CONTROLMODULES_PMSM_FOC_FUNCTIONS_H
+  55:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define PMSM_FOC_CONTROLMODULES_PMSM_FOC_FUNCTIONS_H
+  56:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  57:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**************************************************************************************************
+  58:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * HEADER FILES
+  59:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  **************************************************************************************************
+  60:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  61:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#include "..\MCUInit\wdt.h"
+  62:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#include "..\MCUInit\uart.h"
+  63:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#include "..\MIDSys\pmsm_foc_current_threeshunt.h"
+  64:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   #include "..\MIDSys\pmsm_foc_current_singleshunt.h"
+  65:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#include "pmsm_foc_pi.h"
+  66:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#include "..\MIDSys\pmsm_foc_pwmsvm.h"
+  67:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  68:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+  69:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @addtogroup
+  70:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @{
+  71:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+  72:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  73:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+  74:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @addtogroup
+  75:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @{
+  76:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+  77:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  78:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define FOC_LIB_NO_SVM		1			/* To remove SVM to outside of FOC LIB. Do NOT comment out. */
+  79:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define CALIB00   0x480340E0
+  80:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define CALIB01   0x480340E4
+  81:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+  82:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct FOCInputType
+  83:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+  84:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Phase_L;
+  85:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Phase_R;
+  86:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Phase_L_Scale;
+  87:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t CCU8_Period;
+  88:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Res_Inc;
+  89:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int16_t SVM_Scale;
+  90:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t LPF_N_BEMF;
+  91:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Threshold;
+  92:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Threshold_LOW;
+  93:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Threshold_HIGH;
+  94:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Flag_State;
+  95:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t overcurrent_factor;
+  96:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t BEMF1;
+  97:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t BEMF2;
+  98:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_5_Segment_Flag;
+  99:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 101:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_U;
+ 102:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_V;
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_W;
+ 104:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Speed;
+ 105:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vq_Flag;
+ 106:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vq;
+ 107:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id;
+ 108:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Iq;
+ 109:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Iq_PI_Flag;
+ 110:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t RotorAngleQ31;
+ 111:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t RotorSpeed_In;
+ 112:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t ACIM_Flag;
+ 113:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Slip_Ratio;
+ 114:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Slip_Scale;
+ 115:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Slip_Speed_Max;
+ 116:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id_Min;
+ 117:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id_Max;
+ 118:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Ref_Id_Shift;
+ 119:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 120:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Single_Shunt_Flag;
+ 121:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } FOCInputType;
+ 122:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 123:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct FOCOutputType
+ 124:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_Alpha_1Q31;
+ 126:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_Beta_1Q31;
+ 127:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_d;
+ 128:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_q;
+ 129:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Speed_by_Estimator;
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Rotor_PositionQ31;
+ 131:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Previous_SVM_SectorNo;
+ 132:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t New_SVM_SectorNo;
+ 133:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 134:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 135:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 136:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 137:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_U_CR1S;
+ 138:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_V_CR1S;
+ 139:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_W_CR1S;
+ 140:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 141:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Debug_1;
+ 142:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } FOCOutputType;
+ 143:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 144:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 145:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct CurrentType
+ 146:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 147:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_U; /* Current of motor phase U, Iu */
+ 148:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_V; /* Current of motor phase V, Iv */
+ 149:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_W; /* Current of motor phase W, Iw */
+ 150:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 151:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t I_Mag; /* |I|, magnitude of current space vector */
+ 152:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 153:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_Speed; /* ωi, current space vector speed */
+ 154:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } CurrentType;
+ 155:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 156:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 157:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct ClarkeTransformType
+ 158:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 159:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_Alpha_1Q31; /* Iα (1Q31), Alpha value of current space vector */
+ 160:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t I_Beta_1Q31; /* Iβ (1Q31) */
+ 161:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 162:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } ClarkeTransformType;
+ 163:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 164:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct ParkTransformType
+ 165:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 166:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Id; /* Id */
+ 167:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Iq; /* Iq */
+ 168:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } ParkTransformType;
+ 169:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 170:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct Car2PolType
+ 171:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 172:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Flux_Vd; /* Vd */
+ 173:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Torque_Vq; /* Vq */
+ 174:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 175:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 177:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32_Previous; /* |Vref| of last PWM cycle */
+ 179:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31_Previous; /* Angle θ of last PWM cycle */
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 181:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_Vref16; /* |Vref|, Magnitude (1Q15) of reference vector (for SVM) */
+ 182:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_Angle16; /* Angle θ (16-bit) of reference vector. 0 ~ 2^16 represent electrical ang
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } Car2PolType;
+ 184:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 185:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 187:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 188:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define SHIFT_BIAS_LPF  (3U)      /* Shift times for unity gain LPF: Y[n] = Y[n-1] + (X[n]-Y[n-1])>
+ 189:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 190:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define MOTOR_TRANSITION  0     /* Motor is in transition mode */
+ 191:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define	MOTOR_STABLE    0xAB    /* Motor is in stable mode */
+ 192:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 193:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define DIRECTION_INC   0      /* Motor rotation direction - rotor angle increasing */
+ 194:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 195:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define ADJUST_DONE     0     /* Parameter adjustment has been done */
+ 196:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 197:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 198:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct MotorControlType
+ 199:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 200:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t L_METPLL; /* Motor inductance per phase, used in ωL|I| of MET and FOC PLL observer */
+ 201:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 202:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Speed; /* Rotor reference speed ωref, e.g.: determined by POT ADC or PWM duty cycle 
+ 203:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Speed; /* Motor shaft speed of V/f, MET (and FOC) */
+ 204:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 205:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Speed_by_POT_PWM; /* Target motor speed set by POT ADC, or PWM duty cycle */
+ 206:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t speed_in_rpm;
+ 207:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 208:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_DutyCycle; /* Duty cycle of the PWM for speed adjustment */
+ 209:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_Period; /* Period of the PWM (10kHz ~ 50kHz) for speed adjustment, almost a constant
+ 210:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t PWM_Speed_Raw; /* PWM-set speed, raw data */
+ 211:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_Freq; /* Frequency of PWM. */
+ 212:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 213:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ramp_Up_Rate; /* Motor speed ramp up rate */
+ 214:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ramp_Dn_Rate; /* Motor speed ramp down rate */
+ 215:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 216:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t State; /* Motor state (e.g.: V/f, MET, FOC) */
+ 217:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Rotation_Dir; /* Rotation direction of motor (rotor angle increasing, or decreasing) */
+ 218:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Mode_Flag; /* Flag to indicate if motor is in transition (MOTOR_TRANSITION) or stable (M
+ 219:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 220:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Control_Mode;
+ 221:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 222:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Adjust_Para_Flag; /*
+ 223:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                               * Flag to indicate parameter scheduling status,
+ 224:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                               * e.g.: for parameter adjust of PI controllers in FOC steady state.
+ 225:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                               */
+ 226:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 227:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* General purpose counter */
+ 228:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Ramp_Counter; /* General purpose counter, or counter for motor speed ramp up/down. */
+ 229:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Alignment_Counter; /* Counter for rotor initial positioning / alignment in V/f */
+ 230:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Non_RealTime_Counter; /* Counter for tasks that don't need real-time computing */
+ 231:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t FW_Counter; /* Counter for Flux Weakening (FW) */
+ 232:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t UART_Counter; /* Counter for UART communication */
+ 233:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t UART_Debug_Counter;
+ 234:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 235:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t FG_Speed; /* Motor speed for Frequency Generation (FG) only */
+ 236:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 237:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t UART_Data; /* Data received via UART */
+ 238:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 239:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id; /* Id reference, for ACIM */
+ 240:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } MotorControlType;
+ 241:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 242:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 243:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct StallType /* For motor startup lock / fail / stall detection and protection. */
+ 244:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 245:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for detection of motor startup lock / fail / stall */
+ 246:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 247:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } StallType;
+ 248:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 249:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 250:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct TripType /* For trip / over-current detection and protection */
+ 251:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 252:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for trip / over-current protection */
+ 253:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 254:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t ADC_Ave_DC_Link; /* Average of ADC value (with LPF) for dc link current, to detect trip /
+ 255:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } TripType;
+ 256:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 257:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct OverUnderVoltType /* For over/under-voltage detection and protection */
+ 258:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 259:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for over/under-voltage detection */
+ 260:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } OverUnderVoltType;
+ 261:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 262:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** typedef struct HallType /* For Hall signal processing */
+ 263:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 264:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Speed; /* Rotor speed obtained from Hall */
+ 265:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Speed_rpm; /* Rotor speed obtained from Hall, in rpm */
+ 266:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   int32_t Rotor_AngleQ31; /* Estimated rotor angle (1Q23 << 8) from Hall */
+ 267:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint16_t Flag; /* Flag to indicate if one Hall event has occurred */
+ 268:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Event_Counter; /* Counter for Hall events. */
+ 269:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 270:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Stall_Counter; /* Counter for Hall stall detection */
+ 271:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Restart_Counter; /* Counter for retry times to start motor if stall has been detected by
+ 272:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   uint32_t Rst_Restart_Counter; /* To reset Hall_Restart_Counter if no motor stall for certain time
+ 273:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** } HallType;
+ 274:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 275:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	typedef enum StateMachine
+ 276:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	{
+ 277:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		FOC_CLOSED_LOOP = 0,
+ 278:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		MET_CLOSED_LOOP,
+ 279:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		BRAKE_BOOTSTRAP,
+ 280:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		STOP_MOTOR,
+ 281:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		VFOPENLOOP_RAMP_UP,
+ 282:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		MET_FOC,
+ 283:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		PRE_POSITIONING,
+ 284:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		DCLINK_OVER_UNDER_VOLTAGE,
+ 285:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		MCU_SLEEP,
+ 286:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		TRAP_PROTECTION,
+ 287:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	}StateMachine;
+ 288:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 289:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define DEGREE_90   (4194304U << 8U)        /* 90° angle (0 ~ 2^23 represent electrical angle 0° 
+ 290:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define DEGREE_X    (DEGREE_90 * 1U)        /* X = 0°, 90°, 180°, or 270° */
+ 291:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define DEGREE_SHIFT  (652448U << 8U)         /* 14° angle shift */
+ 292:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 293:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define TH_POT_ADC    50              /* 50. Threshold POT ADC that motor can enter or exit motor i
+ 294:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define SYSTEM_BE_IDLE  (ADC.ADC_POT < TH_POT_ADC)  /* POT ADC is too low */
+ 295:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 296:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	/* %%%%%%%%%% PI Controller Configuration %%%%%%%%%% */
+ 297:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 298:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 299:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		#define SPEED_IK_LIMIT_MAX		PI_Speed.Ik_limit_max
+ 300:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		#define SPEED_IK_LIMIT_MIN		PI_Speed.Ik_limit_min
+ 301:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 302:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_KP				PI_Torque.Kp
+ 303:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_IK_LIMIT_MAX		PI_Torque.Ik_limit_max
+ 304:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_IK_LIMIT_MIN		PI_Torque.Ik_limit_min
+ 305:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 306:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 307:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 308:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define	SCALE_SQRT3		  (10U)							// For √3 scaling, used in Clarke Transform.
+ 309:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define SQRT3			      (1.732050807569F)				// √3
+ 310:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define	DIV_SQRT3		    (591U)							// ((int16_t)((1/SQRT3) * (1<<SCALE_SQRT3)))
+ 311:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   #define DIV_SQRT3_Q14   (9459U)
+ 312:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 313:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define	SCALE_DIV_3		(14U)							// For 1/3 scaling.
+ 314:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define	DIV_3			(5461U)							// ((int16_t)((1/3) * (1<<SCALE_DIV_3)))
+ 315:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 316:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define	RATIO_S			(1U)							// Minimum ramp up and down ratio for S-curve profile
+ 317:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 318:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define PERIOD_ADD_0_OR_1	(1U)						// 0 or 1. Addition to period of a CCU8 PWM
+ 319:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 320:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define POR_OR_BOR			(0x01)						// RSTSTAT = 0000000001B, Power on reset or Brownout reset. Reaso
+ 321:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 322:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_500		((32768U * 1U) >> 1U)		// 500ms. MCU Sleep time before WDT reset system. 
+ 323:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_5		((327U * 1U) >> 1U)			// 5ms
+ 324:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_1500	((32768U * 3U) >> 1U)		// 1500ms
+ 325:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 326:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 327:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 328:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define CORDIC_VECTORING_MODE   (0x62)      // CORDIC: Circular Vectoring Mode (default). MPS: Divi
+ 329:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #define CORDIC_ROTATION_MODE    (0x6A)      // CORDIC: Circular Rotation Mode. MPS: Divide by 2 (de
+ 330:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 331:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 332:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   typedef struct PLL_EstimatorType
+ 333:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   {
+ 334:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     uint32_t Current_I_Mag;
+ 335:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     int32_t Delta_IV;
+ 336:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     int32_t VrefxSinDelta;
+ 337:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 338:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     int32_t RotorAngleQ31;
+ 339:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     int32_t RotorSpeed_In;
+ 340:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 341:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   }PLL_EstimatorType;
+ 342:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 343:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   extern FOCOutputType FOCOutput;                 // Output for FOC LIB.
+ 344:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   extern SVMType SVM;                          // SVM information, such as sector 0 ~ 5 (A ~ F) in 
+ 345:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 346:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 347:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Imag(int32_t Vref_AngleQ31, int32_t I_Alpha_1Q31, in
+ 348:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Imag_GetResult(PLL_EstimatorType* const HandlePtr);
+ 349:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Vref(int32_t Delta_IV, uint32_t Vref32, int32_t PLL_
+ 350:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                                     PLL_EstimatorType* const HandlePtr);
+ 351:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Vref_GetResult(PLL_EstimatorType* const HandlePtr);
+ 352:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_GetPosSpd(PLL_EstimatorType* const HandlePtr);
+ 353:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 354:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 355:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void VF_FOC_Brake_Motor_Bootstrap_Charge (void);
+ 356:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	extern void PWMSVM01_Update(uint16_t Amplitude, uint16_t Angle);
+ 357:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	extern void PI_controller_Init(void);
+ 358:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void FOC_SystemParameters_Init_OnceOnly (void);
+ 359:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 360:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 361:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 362:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Current_Reconstruction (uint16_t Previous_SVM_SectorNo,int32_t ADC_result1, int32_t ADC_result
+ 363:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #else
+ 364:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Current_Reconstruction (int32_t ADC_Iu, int32_t ADC_Iv, int32_t ADC_Iw, CurrentType * const Ha
+ 365:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #endif
+ 366:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ClarkeTransform(int32_t CurrentPhaseU, int32_t CurrentPhaseV, int32_t Cur
+ 367:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                           ClarkeTransformType* const HandlePtr);
+ 368:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform_GetResult(ParkTransformType* const HandlePtr);
+ 369:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform (int32_t I_Alpha1Q31, int32_t I_Beta_1Q31, int32_t RotorAng
+ 370:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline void Cart2Polar(int32_t Torque_Vq, int32_t Flux_Vd, int32_t RotorAngleQ31);
+ 371:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void Car2Pol_GetResult(Car2PolType * const HandlePtr);
+ 372:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 373:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void FOC_Speed_Controller (void);
+ 374:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void SCurve_Ramp_Generator(int32_t set_val, int32_t rampup_rate, int32_t rampdown_rat
+ 375:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                          int32_t speedrampstep, int32_t *reference_val);
+ 376:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Linear_Ramp_Generator(int32_t set_val, int32_t rampup_rate, int32_t rampdown_rat
+ 377:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                          int32_t speedrampstep, int32_t *reference_val);
+ 378:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void FOC_Torque_Controller(void);
+ 379:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void Linear_Torque_Ramp_Generator(int32_t current_set,
+ 380:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                                                                int32_t dec_step,
+ 381:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                                                                FOCInputType* const 
+ 382:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void FOC_VQ_Controller(void);
+ 383:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void Linear_VQ_Ramp_Generator(int32_t current_set, int
+ 384:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                                                            int32_t dec_step,
+ 385:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                                                            FOCInputType* const Hand
+ 386:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Misc_Works_of_IRQ (void);
+ 387:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 388:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Rotor_Pre_Positioning (void);
+ 389:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 390:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_Smooth_Transition_To_FOC (uint32_t Omega_Speed);
+ 391:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** uint16_t VF_Smooth_Transition_To_FOC (void);
+ 392:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Misc_Works_of_MET (void);
+ 393:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Transition_to_FOC (void);
+ 394:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_FOC_RotorAngle (void);
+ 395:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_FOC_PI_Iks (void);
+ 396:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 397:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Misc_Works_of_FOC (void);
+ 398:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 399:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Adjust_FOCSpeed_With_POT_PWM (void);
+ 400:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Adjust_FOC_Parameters (void);
+ 401:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Stop_Motor (void);
+ 402:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Variables_Init (void);
+ 403:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 404:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** extern void CCU4_Debug3Output(int32_t In04, uint16_t In04_Flag, uint16_t In04_N, int32_t In10, uint
+ 405:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                               uint16_t In10_N);
+ 406:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Set_CCU4_Debug_Infor (void);
+ 407:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void CCU4_P1_3_Output (int32_t In_x, uint16_t In_x_Flag, uint16_t In_x_N);
+ 408:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 409:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Update_Vref_Angle (int32_t Speed);
+ 410:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 411:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_Single_Hall (void);
+ 412:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Hall_Speed_Detection (void);
+ 413:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Hall_Level_Detection (uint32_t Item_To_Detect);
+ 414:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 415:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_Detect_Motor_Stall (void);
+ 416:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Detect_Motor_Stall (void);
+ 417:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Detect_Trip_OverCurrent (void);
+ 418:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Detect_Over_Under_Voltage (void);
+ 419:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 420:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Init_Catch_FreeRunning_Motor (void);
+ 421:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 422:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void System_Low_Power_Mode (uint32_t Max_Sleep_Time);
+ 423:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Check_n_Go_Sleep (void);
+ 424:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 425:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 426:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	void CCU4_Init (void);
+ 427:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 	void Init_CCU8x_for_TRAP_LED_Indicator (void);
+ 428:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** void Error_Handling (void);
+ 429:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 430:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 431:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 432:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+ 433:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief To get current I_Alpha / I_Beta of last PWM cycle
+ 434:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * I_Alpha = I_U
+ 435:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * I_Beta = (I_U + 2 * I_V)/√3 = (I_V - I_W)/√3
+ 436:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Above transform scales down I_Mag (i.e.: |I|) by 2/3. Need scale up by 3/2.
+ 437:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Alternatively, can scale up inductance L in ωL|I| by 3/2 (legacy scaling).
+ 438:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 439:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @param Current.I_U
+ 440:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Current.I_V
+ 441:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Current.I_W
+ 442:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 443:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *@retval Current.I_Alpha_1Q31
+ 444:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Current.I_Beta_1Q31
+ 445:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+ 446:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 447:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ClarkeTransform(int32_t CurrentPhaseU, int32_t CurrentPhaseV, int32_t Cur
+ 448:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****                                           ClarkeTransformType* const HandlePtr)
+ 449:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 450:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 451:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->I_Alpha_1Q31 = CurrentPhaseU << CORDIC_SHIFT;
+ 452:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDIC_SHIFT-
+ 453:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 454:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #else
+ 455:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 456:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   if(SVM.Flag_3or2_ADC == 0){
+  80              	 .loc 2 456 0
+  81 0038 8F4A     	 ldr r2,.L50+24
+  82              	.LBE43:
+  83              	.LBE42:
+  84              	 .loc 1 107 0
+  85 003a 3B64     	 str r3,[r7,#64]
+  86              	.LBB48:
+  87              	.LBB44:
+  88              	 .loc 2 456 0
+  89 003c 9288     	 ldrh r2,[r2,#4]
+  90              	.LBE44:
+  91              	.LBE48:
+ 108:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 109:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************  ClarkeTransform(Current.I_U, Current.I_V, Current.I_W, &Clar
+ 110:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 111:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   ClarkeTransform(Current.I_U, Current.I_V, Current.I_W, &Clarke_Transform);
+  92              	 .loc 1 111 0
+  93 003e 7368     	 ldr r3,[r6,#4]
+  94 0040 3068     	 ldr r0,[r6]
+  95 0042 9C46     	 mov ip,r3
+  96 0044 B368     	 ldr r3,[r6,#8]
+  97              	.LVL2:
+  98              	.LBB49:
+  99              	.LBB45:
+ 100              	 .loc 2 456 0
+ 101 0046 002A     	 cmp r2,#0
+ 102 0048 00D0     	 beq .LCB67
+ 103 004a C2E0     	 b .L2
+ 104              	.LCB67:
+ 457:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     /* I_Alpha = (2 * I_U - (I_V + I_W))/3 */
+ 458:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     HandlePtr->I_Alpha_1Q31 = ((CurrentPhaseU << 1) - (CurrentPhaseV + CurrentPhaseW)) * (DIV_3 << 
+ 105              	 .loc 2 458 0
+ 106 004c 6146     	 mov r1,ip
+ 107 004e 4200     	 lsl r2,r0,#1
+ 108 0050 C918     	 add r1,r1,r3
+ 109 0052 501A     	 sub r0,r2,r1
+ 110              	.LVL3:
+ 459:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 460:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     /*  I_Beta = (I_V - I_W)/√3 in 1Q31 */
+ 461:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIFT-14))
+ 111              	 .loc 2 461 0
+ 112 0054 6246     	 mov r2,ip
+ 458:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 113              	 .loc 2 458 0
+ 114 0056 8949     	 ldr r1,.L50+28
+ 115              	 .loc 2 461 0
+ 116 0058 D31A     	 sub r3,r2,r3
+ 117              	.LVL4:
+ 118 005a 894A     	 ldr r2,.L50+32
+ 458:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 119              	 .loc 2 458 0
+ 120 005c 4143     	 mul r1,r0
+ 121              	 .loc 2 461 0
+ 122 005e 5A43     	 mul r2,r3
+ 458:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 123              	 .loc 2 458 0
+ 124 0060 8848     	 ldr r0,.L50+36
+ 125 0062 0160     	 str r1,[r0]
+ 126              	 .loc 2 461 0
+ 127 0064 4260     	 str r2,[r0,#4]
+ 128              	.LVL5:
+ 129              	.L3:
+ 130              	.LBE45:
+ 131              	.LBE49:
+ 132              	.LBB50:
+ 133              	.LBB51:
+ 462:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   }
+ 463:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   else
+ 464:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   {
+ 465:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     switch(FOCOutput.Previous_SVM_SectorNo)
+ 466:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 467:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       case 0:
+ 468:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       case 5:
+ 469:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 = (-(CurrentPhaseV + CurrentPhaseW)) << CORDIC_SHIFT;
+ 470:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 471:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       break;
+ 472:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       case 1:
+ 473:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       case 2:
+ 474:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 =  CurrentPhaseU << CORDIC_SHIFT;
+ 475:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 476:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 477:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       default:
+ 478:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 = CurrentPhaseU << CORDIC_SHIFT;
+ 479:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDI
+ 480:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 481:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     }
+ 482:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   }
+ 483:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #endif
+ 484:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** }
+ 485:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 486:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+ 487:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief CORDIC #1 - Park Transform
+ 488:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Iq = K[I_Beta cos(φ)-I_Alpha sin(φ)]/MPS   * Iq = Xfinal = K[X cos(Z) - Y sin(Z)] / MPS, where
+ 489:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * Id = K[I_Alpha cos(φ)+I_Beta sin(φ)]/MPS   * Id = Yfinal = K[Y cos(Z) + X sin(Z)] / MPS      (
+ 490:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 491:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @param FOCInput.RotorAngleQ31
+ 492:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Current.I_Alpha_1Q31
+ 493:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Current.I_Beta_1Q31
+ 494:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 495:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *@retval MATH->CORRX
+ 496:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      MATH->CORRY
+ 497:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+ 498:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform (int32_t I_Alpha1Q31, int32_t I_Beta_1Q31, int32_t RotorAng
+ 499:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 500:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* General control of CORDIC Control Register */
+ 501:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CON = CORDIC_ROTATION_MODE;
+ 134              	 .loc 2 501 0
+ 135 0066 6A20     	 mov r0,#106
+ 136              	.LBE51:
+ 137              	.LBE50:
+ 138              	.LBB53:
+ 139              	.LBB54:
+ 502:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 503:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Z = φ, Hall rotor angle, or estimated rotor angle of last PWM cycle from PLL */
+ 504:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDZ = RotorAngleQ31;
+ 505:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 506:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Y = I_Alpha */
+ 507:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDY = I_Alpha1Q31;
+ 508:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 509:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* X = I_Beta. Input CORDX data, and auto start of CORDIC calculation (~62 kernel clock cycles) *
+ 510:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDX = I_Beta_1Q31;
+ 511:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 512:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** }
+ 513:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 514:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 515:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+ 516:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief Get Cordic Result from Park Transform
+ 517:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 518:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @param MATH->CORRX
+ 519:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      MATH->CORRY
+ 520:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 521:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *@retval FOCOutput.I_q
+ 522:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      FOCOutput.I_d
+ 523:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+ 524:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform_GetResult(ParkTransformType* const HandlePtr)
+ 525:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 526:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Wait if CORDIC is still running calculation */
+ 527:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   while (MATH->STATC & 0x01)
+ 140              	 .loc 2 527 0
+ 141 0068 0126     	 mov r6,#1
+ 142              	.LBE54:
+ 143              	.LBE53:
+ 144              	.LBB57:
+ 145              	.LBB52:
+ 501:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 146              	 .loc 2 501 0
+ 147 006a 874B     	 ldr r3,.L50+40
+ 148 006c 5864     	 str r0,[r3,#68]
+ 149              	.LVL6:
+ 504:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 150              	 .loc 2 504 0
+ 151 006e E868     	 ldr r0,[r5,#12]
+ 152 0070 1865     	 str r0,[r3,#80]
+ 507:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 153              	 .loc 2 507 0
+ 154 0072 D964     	 str r1,[r3,#76]
+ 510:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 155              	 .loc 2 510 0
+ 156 0074 9A64     	 str r2,[r3,#72]
+ 157              	.LBE52:
+ 158              	.LBE57:
+ 112:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 113:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************  ParkTransform(Clarke_Transform.I_Alpha_1Q31, Clarke_Transfor
+ 114:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   ParkTransform(Clarke_Transform.I_Alpha_1Q31, Clarke_Transform.I_Beta_1Q31, PLL_Estimator.RotorAng
+ 115:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 116:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /* Record previous SVM sector number */
+ 117:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   FOCOutput.Previous_SVM_SectorNo = FOCOutput.New_SVM_SectorNo;
+ 159              	 .loc 1 117 0
+ 160 0076 608B     	 ldrh r0,[r4,#26]
+ 161 0078 2083     	 strh r0,[r4,#24]
+ 162              	.LVL7:
+ 163              	.L8:
+ 164              	.LBB58:
+ 165              	.LBB55:
+ 166              	 .loc 2 527 0
+ 167 007a 1C6C     	 ldr r4,[r3,#64]
+ 168 007c 8248     	 ldr r0,.L50+40
+ 169 007e 2642     	 tst r6,r4
+ 170 0080 FBD1     	 bne .L8
+ 528:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   {
+ 529:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     continue;
+ 530:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   }
+ 531:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Read CORDIC results Iq and Id - 32-bit. CORDIC Result Register [7:0] are 0x00 */
+ 532:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Iq = MATH->CORRX;
+ 171              	 .loc 2 532 0
+ 172 0082 436D     	 ldr r3,[r0,#84]
+ 533:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Id = MATH->CORRY;
+ 173              	 .loc 2 533 0
+ 174 0084 846D     	 ldr r4,[r0,#88]
+ 534:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 535:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /*CPU computes the following simultaneously when CORDIC #2 is computing */
+ 536:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Iq >>= CORDIC_SHIFT;
+ 537:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 538:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Shift to get real results */
+ 539:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Id >>= CORDIC_SHIFT;
+ 540:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 541:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Iq = (HandlePtr->Iq * 311) >> 8;   // x MPS/K.;
+ 175              	 .loc 2 541 0
+ 176 0086 8148     	 ldr r0,.L50+44
+ 536:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 177              	 .loc 2 536 0
+ 178 0088 9B13     	 asr r3,r3,#14
+ 179              	 .loc 2 541 0
+ 180 008a 8146     	 mov r9,r0
+ 181 008c 3820     	 mov r0,#56
+ 182 008e 4E46     	 mov r6,r9
+ 183 0090 FF30     	 add r0,r0,#255
+ 184 0092 4343     	 mul r3,r0
+ 185 0094 1B12     	 asr r3,r3,#8
+ 186 0096 7360     	 str r3,[r6,#4]
+ 539:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 187              	 .loc 2 539 0
+ 188 0098 A313     	 asr r3,r4,#14
+ 542:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 543:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Id = (HandlePtr->Id * 311) >> 8;   // x MPS/K.;
+ 189              	 .loc 2 543 0
+ 190 009a 5843     	 mul r0,r3
+ 191              	.LBE55:
+ 192              	.LBE58:
+ 118:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 119:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************  ParkTransform_GetResult(&Park_Transform);*******************
+ 120:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   ParkTransform_GetResult(&Park_Transform);
+ 121:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 122:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************  PLL_Imag(Car2Polar.Vref_AngleQ31, Clarke_Transform.I_Alpha_1
+ 123:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PLL_Imag(Car2Polar.Vref_AngleQ31, Clarke_Transform.I_Alpha_1Q31,Clarke_Transform.I_Beta_1Q31);
+ 193              	 .loc 1 123 0
+ 194 009c 7C4C     	 ldr r4,.L50+48
+ 195              	.LBB59:
+ 196              	.LBB56:
+ 197              	 .loc 2 543 0
+ 198 009e 0012     	 asr r0,r0,#8
+ 199 00a0 3060     	 str r0,[r6]
+ 200              	.LBE56:
+ 201              	.LBE59:
+ 202              	 .loc 1 123 0
+ 203 00a2 E068     	 ldr r0,[r4,#12]
+ 204 00a4 FFF7FEFF 	 bl PLL_Imag
+ 205              	.LVL8:
+ 124:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************    PI_controller(FOCInput.Ref_Iq, Park_Transform.Iq, &PI_Torq
+ 126:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PI_controller_anti_windup(FOCInput.Ref_Iq, Park_Transform.Iq, &PI_Torque);
+ 206              	 .loc 1 126 0
+ 207 00a8 7368     	 ldr r3,[r6,#4]
+ 208 00aa 9C46     	 mov ip,r3
+ 209              	.LVL9:
+ 210              	.LBB60:
+ 211              	.LBB61:
+ 212              	 .file 3 "../PMSM_FOC/ControlModules/pmsm_foc_pi.h"
+   1:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**
+   2:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @file pmsm_foc_pi.h
+   3:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @date 2015-12-23
+   4:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+   5:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @cond
+   6:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+   7:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+   9:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * All rights reserved.
+  11:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  12:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * following conditions are met:
+  14:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  15:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   disclaimer.
+  17:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  18:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  21:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  24:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  32:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+  35:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+  36:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  37:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @file pmsm_foc_pi.h
+  38:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @date 23 Dec, 2015
+  39:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @version 1.0.0
+  40:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  41:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  42:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  43:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * <b>Detailed description of file</b> <br>
+  44:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * APIs provided in this file mainly cover the following functionality:
+  45:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * ---- Filter, Hysterisis, Output inversion
+  46:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  47:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * History
+  48:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  49:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * 23 Dec 2015 Version 1.0.0 <br>:
+  50:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *      Initial version
+  51:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @endcond
+  52:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+  53:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  */
+  54:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  55:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #ifndef PMSM_FOC_CONTROLMODULES_PMSM_FOC_PI_H_
+  56:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PMSM_FOC_CONTROLMODULES_PMSM_FOC_PI_H_
+  57:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  58:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**************************************************************************************************
+  59:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * HEADER FILES
+  60:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+  61:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #include <XMC1300.h>          /* SFR declarations of the selected device */
+  62:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #include "../Configuration/pmsm_foc_uCProbe_parameters.h"
+  63:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #include "../Configuration/pmsm_foc_user_parameter.h"
+  64:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  65:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**************************************************************************************************
+  66:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * MACROS
+  67:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+  68:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  69:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*%%%%%%%% Update / Modify PI Parameters Here %%%%%%%%*/
+  70:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  71:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****               /* For DJI Drone (black). */
+  72:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Speed PI controller ######################*/
+  73:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #if(MOTOR_TYPE == DJI_DRONE_MOTOR)
+  74:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KP            ((uint16_t)1U<<15U)          /* (1<<15). Proportional g
+  75:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KI            ((uint16_t)2)                /* (1<<3). Integral gain K
+  76:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_SCALE_KPKI    (10 + RES_INC)               /* RES_INC: Angle/speed re
+  77:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  78:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t.
+  79:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<14) * 3) >> 2))      /* (-(1<<15)). I[k] output limi
+  80:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MAX  (((1<<14) * 3) >> 2)         /* (1<<15). I[k] output limit H
+  81:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  82:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MIN  (16)            /* (-32767), 16. U[k] output limit LOW. */
+  83:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normal
+  84:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  85:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Torque / Iq PI controller ######################*/
+  86:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+  87:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)              /* (1<<13). Proportion
+  88:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 0)       /* (1<<6). Integral gain
+  89:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+  90:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  91:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Norma
+  92:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normall
+  93:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  94:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need 
+  95:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need
+  96:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+  97:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Flux / Id PI controller ######################*/
+  98:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+  99:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)              /* (1<<13). Proportion
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 0)       /* (1<<6). Integral gain
+ 101:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 102:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normall
+ 104:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally 
+ 105:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 106:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need ch
+ 107:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need c
+ 108:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 109:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For PLL rotor speed PI controller ######################*/
+ 110:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KP         ((uint16_t)1<<5)              /* Proportional gain Kp, uint1
+ 111:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KI         ((uint16_t)1<<4)              /* (1<<4). Integral gain Ki, u
+ 112:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_SCALE_KPKI     (18 - RES_INC)
+ 113:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 114:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* I[k] output limit LOW. */
+ 115:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_
+ 116:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I
+ 117:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 118:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] out
+ 119:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] out
+ 120:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 121:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 122:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif(MOTOR_TYPE == MCI_DRONE_MOTOR)
+ 123:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*      --------------------------------------------------- User Fine Tune Motor Speed PI and Estim
+ 124:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KP            ((uint16_t)1U<<1U)          /* (1<<15). Proportional ga
+ 126:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KI            ((uint16_t)1U<<1U)                /* (1<<3). Integral g
+ 127:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_SCALE_KPKI    (16 + RES_INC)               /* RES_INC: Angle/speed re
+ 128:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 129:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t.
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<14) * 3) >> 2))      /* (-(1<<15)). I[k] output limi
+ 131:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MAX  (((1<<14) * 3) >> 2)         /* (1<<15). I[k] output limit H
+ 132:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 133:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MIN  (16>>1)            /* (-32767), 16. U[k] output limit LOW. *
+ 134:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normal
+ 135:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 136:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Torque / Iq PI controller ######################*/
+ 137:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+ 138:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP >> 0)             /* (1<<13). Propor
+ 139:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 4)        /* (1<<6). Integral gai
+ 140:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 2)
+ 141:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 142:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Norma
+ 143:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normall
+ 144:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 145:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need 
+ 146:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need
+ 147:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 148:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Flux / Id PI controller ######################*/
+ 149:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+ 150:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP >> 0)             /* (1<<13). Propor
+ 151:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 4)        /* (1<<6). Integral gai
+ 152:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 2)
+ 153:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 154:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normall
+ 155:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally 
+ 156:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 157:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need ch
+ 158:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need c
+ 159:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 160:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For PLL rotor speed PI controller ######################*/
+ 161:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KP             ((uint16_t)1 << 5)              /* Proportional gain Kp,
+ 162:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KI             ((uint16_t)1 << 4)              /* (1<<4). Integral gain
+ 163:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_SCALE_KPKI     (18 - RES_INC)
+ 164:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 165:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* I[k] output limit LOW. */
+ 166:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_
+ 167:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I
+ 168:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 169:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #if(MY_FOC_CONTROL_SCHEME == CONSTANT_TORQUE_DIRECT_FOC)
+ 170:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 171:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)200 )                /* U[k] output limit LOW. *
+ 172:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT )            /* U[k] ou
+ 173:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif((MY_FOC_CONTROL_SCHEME == CONSTANT_SPEED_VF_MET_FOC) || (MY_FOC_CONTROL_SCHEME == CONSTANT_SP
+ 174:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] out
+ 175:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] out
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif(MY_FOC_CONTROL_SCHEME == CONSTANT_VQ_DIRECT_FOC)
+ 177:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)200)                /* U[k] output limit LOW. */
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT )            /* U[k] ou
+ 179:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #endif
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 181:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 182:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == VORNADO_FAN_MOTOR)
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KP            ((uint16_t)1U << 15U)          /* (1<<15). Proportional
+ 184:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_KI            ((uint16_t)3U)                /* (1<<3). Integral gain 
+ 185:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_SPEED_SCALE_KPKI    (10 + RES_INC)               /* RES_INC: Angle/speed re
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 187:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t.
+ 188:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         //        #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<14) * 3) >> 2))      /* (-(1<<15)). I[k] o
+ 189:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         //        #define PI_SPEED_IK_LIMIT_MAX  (((1<<14) * 3) >> 2)         /* (1<<15). I[k] outp
+ 190:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MIN  (-32768)      /* (-(1<<15)). I[k] output limit LOW. */
+ 191:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_IK_LIMIT_MAX  (32768)         /* (1<<15). I[k] output limit HIGH. */
+ 192:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 193:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MIN  (16)            /* (-32767), 16. U[k] output limit LOW. */
+ 194:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normal
+ 195:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 196:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Torque / Iq PI controller ######################*/
+ 197:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+ 198:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportiona
+ 199:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integral gai
+ 200:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+ 201:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 202:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Norma
+ 203:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normall
+ 204:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 205:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need 
+ 206:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need
+ 207:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 208:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Flux / Id PI controller ######################*/
+ 209:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need ch
+ 210:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportiona
+ 211:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integral gai
+ 212:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 213:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 214:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normall
+ 215:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally 
+ 216:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 217:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need ch
+ 218:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need c
+ 219:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 220:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For PLL rotor speed PI controller ######################*/
+ 221:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KP             ((uint16_t)1<<8)              /* Proportional gain Kp, u
+ 222:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_KI             ((uint16_t)1<<6)              /* (1<<4). Integral gain K
+ 223:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define USER_PI_PLL_SCALE_KPKI     (20 - RES_INC)
+ 224:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 225:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* I[k] output limit LOW. */
+ 226:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_
+ 227:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I
+ 228:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 229:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] out
+ 230:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         #define PI_PLL_UK_LIMIT_MAX     ((SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT) << 1)            /* U
+ 231:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 232:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 233:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == NANOTEC_MOTOR)
+ 234:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* For Low Voltage 15W Board with Nanotec Motor */
+ 235:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /*################### For Speed PI controller ######################*/
+ 236:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_SPEED_KP            ((uint16_t)1U<<15U)          /* (1<<15). Proportional gain Kp
+ 237:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_SPEED_KI            ((uint16_t)2)                /* (1<<3). Integral gain Ki, uin
+ 238:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_SPEED_SCALE_KPKI    (10 + RES_INC)               /* RES_INC: Angle/speed resoluti
+ 239:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 240:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t. Same 
+ 241:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<11) * 3) >> 2))      /* (-(1<<15)). I[k] output limit LOW.
+ 242:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_SPEED_IK_LIMIT_MAX  (((1<<11) * 3) >> 2)         /* (1<<15). I[k] output limit HIGH. *
+ 243:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 244:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_SPEED_UK_LIMIT_MIN  (16)            /* (-32767), 16. U[k] output limit LOW. */
+ 245:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_SPEED_UK_LIMIT_MAX  (4000)         /* MAX_I_REF. U[k] output limit HIGH. Normally no n
+ 246:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 247:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /*################### For Torque / Iq PI controller ######################*/
+ 248:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. 
+ 249:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain
+ 250:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integral gain Ki, 
+ 251:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+ 252:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 253:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no
+ 254:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no n
+ 255:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 256:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change
+ 257:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need chang
+ 258:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 259:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /*################### For Flux / Id PI controller ######################*/
+ 260:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. 
+ 261:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain
+ 262:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integral gain Ki, 
+ 263:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 264:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 265:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no n
+ 266:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no nee
+ 267:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 268:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. 
+ 269:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change.
+ 270:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 271:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /*################### For PLL rotor speed PI controller ######################*/
+ 272:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_PLL_KP         ((uint16_t)(1<<6))              /* Proportional gain Kp, uint16_t.
+ 273:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_PLL_KI         ((uint16_t)(1<<4))              /* (1<<4). Integral gain Ki, uint1
+ 274:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define USER_PI_PLL_SCALE_KPKI     (17 - RES_INC)
+ 275:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 276:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* I[k] output limit LOW. */
+ 277:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCALE_
+ 278:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] ou
+ 279:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 280:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] output limi
+ 281:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] output limi
+ 282:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 283:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 284:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == MAXON_MOTOR)
+ 285:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****               /* For Low Voltage 15W Board with MAXON Motor */
+ 286:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Speed PI controller ######################*/
+ 287:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KP            ((uint16_t)1U<<15U)          /* (1<<15). Proportional gain Kp, 
+ 288:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KI            ((uint16_t)3)                /* (1<<3). Integral gain Ki, uint1
+ 289:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_SCALE_KPKI    (10 + RES_INC)               /* RES_INC: Angle/speed resolution
+ 290:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 291:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t. Same as
+ 292:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<15) * 3) >> 2))      /* (-(1<<15)). I[k] output limit LOW. *
+ 293:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MAX  (((1<<15) * 3) >> 2)         /* (1<<15). I[k] output limit HIGH. */
+ 294:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 295:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MIN  (16)            /* (-32767), 16. U[k] output limit LOW. */
+ 296:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MAX  (32767)          /* MAX_I_REF. U[k] output limit HIGH. Normally no n
+ 297:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 298:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Torque / Iq PI controller ######################*/
+ 299:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 300:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 301:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 302:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+ 303:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 304:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no n
+ 305:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no nee
+ 306:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 307:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. 
+ 308:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change.
+ 309:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 310:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Flux / Id PI controller ######################*/
+ 311:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 312:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 313:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 314:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 315:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 316:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no nee
+ 317:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no need 
+ 318:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 319:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. */
+ 320:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change. *
+ 321:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 322:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For PLL rotor speed PI controller ######################*/
+ 323:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KP         ((uint16_t)(1<<8))              /* Proportional gain Kp, uint16_t. *
+ 324:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KI         ((uint16_t)(1<<6))              /* (1<<4). Integral gain Ki, uint16_
+ 325:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_SCALE_KPKI     (19 - RES_INC)
+ 326:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 327:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* I[k] output limit LOW. */
+ 328:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCALE_KP
+ 329:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] outp
+ 330:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 331:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] output limi
+ 332:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] output limi
+ 333:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 334:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 335:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == BEKO_WM_MOTOR)
+ 336:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Speed PI controller ######################*/
+ 337:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KP            ((uint16_t)1U<<16U - 1)          /* (1<<15). Proportional gain 
+ 338:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KI            ((uint16_t)1U << 8U)                /* (1<<3). Integral gain Ki
+ 339:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_SCALE_KPKI    (8 + RES_INC)               /* RES_INC: Angle/speed resolution 
+ 340:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 341:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t. Same as
+ 342:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MIN  (-(1<<13))      /* (-(1<<15)). I[k] output limit LOW. */
+ 343:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MAX  (1<<13)         /* (1<<15). I[k] output limit HIGH. */
+ 344:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 345:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MIN  (4)            /* (-32767), 16. U[k] output limit LOW. */
+ 346:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normally no ne
+ 347:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 348:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Torque / Iq PI controller ######################*/
+ 349:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 350:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 351:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 352:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+ 353:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 354:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no n
+ 355:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no nee
+ 356:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 357:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. 
+ 358:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change.
+ 359:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 360:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Flux / Id PI controller ######################*/
+ 361:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 362:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 363:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 364:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 365:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 366:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no nee
+ 367:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no need 
+ 368:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 369:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. */
+ 370:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change. *
+ 371:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 372:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For PLL rotor speed PI controller ######################*/
+ 373:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KP         ((uint16_t)(2000))              /* Proportional gain Kp, uint16_t. *
+ 374:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KI         ((uint16_t)(1<<5))              /* (1<<4). Integral gain Ki, uint16_
+ 375:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_SCALE_KPKI     (17 - RES_INC)
+ 376:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 377:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* I[k] output limit LOW. */
+ 378:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCALE_KP
+ 379:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] outp
+ 380:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 381:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 0)                /* U[k] output limi
+ 382:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] output limi
+ 383:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 384:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 385:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == EBM_PAPST_VENTI_FAN_MOTOR)
+ 386:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Speed PI controller ######################*/
+ 387:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KP            ((uint16_t)(1U<<15U) - 1)          /* (1<<15). Proportional gai
+ 388:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KI            ((uint16_t)1U<<3)                /* (1<<3). Integral gain Ki, u
+ 389:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_SCALE_KPKI    (12 + RES_INC)               /* RES_INC: Angle/speed resolution
+ 390:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 391:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t. Same as
+ 392:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MIN  (-(1<<14))      /* (-(1<<15)). I[k] output limit LOW. */
+ 393:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MAX  (1<<14)         /* (1<<15). I[k] output limit HIGH. */
+ 394:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 395:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MIN  (4)            /* (-32767), 16. U[k] output limit LOW. */
+ 396:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normally no ne
+ 397:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 398:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Torque / Iq PI controller ######################*/
+ 399:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 400:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KP        (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 401:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KI        (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 402:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_SCALE_KPKI    (SCALING_CURRENT_KPKI + 0)
+ 403:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 404:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no n
+ 405:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no nee
+ 406:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 407:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. 
+ 408:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change.
+ 409:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 410:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Flux / Id PI controller ######################*/
+ 411:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 412:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KP          (USER_DEFAULT_IQID_KP)             /* (1<<13). Proportional gain K
+ 413:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KI          (USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral gain Ki, Ki
+ 414:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_SCALE_KPKI  (SCALING_CURRENT_KPKI + 0)
+ 415:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 416:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no nee
+ 417:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no need 
+ 418:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 419:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. */
+ 420:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change. *
+ 421:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 422:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For PLL rotor speed PI controller ######################*/
+ 423:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KP         ((uint16_t)(1<<8))              /* Proportional gain Kp, uint16_t. *
+ 424:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KI         ((uint16_t)(1<<4))              /* (1<<4). Integral gain Ki, uint16_
+ 425:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_SCALE_KPKI     (20 - RES_INC)
+ 426:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 427:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* I[k] output limit LOW. */
+ 428:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCALE_KP
+ 429:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] outp
+ 430:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 431:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 1)                /* U[k] output limi
+ 432:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] output limi
+ 433:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 434:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 435:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == LG_CordZero)
+ 436:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_SPEED_KP            ((uint16_t)1U << 15U)          /* (1<<15). Proportional gai
+ 437:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_SPEED_KI            ((uint16_t)3U)                /* (1<<3). Integral gain Ki, 
+ 438:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_SPEED_SCALE_KPKI    (10U + RES_INC)               /* RES_INC: Angle/speed resol
+ 439:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 440:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****         /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t.
+ 441:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** //  #define PI_SPEED_IK_LIMIT_MIN  (-(((1<<14) * 3) >> 2))      /* (-(1<<15)). I[k] output limit LO
+ 442:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** //  #define PI_SPEED_IK_LIMIT_MAX  (((1<<14) * 3) >> 2)         /* (1<<15). I[k] output limit HIGH.
+ 443:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_SPEED_IK_LIMIT_MIN  (-32768)      /* (-(1<<15)). I[k] output limit LOW. */
+ 444:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_SPEED_IK_LIMIT_MAX  (32768)         /* (1<<15). I[k] output limit HIGH. */
+ 445:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 446:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 447:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_SPEED_UK_LIMIT_MIN  (16)            /* (-32767), 16. U[k] output limit LOW. */
+ 448:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normally n
+ 449:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 450:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /*################### For Torque / Iq PI controller ######################*/
+ 451:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change
+ 452:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 453:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_TORQUE_KP        (62397U)//(USER_DEFAULT_IQID_KP)             /* (1<<13). Propo
+ 454:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_TORQUE_KI        (1078U)//(USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integra
+ 455:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_TORQUE_SCALE_KPKI    (15U)//(SCALING_CURRENT_KPKI + 2)
+ 456:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 457:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally 
+ 458:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no
+ 459:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 460:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need chan
+ 461:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need cha
+ 462:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 463:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /*################### For Flux / Id PI controller ######################*/
+ 464:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change
+ 465:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 466:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_FLUX_KP          (62397U)//(USER_DEFAULT_IQID_KP)             /* (1<<13). Propo
+ 467:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_FLUX_KI          (1078U)//(USER_DEFAULT_IQID_KI >> 1)        /* (1<<6). Integra
+ 468:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_FLUX_SCALE_KPKI  (15U)//(SCALING_CURRENT_KPKI + 2)
+ 469:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 470:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no
+ 471:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no n
+ 472:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 473:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change
+ 474:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need chang
+ 475:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 476:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /*################### For PLL rotor speed PI controller ######################*/
+ 477:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 478:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_PLL_KP             (1260U)//((uint16_t)1<<10)              /* Proportional gain
+ 479:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_PLL_KI             (25U)//((uint16_t)1<<5)              /* (1<<4). Integral gai
+ 480:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define USER_PI_PLL_SCALE_KPKI     (15U)//(20 - (RES_INC+3))
+ 481:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 482:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /* I[k] output limit LOW. */
+ 483:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCAL
+ 484:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] 
+ 485:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 486:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 4)                /* U[k] output 
+ 487:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     #define PI_PLL_UK_LIMIT_MAX     ((SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT) << 1)            /* U[k] 
+ 488:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 489:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 490:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #elif (MOTOR_TYPE == HV_Drive)
+ 491:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Speed PI controller ######################*/
+ 492:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KP            ((uint16_t)(1U<<15U) - 1)          /* (1<<15). Proportional gai
+ 493:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_KI            ((uint16_t)1U<<3)                /* (1<<3). Integral gain Ki, u
+ 494:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_SPEED_SCALE_KPKI    (12 + RES_INC)               /* RES_INC: Angle/speed resolution
+ 495:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 496:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Note: (IK_LIMIT_MIN << SCALE_KPKI) and (IK_LIMIT_MAX << SCALE_KPKI) are maximum int32_t. Same as
+ 497:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MIN  (-(1<<14))      /* (-(1<<15)). I[k] output limit LOW. */
+ 498:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_IK_LIMIT_MAX  (1<<14)         /* (1<<15). I[k] output limit HIGH. */
+ 499:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 500:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MIN  (4)            /* (-32767), 16. U[k] output limit LOW. */
+ 501:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_SPEED_UK_LIMIT_MAX  (32767)         /* MAX_I_REF. U[k] output limit HIGH. Normally no ne
+ 502:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 503:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Torque / Iq PI controller ######################*/
+ 504:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 505:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KP        (32113U)//(USER_DEFAULT_IQID_KP)             /* (1<<13). Proportio
+ 506:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_KI        (23929U)//(USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral g
+ 507:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_TORQUE_SCALE_KPKI    (17U)//(SCALING_CURRENT_KPKI + 0)
+ 508:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 509:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no n
+ 510:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no nee
+ 511:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 512:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. 
+ 513:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_TORQUE_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change.
+ 514:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 515:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For Flux / Id PI controller ######################*/
+ 516:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* Kp and Ki (from excel file) calculated from motor parameter L and R. Normally no need change. */
+ 517:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KP          (32113U)//(USER_DEFAULT_IQID_KP)             /* (1<<13). Proportio
+ 518:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_KI          (23929U)//(USER_DEFAULT_IQID_KI >> 0)        /* (1<<6). Integral g
+ 519:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_FLUX_SCALE_KPKI  (17U)//(SCALING_CURRENT_KPKI + 0)
+ 520:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 521:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MIN    (-32768)      /* (-(1<<15)). I[k] output limit LOW. Normally no nee
+ 522:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_IK_LIMIT_MAX    (32767)       /* (1<<15). I[k] output limit HIGH. Normally no need 
+ 523:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 524:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MIN    (-32768)      /* U[k] output limit LOW. Normally no need change. */
+ 525:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_FLUX_UK_LIMIT_MAX    32767         /* U[k] output limit HIGH. Normally no need change. *
+ 526:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 527:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /*################### For PLL rotor speed PI controller ######################*/
+ 528:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KP         (456U)//((uint16_t)(1<<8))              /* Proportional gain Kp, uin
+ 529:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_KI         (26U)//((uint16_t)(1<<4))              /* (1<<4). Integral gain Ki, 
+ 530:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define USER_PI_PLL_SCALE_KPKI     (16U)//(20 - RES_INC)
+ 531:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 532:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /* I[k] output limit LOW. */
+ 533:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MIN     (-(int32_t)((uint32_t)1 << (uint32_t)(30U-(uint32_t)PI_PLL_SCALE_KP
+ 534:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_IK_LIMIT_MAX     ((uint32_t)1 << (30U-(uint32_t)PI_PLL_SCALE_KPKI))     /* I[k] outp
+ 535:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 536:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MIN     ((uint32_t)SPEED_LOW_LIMIT >> 1)                /* U[k] output limi
+ 537:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #define PI_PLL_UK_LIMIT_MAX     (SPEED_HIGH_LIMIT + SPEED_LOW_LIMIT)            /* U[k] output limi
+ 538:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 539:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 540:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** #endif
+ 541:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 542:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**************************************************************************************************
+ 543:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * DATA STRUCTURES
+ 544:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+ 545:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** typedef struct PI_Coefs_Type
+ 546:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** {
+ 547:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t error;										/* PI error signal (reference value � feedback value), error[k] */
+ 548:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 549:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Uk;											  /* PI output U[k] */
+ 550:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Ik;											  /* Integral result I[k] */
+ 551:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 552:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   uint16_t Kp;										  /* Proportional gain Kp */
+ 553:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   uint16_t Ki;										  /* Integral gain Ki */
+ 554:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int16_t Scale_KpKi;								/* Scale-up Kp and Ki by 2^Scale_KpKi */
+ 555:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 556:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Ik_limit_min;
+ 557:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Ik_limit_max;
+ 558:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 559:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Uk_limit_min;
+ 560:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Uk_limit_max;
+ 561:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   uint8_t Uk_limit_status;
+ 562:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** } PI_Coefs_Type;
+ 563:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 564:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 565:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 566:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**************************************************************************************************
+ 567:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * API Prototypes
+ 568:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+ 569:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**
+ 570:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @brief Fixed point implementation for filter saturation logic.
+ 571:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @param input_val    Value that need to be limited
+ 572:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @param higher_limit Maximum value for <i>input_val</i>
+ 573:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @param lower_limit  Minimum value for <i>input_val</i>
+ 574:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @return int32_t
+ 575:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * <i>input_val</i>, if <i>lower_limit</i> < <i>input_val</i> < <i>higher_limit</i>
+ 576:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * <i>higher_limit</i>, if <i>input_val</i> > <i>higher_limit</i>
+ 577:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * <i>lower_limit</i>, if <i>input_val</i> < <i>lower_limit</i>
+ 578:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+ 579:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * \par<b>Description: </b><br>
+ 580:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * This function is used by PI Controller to limit the <i>input_val</i> within its minimum and maxi
+ 581:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+ 582:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @endcode
+ 583:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  */
+ 584:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE RAM_ATTRIBUTE int32_t MIN_MAX_LIMIT(int32_t input_val,int32_t higher_limit,int32_t 
+ 585:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 586:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**
+ 587:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @brief PI controller
+ 588:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *      U(t)=Kp x e(t) + (Ki/Ts) x ∫e(t)dt, where Ts is sampling period, e.g.: Ts = 50us.
+ 589:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *      I[k] = I[k-1] + Ki * error[k]
+ 590:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *      U[k] = Kp * error[k] + I[k]
+ 591:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+ 592:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * @param *PI_data
+ 593:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *      error
+ 594:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *
+ 595:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  *@retval *PI_data
+ 596:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  */
+ 597:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE void PI_controller(int32_t reference, int32_t feedback, PI_Coefs_Type *PI_data);
+ 598:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 599:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** /**************************************************************************************************
+ 600:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  * API IMPLEMENTATION
+ 601:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****  **************************************************************************************************
+ 602:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE RAM_ATTRIBUTE int32_t MIN_MAX_LIMIT(int32_t input_val,int32_t higher_limit,int32_t 
+ 603:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** {
+ 604:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t return_val;
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if ( input_val > higher_limit )
+ 606:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 607:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     return_val = higher_limit;
+ 608:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 609:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   else if ( input_val < lower_limit )
+ 610:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 611:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     return_val = lower_limit;
+ 612:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 613:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   else
+ 614:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 615:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     return_val = input_val;
+ 616:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 617:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   return return_val;
+ 618:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** }
+ 619:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 620:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE RAM_ATTRIBUTE void PI_controller(int32_t reference, int32_t feedback, PI_Coefs_Type
+ 621:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** {
+ 622:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   int32_t Tmp_Ik_Uk;
+ 623:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 624:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   PI_data->error = reference - feedback;
+ 625:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 626:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Integral output I[k] = I[k-1] + Ki * error[k] */
+ 627:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   Tmp_Ik_Uk = ((int32_t)PI_data->Ki * PI_data->error) + PI_data->Ik;
+ 628:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 629:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Check I[k] limit */
+ 630:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 631:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 632:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* PI output U[k] = Kp * error[k] + I[k] */
+ 633:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   Tmp_Ik_Uk = ((int32_t)PI_data->Kp * PI_data->error) + PI_data->Ik;
+ 634:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 635:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Check U[k] output limit */
+ 636:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   PI_data->Uk = MIN_MAX_LIMIT((Tmp_Ik_Uk >> PI_data->Scale_KpKi), PI_data->Uk_limit_max, PI_data->U
+ 637:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 638:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** }
+ 639:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 640:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** void PI_controller_Init(void);
+ 641:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE RAM_ATTRIBUTE void PI_controller_anti_windup(int32_t reference, int32_t feedback,
+ 642:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****                                                              PI_Coefs_Type *PI_data);
+ 643:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 644:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** __STATIC_INLINE RAM_ATTRIBUTE void PI_controller_anti_windup(int32_t reference, int32_t feedback,
+ 645:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****                                                              PI_Coefs_Type *PI_data)
+ 646:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** {
+ 647:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   static int32_t Tmp_Ik_Uk;
+ 648:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 649:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   PI_data->error = reference - feedback;
+ 213              	 .loc 3 649 0
+ 214 00ac 6246     	 mov r2,ip
+ 215 00ae 3B6D     	 ldr r3,[r7,#80]
+ 216              	.LVL10:
+ 217 00b0 9E1A     	 sub r6,r3,r2
+ 650:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 651:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk_limit_status == 0)
+ 218              	 .loc 3 651 0
+ 219 00b2 2422     	 mov r2,#36
+ 220              	.LVL11:
+ 649:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 221              	 .loc 3 649 0
+ 222 00b4 774B     	 ldr r3,.L50+52
+ 223 00b6 1E60     	 str r6,[r3]
+ 224              	 .loc 3 651 0
+ 225 00b8 9A5C     	 ldrb r2,[r3,r2]
+ 226 00ba 002A     	 cmp r2,#0
+ 227 00bc 00D1     	 bne .LCB175
+ 228 00be 7CE0     	 b .L9
+ 229              	.LCB175:
+ 230 00c0 9868     	 ldr r0,[r3,#8]
+ 231              	.L10:
+ 652:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 653:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     /* Integral output I[k] = I[k-1] + Ki * error[k] */
+ 654:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     Tmp_Ik_Uk = ((int32_t)PI_data->Ki * PI_data->error) + PI_data->Ik;
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 656:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 657:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 658:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* PI output U[k] = Kp * error[k] + I[k] */
+ 659:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   Tmp_Ik_Uk = ((int32_t)PI_data->Kp * PI_data->error) + PI_data->Ik;
+ 232              	 .loc 3 659 0
+ 233 00c2 9A89     	 ldrh r2,[r3,#12]
+ 234 00c4 7243     	 mul r2,r6
+ 235 00c6 1118     	 add r1,r2,r0
+ 660:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   Tmp_Ik_Uk = Tmp_Ik_Uk >> PI_data->Scale_KpKi;
+ 236              	 .loc 3 660 0
+ 237 00c8 1020     	 mov r0,#16
+ 238 00ca 1A5E     	 ldrsh r2,[r3,r0]
+ 239 00cc 724E     	 ldr r6,.L50+56
+ 240 00ce 1141     	 asr r1,r1,r2
+ 241 00d0 0A1E     	 sub r2,r1,#0
+ 242 00d2 3160     	 str r1,[r6]
+ 661:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Check U[k] output limit */
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   PI_data->Uk = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Uk_limit_max, PI_data->Uk_limit_min);
+ 243              	 .loc 3 662 0
+ 244 00d4 196A     	 ldr r1,[r3,#32]
+ 245 00d6 D869     	 ldr r0,[r3,#28]
+ 246              	.LVL12:
+ 247              	.LBB62:
+ 248              	.LBB63:
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 249              	 .loc 3 605 0
+ 250 00d8 8A42     	 cmp r2,r1
+ 251 00da 03DC     	 bgt .L13
+ 609:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 252              	 .loc 3 609 0
+ 253 00dc 8242     	 cmp r2,r0
+ 254 00de 00DB     	 blt .LCB197
+ 255 00e0 92E0     	 b .L44
+ 256              	.LCB197:
+ 257 00e2 011C     	 mov r1,r0
+ 258              	.LVL13:
+ 259              	.L13:
+ 260              	.LBE63:
+ 261              	.LBE62:
+ 663:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 664:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 665:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Uk_limit_status = 1;
+ 262              	 .loc 3 665 0
+ 263 00e4 0122     	 mov r2,#1
+ 264              	.LVL14:
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 265              	 .loc 3 662 0
+ 266 00e6 5960     	 str r1,[r3,#4]
+ 267              	.L24:
+ 268 00e8 2420     	 mov r0,#36
+ 269              	.LVL15:
+ 270 00ea 1A54     	 strb r2,[r3,r0]
+ 271              	.LBE61:
+ 272              	.LBE60:
+ 273              	.LBB68:
+ 274              	.LBB69:
+ 544:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 545:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** }
+ 546:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 547:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 548:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+ 549:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief Cartesian to Polar + Angle Addition, optimized FOC of Infineon
+ 550:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Vref = K/MPS * sqrt(V_q^2+V_d^2)    * Xfinal = K/MPS * sqrt(X^2+Y^2), where K = 1.646760258
+ 551:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      Θ = atan(V_q/V_d) + Phi         * Zfinal = Z + atan(Y/X)          (Yfinal = 0).
+ 552:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 553:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @param PI_Torque.Uk
+ 554:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      PI_Flux.Uk
+ 555:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 556:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *@retval FOCInput.RotorAngleQ31
+ 557:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+ 558:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void Cart2Polar(int32_t Torque_Vq, int32_t Flux_Vd, int32_t RotorAngleQ31)
+ 559:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 560:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 561:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* General control of CORDIC Control Register */
+ 562:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CON = CORDIC_VECTORING_MODE;
+ 563:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 564:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Z = φ. Θ = atan(Vq/Vd) + rotor angle φ, equivalent to Inv. Park Transform */
+ 565:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDZ = RotorAngleQ31;
+ 566:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 567:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Y = Vq = PI_Torque.Uk */
+ 568:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDY = Torque_Vq << CORDIC_SHIFT;
+ 569:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 570:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* X = Vd = PI_Flux.Uk. Input CORDX data, and auto start of CORDIC calculation */
+ 571:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   MATH->CORDX = Flux_Vd << CORDIC_SHIFT;
+ 572:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 573:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** }
+ 574:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 575:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 576:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** /**
+ 577:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @brief Cartesian to Polar + Angle Addition, optimized FOC of Infineon
+ 578:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 579:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  * @param MATH->CORRX
+ 580:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      MATH->CORRZ
+ 581:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *
+ 582:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *@retval FOCInput.Vref32
+ 583:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  *      FOCInput.Vref_AngleQ31
+ 584:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****  */
+ 585:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void Car2Pol_GetResult(Car2PolType * const HandlePtr)
+ 586:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 587:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Read CORDIC result |Vref| - 32-bit unsigned */
+ 588:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Vref32 = MATH->CORRX;
+ 589:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 590:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   /* Angle addition by CORDIC directly, where Θ = atan(Vq/Vd), φ is rotor angle */
+ 591:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****   HandlePtr->Vref_AngleQ31 = MATH->CORRZ;
+ 592:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 593:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** }
+ 594:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 595:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** #if(OVERCURRENT_PROTECTION == ENABLED)
+ 596:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** __STATIC_INLINE RAM_ATTRIBUTE void Over_current_Protection_check(int32_t IDCLink, int32_t current_i
+ 597:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** {
+ 598:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 599:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     uint8_t status;
+ 600:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 601:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     if(IDCLink > IDC_MAX_LIMIT)
+ 275              	 .loc 2 601 0
+ 276 00ec 4346     	 mov r3,r8
+ 277              	.LVL16:
+ 278 00ee 9A6A     	 ldr r2,[r3,#40]
+ 279 00f0 6A4B     	 ldr r3,.L50+60
+ 280              	.LBE69:
+ 281              	.LBE68:
+ 127:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 128:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Car2Polar.Torque_Vq = PI_Torque.Uk;
+ 282              	 .loc 1 128 0
+ 283 00f2 6160     	 str r1,[r4,#4]
+ 284              	.LVL17:
+ 285              	.LBB72:
+ 286              	.LBB70:
+ 287              	 .loc 2 601 0
+ 288 00f4 9A42     	 cmp r2,r3
+ 289 00f6 03D8     	 bhi .L15
+ 602:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 603:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       status = 1;
+ 604:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     }
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     #if((MY_FOC_CONTROL_SCHEME == CONSTANT_TORQUE_DIRECT_FOC) || (MY_FOC_CONTROL_SCHEME == CONSTANT
+ 606:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     else if(current_iq > USER_IQ_REF_HIGH_LIMIT)
+ 290              	 .loc 2 606 0
+ 291 00f8 694B     	 ldr r3,.L50+64
+ 292 00fa 9C45     	 cmp ip,r3
+ 293 00fc 00D8     	 bhi .LCB238
+ 294 00fe 7BE0     	 b .L45
+ 295              	.LCB238:
+ 296              	.L15:
+ 297              	.LVL18:
+ 607:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 608:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       status = 1;
+ 609:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     }
+ 610:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     #endif
+ 611:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     else
+ 612:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 613:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       status = 0;
+ 614:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     }
+ 615:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 616:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     if(status)
+ 617:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 618:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       if(*factor > 5)
+ 298              	 .loc 2 618 0
+ 299 0100 FB8B     	 ldrh r3,[r7,#30]
+ 300 0102 052B     	 cmp r3,#5
+ 301 0104 00D9     	 bls .LCB245
+ 302 0106 74E0     	 b .L25
+ 303              	.LCB245:
+ 304              	.LVL19:
+ 305              	.L17:
+ 306              	.LBE70:
+ 307              	.LBE72:
+ 129:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   #if(OVERCURRENT_PROTECTION == ENABLED)
+ 131:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     Over_current_Protection_check(ADC.ADC_IDCLink, Park_Transform.Iq, &FOCInput.overcurrent_factor)
+ 132:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   #endif
+ 133:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 134:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PLL_Imag_GetResult(&PLL_Estimator);
+ 308              	 .loc 1 134 0
+ 309 0108 281C     	 mov r0,r5
+ 310 010a FFF7FEFF 	 bl PLL_Imag_GetResult
+ 311              	.LVL20:
+ 135:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 136:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PLL_Vref(PLL_Estimator.Delta_IV, Car2Polar.Vref32, PI_PLL.Uk, FOCInput.Phase_L,&PLL_Estimator);
+ 312              	 .loc 1 136 0
+ 313 010e 654B     	 ldr r3,.L50+68
+ 314 0110 5A68     	 ldr r2,[r3,#4]
+ 315 0112 0095     	 str r5,[sp]
+ 316 0114 A168     	 ldr r1,[r4,#8]
+ 317 0116 3B68     	 ldr r3,[r7]
+ 318 0118 6868     	 ldr r0,[r5,#4]
+ 319 011a FFF7FEFF 	 bl PLL_Vref
+ 320              	.LVL21:
+ 321              	.LBB73:
+ 322              	.LBB74:
+ 649:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 323              	 .loc 3 649 0
+ 324 011e 4B46     	 mov r3,r9
+ 651:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 325              	 .loc 3 651 0
+ 326 0120 2421     	 mov r1,#36
+ 649:../PMSM_FOC/ControlModules/pmsm_foc_pi.h **** 
+ 327              	 .loc 3 649 0
+ 328 0122 1B68     	 ldr r3,[r3]
+ 329 0124 FA6C     	 ldr r2,[r7,#76]
+ 330 0126 D21A     	 sub r2,r2,r3
+ 331 0128 5F4B     	 ldr r3,.L50+72
+ 332 012a 1A60     	 str r2,[r3]
+ 651:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 333              	 .loc 3 651 0
+ 334 012c 595C     	 ldrb r1,[r3,r1]
+ 335 012e 0029     	 cmp r1,#0
+ 336 0130 37D0     	 beq .L18
+ 337 0132 9868     	 ldr r0,[r3,#8]
+ 338              	.L19:
+ 659:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   Tmp_Ik_Uk = Tmp_Ik_Uk >> PI_data->Scale_KpKi;
+ 339              	 .loc 3 659 0
+ 340 0134 9989     	 ldrh r1,[r3,#12]
+ 341 0136 4A43     	 mul r2,r1
+ 342 0138 1118     	 add r1,r2,r0
+ 660:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Check U[k] output limit */
+ 343              	 .loc 3 660 0
+ 344 013a 1020     	 mov r0,#16
+ 345 013c 1A5E     	 ldrsh r2,[r3,r0]
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 346              	 .loc 3 662 0
+ 347 013e D869     	 ldr r0,[r3,#28]
+ 660:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   /* Check U[k] output limit */
+ 348              	 .loc 3 660 0
+ 349 0140 1141     	 asr r1,r1,r2
+ 350 0142 0A1E     	 sub r2,r1,#0
+ 351              	.LVL22:
+ 352 0144 3160     	 str r1,[r6]
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 353              	 .loc 3 662 0
+ 354 0146 196A     	 ldr r1,[r3,#32]
+ 355              	.LVL23:
+ 356              	.LBB75:
+ 357              	.LBB76:
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 358              	 .loc 3 605 0
+ 359 0148 8A42     	 cmp r2,r1
+ 360 014a 03DC     	 bgt .L22
+ 609:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 361              	 .loc 3 609 0
+ 362 014c 8242     	 cmp r2,r0
+ 363 014e 00DB     	 blt .LCB308
+ 364 0150 6CE0     	 b .L46
+ 365              	.LCB308:
+ 366 0152 011C     	 mov r1,r0
+ 367              	.LVL24:
+ 368              	.L22:
+ 369              	.LBE76:
+ 370              	.LBE75:
+ 371              	 .loc 3 665 0
+ 372 0154 0122     	 mov r2,#1
+ 373              	.LVL25:
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 374              	 .loc 3 662 0
+ 375 0156 5960     	 str r1,[r3,#4]
+ 376              	.L27:
+ 377 0158 2420     	 mov r0,#36
+ 378              	.LVL26:
+ 379 015a 1A54     	 strb r2,[r3,r0]
+ 380              	.LBE74:
+ 381              	.LBE73:
+ 137:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 138:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************     PI_controller(FOCInput.Ref_Id, Park_Transform.Id, &PI_Flu
+ 139:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 140:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PI_controller_anti_windup(FOCInput.Ref_Id, Park_Transform.Id, &PI_Flux);
+ 141:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 142:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Car2Polar.Flux_Vd = PI_Flux.Uk;
+ 143:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 144:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************   PLL_Vref_GetResult(&PLL_Estimator);************************
+ 145:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 146:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PLL_Vref_GetResult(&PLL_Estimator);
+ 382              	 .loc 1 146 0
+ 383 015c 281C     	 mov r0,r5
+ 142:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 384              	 .loc 1 142 0
+ 385 015e 2160     	 str r1,[r4]
+ 386              	 .loc 1 146 0
+ 387 0160 FFF7FEFF 	 bl PLL_Vref_GetResult
+ 388              	.LVL27:
+ 389              	.LBB81:
+ 390              	.LBB82:
+ 562:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 391              	 .loc 2 562 0
+ 392 0164 6222     	 mov r2,#98
+ 393 0166 484E     	 ldr r6,.L50+40
+ 394              	.LBE82:
+ 395              	.LBE81:
+ 147:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 148:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************    Cart2Polar(Car2Polar.Torque_Vq, Car2Polar.Flux_Vd,PLL_Esti
+ 149:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Cart2Polar(Car2Polar.Torque_Vq, Car2Polar.Flux_Vd,PLL_Estimator.RotorAngleQ31);
+ 396              	 .loc 1 149 0
+ 397 0168 2368     	 ldr r3,[r4]
+ 398              	.LVL28:
+ 399              	.LBB85:
+ 400              	.LBB83:
+ 562:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 401              	 .loc 2 562 0
+ 402 016a 7264     	 str r2,[r6,#68]
+ 565:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 403              	 .loc 2 565 0
+ 404 016c EA68     	 ldr r2,[r5,#12]
+ 571:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 405              	 .loc 2 571 0
+ 406 016e 9B03     	 lsl r3,r3,#14
+ 407              	.LVL29:
+ 565:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 408              	 .loc 2 565 0
+ 409 0170 3265     	 str r2,[r6,#80]
+ 568:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 410              	 .loc 2 568 0
+ 411 0172 6268     	 ldr r2,[r4,#4]
+ 412              	.LBE83:
+ 413              	.LBE85:
+ 150:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 151:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   PLL_GetPosSpd(&PLL_Estimator);
+ 414              	 .loc 1 151 0
+ 415 0174 281C     	 mov r0,r5
+ 416              	.LBB86:
+ 417              	.LBB84:
+ 568:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 418              	 .loc 2 568 0
+ 419 0176 9203     	 lsl r2,r2,#14
+ 420 0178 F264     	 str r2,[r6,#76]
+ 571:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 421              	 .loc 2 571 0
+ 422 017a B364     	 str r3,[r6,#72]
+ 423              	.LBE84:
+ 424              	.LBE86:
+ 425              	 .loc 1 151 0
+ 426 017c FFF7FEFF 	 bl PLL_GetPosSpd
+ 427              	.LVL30:
+ 428              	.LBB87:
+ 429              	.LBB88:
+ 588:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 430              	 .loc 2 588 0
+ 431 0180 736D     	 ldr r3,[r6,#84]
+ 432 0182 A360     	 str r3,[r4,#8]
+ 591:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 433              	 .loc 2 591 0
+ 434 0184 F26D     	 ldr r2,[r6,#92]
+ 435              	.LBE88:
+ 436              	.LBE87:
+ 152:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 153:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   /**********************************   Car2Pol_GetResult(&Car2Polar);*****************************
+ 154:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Car2Pol_GetResult(&Car2Polar);
+ 155:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 156:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   uint32_t SVM_Vref16;
+ 157:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   SVM_Vref16 = Car2Polar.Vref32 >>CORDIC_SHIFT;
+ 437              	 .loc 1 157 0
+ 438 0186 9B0B     	 lsr r3,r3,#14
+ 439              	.LBB90:
+ 440              	.LBB89:
+ 591:../PMSM_FOC/ControlModules/pmsm_foc_functions.h **** 
+ 441              	 .loc 2 591 0
+ 442 0188 E260     	 str r2,[r4,#12]
+ 443              	.LVL31:
+ 444              	.LBE89:
+ 445              	.LBE90:
+ 158:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 159:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   SVM_Vref16 = (SVM_Vref16 * 311) >> 8;
+ 446              	 .loc 1 159 0
+ 447 018a 3822     	 mov r2,#56
+ 448 018c FF32     	 add r2,r2,#255
+ 449 018e 5343     	 mul r3,r2
+ 450              	.LVL32:
+ 451 0190 1B0A     	 lsr r3,r3,#8
+ 452              	.LVL33:
+ 160:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****   Car2Polar.Vref32 = SVM_Vref16 << CORDIC_SHIFT;
+ 453              	 .loc 1 160 0
+ 454 0192 9B03     	 lsl r3,r3,#14
+ 455              	.LVL34:
+ 456 0194 A360     	 str r3,[r4,#8]
+ 457              	.LVL35:
+ 161:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 162:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 163:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** }
+ 458              	 .loc 1 163 0
+ 459 0196 02B0     	 add sp,sp,#8
+ 460              	 
+ 461 0198 1CBC     	 pop {r2,r3,r4}
+ 462 019a 9046     	 mov r8,r2
+ 463 019c 9946     	 mov r9,r3
+ 464 019e A246     	 mov r10,r4
+ 465 01a0 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 466              	.LVL36:
+ 467              	.L18:
+ 468              	.LBB91:
+ 469              	.LBB79:
+ 654:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 470              	 .loc 3 654 0
+ 471 01a2 9968     	 ldr r1,[r3,#8]
+ 472 01a4 D889     	 ldrh r0,[r3,#14]
+ 473 01a6 8C46     	 mov ip,r1
+ 474 01a8 5043     	 mul r0,r2
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 475              	 .loc 3 655 0
+ 476 01aa 9969     	 ldr r1,[r3,#24]
+ 654:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 477              	 .loc 3 654 0
+ 478 01ac 6044     	 add r0,r0,ip
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 479              	 .loc 3 655 0
+ 480 01ae 5F69     	 ldr r7,[r3,#20]
+ 481              	.LVL37:
+ 482              	.LBB77:
+ 483              	.LBB78:
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 484              	 .loc 3 605 0
+ 485 01b0 8842     	 cmp r0,r1
+ 486 01b2 34DD     	 ble .L47
+ 487              	.LVL38:
+ 488              	.L20:
+ 489              	.LBE78:
+ 490              	.LBE77:
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 491              	 .loc 3 655 0
+ 492 01b4 9960     	 str r1,[r3,#8]
+ 493 01b6 081C     	 mov r0,r1
+ 494              	.LVL39:
+ 495 01b8 BCE7     	 b .L19
+ 496              	.LVL40:
+ 497              	.L9:
+ 498              	.LBE79:
+ 499              	.LBE91:
+ 500              	.LBB92:
+ 501              	.LBB66:
+ 654:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 502              	 .loc 3 654 0
+ 503 01ba 9A68     	 ldr r2,[r3,#8]
+ 504 01bc D889     	 ldrh r0,[r3,#14]
+ 505 01be 9246     	 mov r10,r2
+ 506 01c0 7043     	 mul r0,r6
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 507              	 .loc 3 655 0
+ 508 01c2 9969     	 ldr r1,[r3,#24]
+ 654:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Ik = MIN_MAX_LIMIT(Tmp_Ik_Uk, PI_data->Ik_limit_max, PI_data->Ik_limit_min);
+ 509              	 .loc 3 654 0
+ 510 01c4 5044     	 add r0,r0,r10
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 511              	 .loc 3 655 0
+ 512 01c6 5A69     	 ldr r2,[r3,#20]
+ 513              	.LVL41:
+ 514              	.LBB64:
+ 515              	.LBB65:
+ 605:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 516              	 .loc 3 605 0
+ 517 01c8 8842     	 cmp r0,r1
+ 518 01ca 21DD     	 ble .L48
+ 519              	.LVL42:
+ 520              	.L11:
+ 521              	.LBE65:
+ 522              	.LBE64:
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 523              	 .loc 3 655 0
+ 524 01cc 9960     	 str r1,[r3,#8]
+ 525 01ce 081C     	 mov r0,r1
+ 526              	.LVL43:
+ 527 01d0 77E7     	 b .L10
+ 528              	.LVL44:
+ 529              	.L2:
+ 530              	.LBE66:
+ 531              	.LBE92:
+ 532              	.LBB93:
+ 533              	.LBB46:
+ 465:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 534              	 .loc 2 465 0
+ 535 01d2 228B     	 ldrh r2,[r4,#24]
+ 536 01d4 022A     	 cmp r2,#2
+ 537 01d6 2DD8     	 bhi .L5
+ 538 01d8 002A     	 cmp r2,#0
+ 539 01da 37D1     	 bne .L49
+ 540              	.L7:
+ 469:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 541              	 .loc 2 469 0
+ 542 01dc 6246     	 mov r2,ip
+ 543 01de D118     	 add r1,r2,r3
+ 470:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       break;
+ 544              	 .loc 2 470 0
+ 545 01e0 D31A     	 sub r3,r2,r3
+ 546              	.LVL45:
+ 547 01e2 274A     	 ldr r2,.L50+32
+ 469:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 548              	 .loc 2 469 0
+ 549 01e4 2748     	 ldr r0,.L50+36
+ 550              	.LVL46:
+ 470:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       break;
+ 551              	 .loc 2 470 0
+ 552 01e6 5A43     	 mul r2,r3
+ 469:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 553              	 .loc 2 469 0
+ 554 01e8 4942     	 neg r1,r1
+ 555 01ea 8903     	 lsl r1,r1,#14
+ 556 01ec 0160     	 str r1,[r0]
+ 470:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       break;
+ 557              	 .loc 2 470 0
+ 558 01ee 4260     	 str r2,[r0,#4]
+ 559 01f0 39E7     	 b .L3
+ 560              	.LVL47:
+ 561              	.L25:
+ 562              	.LBE46:
+ 563              	.LBE93:
+ 564              	.LBB94:
+ 565              	.LBB71:
+ 619:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       {
+ 620:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         *factor -= 4;
+ 566              	 .loc 2 620 0
+ 567 01f2 043B     	 sub r3,r3,#4
+ 568 01f4 FB83     	 strh r3,[r7,#30]
+ 569 01f6 87E7     	 b .L17
+ 570              	.LVL48:
+ 571              	.L45:
+ 621:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       }
+ 622:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     }
+ 623:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     else
+ 624:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 625:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       if(*factor < 4096)
+ 572              	 .loc 2 625 0
+ 573 01f8 FB8B     	 ldrh r3,[r7,#30]
+ 574 01fa 2C4A     	 ldr r2,.L50+76
+ 575 01fc 9342     	 cmp r3,r2
+ 576 01fe 00D9     	 bls .LCB577
+ 577 0200 82E7     	 b .L17
+ 578              	.LCB577:
+ 626:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****       {
+ 627:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         *factor += 2;
+ 579              	 .loc 2 627 0
+ 580 0202 0233     	 add r3,r3,#2
+ 581 0204 FB83     	 strh r3,[r7,#30]
+ 582 0206 7FE7     	 b .L17
+ 583              	.LVL49:
+ 584              	.L44:
+ 585              	.LBE71:
+ 586              	.LBE94:
+ 587              	.LBB95:
+ 588              	.LBB67:
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 589              	 .loc 3 662 0
+ 590 0208 5A60     	 str r2,[r3,#4]
+ 591 020a 111C     	 mov r1,r2
+ 592              	.LVL50:
+ 666:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 667:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   else
+ 668:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   {
+ 669:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****     PI_data->Uk_limit_status = 0;
+ 593              	 .loc 3 669 0
+ 594 020c 0022     	 mov r2,#0
+ 595              	.LVL51:
+ 596 020e 6BE7     	 b .L24
+ 597              	.LVL52:
+ 598              	.L48:
+ 599 0210 011E     	 sub r1,r0,#0
+ 600              	.LVL53:
+ 601 0212 9142     	 cmp r1,r2
+ 602 0214 DADA     	 bge .L11
+ 603 0216 111C     	 mov r1,r2
+ 604              	.LVL54:
+ 655:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   }
+ 605              	 .loc 3 655 0
+ 606 0218 9960     	 str r1,[r3,#8]
+ 607 021a 081C     	 mov r0,r1
+ 608              	.LVL55:
+ 609 021c 51E7     	 b .L10
+ 610              	.LVL56:
+ 611              	.L47:
+ 612 021e 011E     	 sub r1,r0,#0
+ 613              	.LVL57:
+ 614 0220 B942     	 cmp r1,r7
+ 615 0222 C7DA     	 bge .L20
+ 616 0224 391C     	 mov r1,r7
+ 617              	.LVL58:
+ 618              	.LBE67:
+ 619              	.LBE95:
+ 620              	.LBB96:
+ 621              	.LBB80:
+ 622 0226 9960     	 str r1,[r3,#8]
+ 623 0228 081C     	 mov r0,r1
+ 624              	.LVL59:
+ 625 022a 83E7     	 b .L19
+ 626              	.LVL60:
+ 627              	.L46:
+ 662:../PMSM_FOC/ControlModules/pmsm_foc_pi.h ****   if(PI_data->Uk != Tmp_Ik_Uk)
+ 628              	 .loc 3 662 0
+ 629 022c 5A60     	 str r2,[r3,#4]
+ 630 022e 111C     	 mov r1,r2
+ 631              	.LVL61:
+ 632              	 .loc 3 669 0
+ 633 0230 0022     	 mov r2,#0
+ 634              	.LVL62:
+ 635 0232 91E7     	 b .L27
+ 636              	.LVL63:
+ 637              	.L5:
+ 638              	.LBE80:
+ 639              	.LBE96:
+ 640              	.LBB97:
+ 641              	.LBB47:
+ 465:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****     {
+ 642              	 .loc 2 465 0
+ 643 0234 052A     	 cmp r2,#5
+ 644 0236 D1D0     	 beq .L7
+ 479:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 645              	 .loc 2 479 0
+ 646 0238 6346     	 mov r3,ip
+ 647              	.LVL64:
+ 648 023a 5B00     	 lsl r3,r3,#1
+ 649 023c C218     	 add r2,r0,r3
+ 650 023e 104B     	 ldr r3,.L50+32
+ 478:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDI
+ 651              	 .loc 2 478 0
+ 652 0240 104E     	 ldr r6,.L50+36
+ 653              	.LVL65:
+ 479:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 654              	 .loc 2 479 0
+ 655 0242 5A43     	 mul r2,r3
+ 478:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDI
+ 656              	 .loc 2 478 0
+ 657 0244 8103     	 lsl r1,r0,#14
+ 658 0246 3160     	 str r1,[r6]
+ 479:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 659              	 .loc 2 479 0
+ 660 0248 7260     	 str r2,[r6,#4]
+ 661 024a 0CE7     	 b .L3
+ 662              	.LVL66:
+ 663              	.L49:
+ 475:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 664              	 .loc 2 475 0
+ 665 024c 5B00     	 lsl r3,r3,#1
+ 666              	.LVL67:
+ 667 024e C218     	 add r2,r0,r3
+ 668 0250 174B     	 ldr r3,.L50+80
+ 474:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 669              	 .loc 2 474 0
+ 670 0252 0C4E     	 ldr r6,.L50+36
+ 671              	.LVL68:
+ 475:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 672              	 .loc 2 475 0
+ 673 0254 5A43     	 mul r2,r3
+ 474:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 674              	 .loc 2 474 0
+ 675 0256 8103     	 lsl r1,r0,#14
+ 676 0258 3160     	 str r1,[r6]
+ 475:../PMSM_FOC/ControlModules/pmsm_foc_functions.h ****         break;
+ 677              	 .loc 2 475 0
+ 678 025a 7260     	 str r2,[r6,#4]
+ 679 025c 03E7     	 b .L3
+ 680              	.L51:
+ 681 025e C046     	 .align 2
+ 682              	.L50:
+ 683 0260 00000000 	 .word ADC
+ 684 0264 00000000 	 .word FOCOutput
+ 685 0268 00000000 	 .word Current
+ 686 026c 00000000 	 .word PLL_Estimator
+ 687 0270 00000000 	 .word Motor
+ 688 0274 00000000 	 .word FOCInput
+ 689 0278 00000000 	 .word SVM
+ 690 027c 55150000 	 .word 5461
+ 691 0280 F3240000 	 .word 9459
+ 692 0284 00000000 	 .word Clarke_Transform
+ 693 0288 00000340 	 .word 1073938432
+ 694 028c 00000000 	 .word Park_Transform
+ 695 0290 00000000 	 .word Car2Polar
+ 696 0294 00000000 	 .word PI_Torque
+ 697 0298 00000000 	 .word .LANCHOR0
+ 698 029c D7090000 	 .word 2519
+ 699 02a0 AEB70000 	 .word 47022
+ 700 02a4 00000000 	 .word PI_PLL
+ 701 02a8 00000000 	 .word PI_Flux
+ 702 02ac FF0F0000 	 .word 4095
+ 703 02b0 0DDBFFFF 	 .word -9459
+ 704              	.LBE47:
+ 705              	.LBE97:
+ 706              	 .cfi_endproc
+ 707              	.LFE201:
+ 709              	 .align 2
+ 710              	 .global Linear_Torque_Ramp_Generator
+ 711              	 .code 16
+ 712              	 .thumb_func
+ 714              	Linear_Torque_Ramp_Generator:
+ 715              	.LFB202:
+ 164:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 165:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 166:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** __attribute__((section(".ram_code"))) void Linear_Torque_Ramp_Generator(int32_t current_set, int32_
+ 167:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** {
+ 716              	 .loc 1 167 0
+ 717              	 .cfi_startproc
+ 718              	.LVL69:
+ 719 02b4 30B5     	 push {r4,r5,lr}
+ 720              	 .cfi_def_cfa_offset 12
+ 721              	 .cfi_offset 4,-12
+ 722              	 .cfi_offset 5,-8
+ 723              	 .cfi_offset 14,-4
+ 168:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     static uint32_t Iq_counter = 0;
+ 169:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 170:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     Iq_counter++;
+ 724              	 .loc 1 170 0
+ 725 02b6 104D     	 ldr r5,.L57
+ 726 02b8 2C68     	 ldr r4,[r5]
+ 727 02ba 0134     	 add r4,r4,#1
+ 728 02bc 2C60     	 str r4,[r5]
+ 171:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     if(Iq_counter >= USER_IQ_RAMP_SLEWRATE)
+ 729              	 .loc 1 171 0
+ 730 02be 002C     	 cmp r4,#0
+ 731 02c0 06D1     	 bne .L53
+ 732 02c2 1C6D     	 ldr r4,[r3,#80]
+ 733              	.LVL70:
+ 734              	.L54:
+ 172:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     {
+ 173:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         Iq_counter = 0;
+ 174:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         if( HandlePtr->Ref_Iq < current_set)
+ 175:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         {
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           HandlePtr->Ref_Iq += inc_step;
+ 177:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         }
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         else if(HandlePtr->Ref_Iq > current_set)
+ 179:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         {
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           if((HandlePtr->Ref_Iq >= dec_step )&& (ADC.ADC_DCLink < VDC_MAX_LIMIT))
+ 181:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           {
+ 182:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****             HandlePtr->Ref_Iq -=  dec_step;
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           }
+ 184:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 185:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         }
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     }
+ 187:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 188:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     /* Limit protection for ref_iq, the max value is capped up to 1Q15*/
+ 189:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****     if(HandlePtr->Ref_Iq > USER_IQ_REF_HIGH_LIMIT)
+ 735              	 .loc 1 189 0
+ 736 02c4 0D4A     	 ldr r2,.L57+4
+ 737              	.LVL71:
+ 738 02c6 9442     	 cmp r4,r2
+ 739 02c8 01D9     	 bls .L52
+ 190:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****       HandlePtr->Ref_Iq = USER_IQ_REF_HIGH_LIMIT - 1;
+ 740              	 .loc 1 190 0
+ 741 02ca 0D4A     	 ldr r2,.L57+8
+ 742 02cc 1A65     	 str r2,[r3,#80]
+ 743              	.L52:
+ 191:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** 
+ 192:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c **** }
+ 744              	 .loc 1 192 0
+ 745              	 
+ 746 02ce 30BD     	 pop {r4,r5,pc}
+ 747              	.LVL72:
+ 748              	.L53:
+ 173:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         if( HandlePtr->Ref_Iq < current_set)
+ 749              	 .loc 1 173 0
+ 750 02d0 0024     	 mov r4,#0
+ 751 02d2 2C60     	 str r4,[r5]
+ 174:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         {
+ 752              	 .loc 1 174 0
+ 753 02d4 1C6D     	 ldr r4,[r3,#80]
+ 754 02d6 8442     	 cmp r4,r0
+ 755 02d8 02DA     	 bge .L55
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         }
+ 756              	 .loc 1 176 0
+ 757 02da 6418     	 add r4,r4,r1
+ 758 02dc 1C65     	 str r4,[r3,#80]
+ 759 02de F1E7     	 b .L54
+ 760              	.L55:
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****         {
+ 761              	 .loc 1 178 0
+ 762 02e0 8442     	 cmp r4,r0
+ 763 02e2 EFDD     	 ble .L54
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           {
+ 764              	 .loc 1 180 0
+ 765 02e4 9442     	 cmp r4,r2
+ 766 02e6 EDDB     	 blt .L54
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           {
+ 767              	 .loc 1 180 0 is_stmt 0 discriminator 1
+ 768 02e8 0649     	 ldr r1,.L57+12
+ 769              	.LVL73:
+ 770 02ea 486A     	 ldr r0,[r1,#36]
+ 771              	.LVL74:
+ 772 02ec 0649     	 ldr r1,.L57+16
+ 773 02ee 8842     	 cmp r0,r1
+ 774 02f0 E8DC     	 bgt .L54
+ 182:../PMSM_FOC/ControlModules/pmsm_foc_torque_ctrl.c ****           }
+ 775              	 .loc 1 182 0 is_stmt 1
+ 776 02f2 A41A     	 sub r4,r4,r2
+ 777 02f4 1C65     	 str r4,[r3,#80]
+ 778 02f6 E5E7     	 b .L54
+ 779              	.L58:
+ 780              	 .align 2
+ 781              	.L57:
+ 782 02f8 00000000 	 .word .LANCHOR1
+ 783 02fc AEB70000 	 .word 47022
+ 784 0300 ADB70000 	 .word 47021
+ 785 0304 00000000 	 .word ADC
+ 786 0308 5B0D0000 	 .word 3419
+ 787              	 .cfi_endproc
+ 788              	.LFE202:
+ 790              	 .section .bss.Iq_counter.8388,"aw",%nobits
+ 791              	 .align 2
+ 792              	 .set .LANCHOR1,.+0
+ 795              	Iq_counter.8388:
+ 796 0000 00000000 	 .space 4
+ 797              	 .section .bss.Tmp_Ik_Uk.8012,"aw",%nobits
+ 798              	 .align 2
+ 799              	 .set .LANCHOR0,.+0
+ 802              	Tmp_Ik_Uk.8012:
+ 803 0000 00000000 	 .space 4
+ 804              	 .text
+ 805              	.Letext0:
+ 806              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 807              	 .file 5 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 808              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 809              	 .file 7 "../PMSM_FOC/ControlModules/..\\MIDSys\\../MCUInit/adc.h"
+ 810              	 .file 8 "../PMSM_FOC/ControlModules/..\\MIDSys\\pmsm_foc_pwmsvm.h"
+ 811              	 .file 9 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 812              	 .file 10 "../PMSM_FOC/ControlModules/..\\MIDSys\\pmsm_foc_current_threeshunt.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_torque_ctrl.c
+    {standard input}:18     .ram_code:00000000 $t
+    {standard input}:23     .ram_code:00000000 FOC_Torque_Controller
+    {standard input}:683    .ram_code:00000260 $d
+    {standard input}:709    .ram_code:000002b4 $t
+    {standard input}:714    .ram_code:000002b4 Linear_Torque_Ramp_Generator
+    {standard input}:782    .ram_code:000002f8 $d
+    {standard input}:791    .bss.Iq_counter.8388:00000000 $d
+    {standard input}:795    .bss.Iq_counter.8388:00000000 Iq_counter.8388
+    {standard input}:798    .bss.Tmp_Ik_Uk.8012:00000000 $d
+    {standard input}:802    .bss.Tmp_Ik_Uk.8012:00000000 Tmp_Ik_Uk.8012
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Get_ADCPhaseCurrent
+Current_Reconstruction
+PLL_Imag
+PLL_Imag_GetResult
+PLL_Vref
+PLL_Vref_GetResult
+PLL_GetPosSpd
+ADC
+FOCOutput
+Current
+PLL_Estimator
+Motor
+FOCInput
+SVM
+Clarke_Transform
+Park_Transform
+Car2Polar
+PI_Torque
+PI_PLL
+PI_Flux

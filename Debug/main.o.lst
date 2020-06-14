@@ -1,0 +1,1528 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "main.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.startup.main,"ax",%progbits
+  18              	 .align 2
+  19              	 .global main
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	main:
+  24              	.LFB201:
+  25              	 .file 1 "../main.c"
+   1:../main.c     **** /*******************************************************************************
+   2:../main.c     ****  Copyright (c) 2015-2016, Infineon Technologies AG                            **
+   3:../main.c     ****  All rights reserved.                                                         **
+   4:../main.c     ****                                                                               **
+   5:../main.c     ****  Redistribution and use in source and binary forms, with or without           **
+   6:../main.c     ****  modification,are permitted provided that the following conditions are met:   **
+   7:../main.c     ****                                                                               **
+   8:../main.c     ****  *Redistributions of source code must retain the above copyright notice,      **
+   9:../main.c     ****  this list of conditions and the following disclaimer.                        **
+  10:../main.c     ****  *Redistributions in binary form must reproduce the above copyright notice,   **
+  11:../main.c     ****  this list of conditions and the following disclaimer in the documentation    **
+  12:../main.c     ****  and/or other materials provided with the distribution.                       **
+  13:../main.c     ****  *Neither the name of the copyright holders nor the names of its contributors **
+  14:../main.c     ****  may be used to endorse or promote products derived from this software without**
+  15:../main.c     ****  specific prior written permission.                                           **
+  16:../main.c     ****                                                                               **
+  17:../main.c     ****  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  **
+  18:../main.c     ****  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    **
+  19:../main.c     ****  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   **
+  20:../main.c     ****  ARE  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   **
+  21:../main.c     ****  LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         **
+  22:../main.c     ****  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         **
+  23:../main.c     ****  SUBSTITUTE GOODS OR  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS    **
+  24:../main.c     ****  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      **
+  25:../main.c     ****  CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)       **
+  26:../main.c     ****  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   **
+  27:../main.c     ****  POSSIBILITY OF SUCH DAMAGE.                                                  **
+  28:../main.c     ****                                                                               **
+  29:../main.c     ****  To improve the quality of the software, users are encouraged to share        **
+  30:../main.c     ****  modifications, enhancements or bug fixes with Infineon Technologies AG       **
+  31:../main.c     ****  dave@infineon.com).                                                          **
+  32:../main.c     ****                                                                               **
+  33:../main.c     **** ********************************************************************************
+  34:../main.c     **** **                                                                            **
+  35:../main.c     **** **                                                                            **
+  36:../main.c     **** ** PLATFORM : Infineon XMC1300 Series                                         **
+  37:../main.c     **** **                                                                            **
+  38:../main.c     **** ** AUTHOR : Motor Control  R&D Team                                           **
+  39:../main.c     **** **                                                                            **
+  40:../main.c     **** ** version 1.0.0  Initial version                                             **
+  41:../main.c     **** **                                                                            **
+  42:../main.c     **** ** MODIFICATION DATE : Sep 30, 2016                                           **
+  43:../main.c     **** **                                                                            **
+  44:../main.c     **** *******************************************************************************/
+  45:../main.c     **** 
+  46:../main.c     **** /**************************************************************************************************
+  47:../main.c     ****  * HEADER FILES
+  48:../main.c     ****  **************************************************************************************************
+  49:../main.c     **** 
+  50:../main.c     **** /* SFR declarations of the selected device */
+  51:../main.c     **** #include <XMC1300.h>
+  52:../main.c     **** #include "xmc_gpio.h"
+  53:../main.c     **** 
+  54:../main.c     **** #include "pmsm_foc_user_mcuhwconfig.h"
+  55:../main.c     **** #include "pmsm_foc_features_config.h"
+  56:../main.c     **** #include "..\ControlModules\pmsm_foc_interface.h"
+  57:../main.c     **** #include "..\MCUInit\uart.h"
+  58:../main.c     **** #include "..\ControlModules\pmsm_foc_pi.h"
+  59:../main.c     **** #include "xmc1_flash.h"
+  60:../main.c     **** /**************************************************************************************************
+  61:../main.c     ****  * API IMPLEMENTATION
+  62:../main.c     ****  **************************************************************************************************
+  63:../main.c     **** 
+  64:../main.c     **** #if(uCPROBE_GUI == ENABLED)
+  65:../main.c     **** /* uC Probe Variables */
+  66:../main.c     **** uint32_t User_Para[40];
+  67:../main.c     **** uint32_t Update_KpKi;
+  68:../main.c     **** #endif
+  69:../main.c     **** 
+  70:../main.c     **** extern void PMSM_FOC_Init (void);
+  71:../main.c     **** 
+  72:../main.c     **** 
+  73:../main.c     **** int main(void)
+  74:../main.c     **** {
+  26              	 .loc 1 74 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  75:../main.c     **** 
+  76:../main.c     **** #if(uCPROBE_GUI == ENABLED)
+  77:../main.c     ****   uint32_t * MotorCONF_Addr = MotorConfig_Addr;
+  78:../main.c     **** 
+  79:../main.c     ****   if ((*MotorCONF_Addr)!= PARAM_HEADER)
+  29              	 .loc 1 79 0
+  30 0000 2548     	 ldr r0,.L6
+  31 0002 264B     	 ldr r3,.L6+4
+  32 0004 0268     	 ldr r2,[r0]
+  74:../main.c     **** 
+  33              	 .loc 1 74 0
+  34 0006 10B5     	 push {r4,lr}
+  35              	 .cfi_def_cfa_offset 8
+  36              	 .cfi_offset 4,-8
+  37              	 .cfi_offset 14,-4
+  38              	 .loc 1 79 0
+  39 0008 9A42     	 cmp r2,r3
+  40 000a 25D0     	 beq .L2
+  41              	.LVL1:
+  42              	.LBB17:
+  80:../main.c     ****   {
+  81:../main.c     ****     uint32_t *MotorCONF_Address = MotorConfig_Addr;
+  82:../main.c     ****     uint32_t *UserConfig_Address ;
+  83:../main.c     **** 
+  84:../main.c     ****     User_Para[0] = PARAM_HEADER;
+  43              	 .loc 1 84 0
+  44 000c 2449     	 ldr r1,.L6+8
+  85:../main.c     ****     User_Para[1] = USER_PI_SPEED_KP;
+  86:../main.c     ****     User_Para[2] = USER_PI_SPEED_KI;
+  87:../main.c     ****     User_Para[3] = USER_PI_SPEED_SCALE_KPKI;
+  88:../main.c     ****     User_Para[4] = USER_PI_TORQUE_KP;
+  89:../main.c     ****     User_Para[5] = USER_PI_TORQUE_KI;
+  45              	 .loc 1 89 0
+  46 000e 254A     	 ldr r2,.L6+12
+  84:../main.c     ****     User_Para[1] = USER_PI_SPEED_KP;
+  47              	 .loc 1 84 0
+  48 0010 0B60     	 str r3,[r1]
+  85:../main.c     ****     User_Para[1] = USER_PI_SPEED_KP;
+  49              	 .loc 1 85 0
+  50 0012 254B     	 ldr r3,.L6+16
+  88:../main.c     ****     User_Para[5] = USER_PI_TORQUE_KI;
+  51              	 .loc 1 88 0
+  52 0014 254C     	 ldr r4,.L6+20
+  85:../main.c     ****     User_Para[1] = USER_PI_SPEED_KP;
+  53              	 .loc 1 85 0
+  54 0016 4B60     	 str r3,[r1,#4]
+  86:../main.c     ****     User_Para[3] = USER_PI_SPEED_SCALE_KPKI;
+  55              	 .loc 1 86 0
+  56 0018 0823     	 mov r3,#8
+  57 001a 8B60     	 str r3,[r1,#8]
+  87:../main.c     ****     User_Para[4] = USER_PI_TORQUE_KP;
+  58              	 .loc 1 87 0
+  59 001c 0733     	 add r3,r3,#7
+  60 001e CB60     	 str r3,[r1,#12]
+  90:../main.c     ****     User_Para[6] = USER_PI_TORQUE_SCALE_KPKI;
+  61              	 .loc 1 90 0
+  62 0020 0233     	 add r3,r3,#2
+  63 0022 8B61     	 str r3,[r1,#24]
+  91:../main.c     ****     User_Para[7] = USER_PI_FLUX_KP;
+  92:../main.c     ****     User_Para[8] = USER_PI_FLUX_KI;
+  93:../main.c     ****     User_Para[9] = USER_PI_FLUX_SCALE_KPKI;
+  64              	 .loc 1 93 0
+  65 0024 4B62     	 str r3,[r1,#36]
+  94:../main.c     ****     User_Para[10] = USER_PI_PLL_KP;
+  66              	 .loc 1 94 0
+  67 0026 B833     	 add r3,r3,#184
+  68 0028 FF33     	 add r3,r3,#255
+  69 002a 8B62     	 str r3,[r1,#40]
+  95:../main.c     ****     User_Para[11] = USER_PI_PLL_KI;
+  70              	 .loc 1 95 0
+  71 002c AF3B     	 sub r3,r3,#175
+  72 002e FF3B     	 sub r3,r3,#255
+  73 0030 CB62     	 str r3,[r1,#44]
+  96:../main.c     ****     User_Para[12] = USER_PI_PLL_SCALE_KPKI;
+  74              	 .loc 1 96 0
+  75 0032 0A3B     	 sub r3,r3,#10
+  76 0034 0B63     	 str r3,[r1,#48]
+  97:../main.c     ****     User_Para[13] = USER_RES_INC;
+  77              	 .loc 1 97 0
+  78 0036 0D3B     	 sub r3,r3,#13
+  88:../main.c     ****     User_Para[5] = USER_PI_TORQUE_KI;
+  79              	 .loc 1 88 0
+  80 0038 0C61     	 str r4,[r1,#16]
+  89:../main.c     ****     User_Para[6] = USER_PI_TORQUE_SCALE_KPKI;
+  81              	 .loc 1 89 0
+  82 003a 4A61     	 str r2,[r1,#20]
+  91:../main.c     ****     User_Para[8] = USER_PI_FLUX_KI;
+  83              	 .loc 1 91 0
+  84 003c CC61     	 str r4,[r1,#28]
+  92:../main.c     ****     User_Para[9] = USER_PI_FLUX_SCALE_KPKI;
+  85              	 .loc 1 92 0
+  86 003e 0A62     	 str r2,[r1,#32]
+  87              	 .loc 1 97 0
+  88 0040 4B63     	 str r3,[r1,#52]
+  89              	.LVL2:
+  98:../main.c     **** 
+  99:../main.c     ****     UserConfig_Address = &User_Para[0];
+ 100:../main.c     ****     XMC_FLASH_ProgramVerifyPage(MotorCONF_Address,UserConfig_Address);
+  90              	 .loc 1 100 0
+  91 0042 FFF7FEFF 	 bl XMC_FLASH_ProgramVerifyPage
+  92              	.LVL3:
+  93              	.LBB18:
+  94              	.LBB19:
+  95              	.LBB20:
+  96              	.LBB21:
+  97              	 .file 2 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include/cmsis_gcc.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /**************************************************************************//**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * @brief    CMSIS Cortex-M Core Function/Instruction Header File
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * @version  V4.20
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * @date     18. August 2015
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  ******************************************************************************/
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    All rights reserved.
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    Redistribution and use in source and binary forms, with or without
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    modification, are permitted provided that the following conditions are met:
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    - Redistributions of source code must retain the above copyright
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer.
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer in the
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****      documentation and/or other materials provided with the distribution.
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****      to endorse or promote products derived from this software without
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****      specific prior written permission.
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    *
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    ---------------------------------------------------------------------------*/
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #define __CMSIS_GCC_H
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   @{
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Enable IRQ Interrupts
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   This function enables IRQ interrupts by clearing the I-bit in the CPSR.
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   Can only be executed in Privileged modes.
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Disable IRQ Interrupts
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   This function disables IRQ interrupts by setting the I-bit in the CPSR.
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   Can only be executed in Privileged modes.
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Control Register
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the content of the Control Register.
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               Control Register value
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, control" : "=r" (result) );
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Control Register
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function writes the given value to the Control Register.
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    control  Control Register value to set
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t control)
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get IPSR Register
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the content of the IPSR Register.
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               IPSR Register value
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get APSR Register
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the content of the APSR Register.
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               APSR Register value
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, apsr" : "=r" (result) );
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get xPSR Register
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the content of the xPSR Register.
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               xPSR Register value
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Process Stack Pointer
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current value of the Process Stack Pointer (PSP).
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               PSP Register value
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   register uint32_t result;
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, psp\n"  : "=r" (result) );
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Process Stack Pointer
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Process Stack Pointer (PSP).
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR psp, %0\n" : : "r" (topOfProcStack) : "sp");
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Main Stack Pointer
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current value of the Main Stack Pointer (MSP).
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               MSP Register value
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   register uint32_t result;
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, msp\n" : "=r" (result) );
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Main Stack Pointer
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Main Stack Pointer (MSP).
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR msp, %0\n" : : "r" (topOfMainStack) : "sp");
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Priority Mask
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current state of the priority mask bit from the Priority Mask Registe
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               Priority Mask value
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, primask" : "=r" (result) );
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Priority Mask
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Priority Mask Register.
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    priMask  Priority Mask
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #if       (__CORTEX_M >= 0x03U)
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Enable FIQ
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Can only be executed in Privileged modes.
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("cpsie f" : : : "memory");
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Disable FIQ
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function disables FIQ interrupts by setting the F-bit in the CPSR.
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Can only be executed in Privileged modes.
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void)
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("cpsid f" : : : "memory");
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Base Priority
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current value of the Base Priority register.
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               Base Priority register value
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, basepri" : "=r" (result) );
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Base Priority
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Base Priority register.
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    basePri  Base Priority value to set
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t value)
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR basepri, %0" : : "r" (value) : "memory");
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 269:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 270:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 271:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Base Priority with condition
+ 272:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 273:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Base Priority register only if BASEPRI masking is 
+ 274:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 	or the new value increases the BASEPRI priority level.
+ 275:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 276:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    basePri  Base Priority value to set
+ 277:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 278:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI_MAX(uint32_t value)
+ 279:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 280:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR basepri_max, %0" : : "r" (value) : "memory");
+ 281:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 282:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 283:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 284:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get Fault Mask
+ 285:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 286:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current value of the Fault Mask register.
+ 287:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 288:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               Fault Mask register value
+ 289:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 290:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void)
+ 291:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 292:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 293:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 294:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MRS %0, faultmask" : "=r" (result) );
+ 295:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 296:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 297:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 298:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 299:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set Fault Mask
+ 300:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 301:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Fault Mask register.
+ 302:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 303:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    faultMask  Fault Mask value to set
+ 304:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 305:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
+ 306:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 307:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("MSR faultmask, %0" : : "r" (faultMask) : "memory");
+ 308:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 309:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 310:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #endif /* (__CORTEX_M >= 0x03U) */
+ 311:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 312:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 313:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #if       (__CORTEX_M == 0x04U) || (__CORTEX_M == 0x07U)
+ 314:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 315:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Get FPSCR
+ 316:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 317:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function returns the current value of the Floating Point Status/Control register.
+ 318:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 319:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \return               Floating Point Status/Control register value
+ 320:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 321:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
+ 322:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 323:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
+ 324:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   uint32_t result;
+ 325:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 326:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   /* Empty asm statement works as a scheduling barrier */
+ 327:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("");
+ 328:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("VMRS %0, fpscr" : "=r" (result) );
+ 329:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("");
+ 330:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   return(result);
+ 331:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #else
+ 332:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****    return(0);
+ 333:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #endif
+ 334:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 335:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 336:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 337:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Set FPSCR
+ 338:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 339:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function assigns the given value to the Floating Point Status/Control register.
+ 340:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 341:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     \param [in]    fpscr  Floating Point Status/Control value to set
+ 342:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 343:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+ 344:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 345:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
+ 346:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   /* Empty asm statement works as a scheduling barrier */
+ 347:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("");
+ 348:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** //  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc");          // ARMCC_V6: needs to be 
+ 349:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("");
+ 350:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #endif
+ 351:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 352:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 353:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #endif /* (__CORTEX_M == 0x04U) || (__CORTEX_M == 0x07U) */
+ 354:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 355:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 356:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 357:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /*@} end of CMSIS_Core_RegAccFunctions */
+ 358:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 359:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 360:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /* ##########################  Core Instruction Access  ######################### */
+ 361:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+ 362:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   Access to dedicated instructions
+ 363:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   @{
+ 364:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** */
+ 365:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 366:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /* Define macros for porting to both thumb1 and thumb2.
+ 367:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * For thumb1, use low register (r0-r7), specified by constrant "l"
+ 368:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  * Otherwise, use general registers, specified by constrant "r" */
+ 369:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #if defined (__thumb__) && !defined (__thumb2__)
+ 370:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
+ 371:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "l" (r)
+ 372:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #else
+ 373:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=r" (r)
+ 374:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "r" (r)
+ 375:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** #endif
+ 376:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 377:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  No Operation
+ 378:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 379:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+ 380:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 381:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __NOP(void)
+ 382:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("nop");
+ 384:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 385:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 386:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 387:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Wait For Interrupt
+ 388:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 389:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Wait For Interrupt is a hint instruction that suspends execution
+ 390:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     until one of a number of events occurs.
+ 391:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 392:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __WFI(void)
+ 393:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 394:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("wfi");
+ 395:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 396:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 397:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 398:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Wait For Event
+ 399:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 400:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Wait For Event is a hint instruction that permits the processor to enter
+ 401:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     a low-power state until one of a number of events occurs.
+ 402:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 403:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __WFE(void)
+ 404:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 405:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("wfe");
+ 406:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 407:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 408:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 409:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Send Event
+ 410:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 411:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 412:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 413:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __SEV(void)
+ 414:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 415:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("sev");
+ 416:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 417:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 418:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 419:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Instruction Synchronization Barrier
+ 420:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 421:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 422:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     so that all instructions following the ISB are fetched from cache or
+ 423:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     memory, after the instruction has been completed.
+ 424:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 425:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __ISB(void)
+ 426:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 427:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("isb 0xF":::"memory");
+ 428:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 429:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 430:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 431:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** /** \brief  Data Synchronization Barrier
+ 432:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** 
+ 433:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     This function acts as a special kind of Data Memory Barrier.
+ 434:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****     It completes when all explicit memory accesses before this instruction complete.
+ 435:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****  */
+ 436:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __DSB(void)
+ 437:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** {
+ 438:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h ****   __ASM volatile ("dsb 0xF":::"memory");
+  98              	 .loc 2 438 0
+  99              	
+ 100 0046 BFF34F8F 	 dsb 0xF
+ 101              	
+ 102              	 .code 16
+ 103              	.LBE21:
+ 104              	.LBE20:
+ 105              	 .file 3 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include/core_cm0.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /**************************************************************************//**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  * @file     core_cm0.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  * @brief    CMSIS Cortex-M0 Core Peripheral Access Layer Header File
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  * @version  V4.20
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  * @date     20. August 2015
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  ******************************************************************************/
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    All rights reserved.
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    Redistribution and use in source and binary forms, with or without
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    modification, are permitted provided that the following conditions are met:
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    - Redistributions of source code must retain the above copyright
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      notice, this list of conditions and the following disclaimer.
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      notice, this list of conditions and the following disclaimer in the
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      documentation and/or other materials provided with the distribution.
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      to endorse or promote products derived from this software without
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      specific prior written permission.
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    *
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    ---------------------------------------------------------------------------*/
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #if   defined ( __ICCARM__ )
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  #pragma system_include         /* treat file as system include file for MISRA check */
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif (__ARMCC_VERSION >= 6010050)
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #pragma clang system_header   /* treat file as system include file */
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifndef __CORE_CM0_H_GENERIC
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CORE_CM0_H_GENERIC
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #include <stdint.h>
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifdef __cplusplus
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  extern "C" {
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      Function definitions in header files are used to allow 'inlining'.
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      Unions are used for effective representation of core registers.
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****      Function-like macros are used to allow more efficient code.
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*******************************************************************************
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  *                 CMSIS definitions
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  ******************************************************************************/
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup Cortex_M0
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*  CMSIS CM0 definitions */
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CM0_CMSIS_VERSION_MAIN  (0x04U)                                      /*!< [31:16] CMSIS H
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CM0_CMSIS_VERSION_SUB   (0x14U)                                      /*!< [15:0]  CMSIS H
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CM0_CMSIS_VERSION       ((__CM0_CMSIS_VERSION_MAIN << 16U) | \
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****                                     __CM0_CMSIS_VERSION_SUB           )        /*!< CMSIS HAL versi
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CORTEX_M                (0x00U)                                      /*!< Cortex-M Core *
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #if   defined ( __CC_ARM )
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static __inline
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __GNUC__ )
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for GNU Comp
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         inline                                     /*!< inline keyword for GNU C
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static inline
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __ICCARM__ )
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for IAR Comp
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         inline                                     /*!< inline keyword for IAR C
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static inline
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __TMS470__ )
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for TI CCS C
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static inline
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __TASKING__ )
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for TASKING 
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         inline                                     /*!< inline keyword for TASKI
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static inline
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __CSMC__ )
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __packed
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            _asm                                      /*!< asm keyword for COSMIC Co
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         inline                                    /*!< inline keyword for COSMIC
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static inline
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif (__ARMCC_VERSION >= 6010050)
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define __STATIC_INLINE  static __inline
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #else
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #error Unknown compiler
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** __FPU_USED indicates whether an FPU is used or not.
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     This core does not support an FPU at all
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __FPU_USED       0U
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #if defined ( __CC_ARM )
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined __TARGET_FPU_VFP
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __GNUC__ )
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __ICCARM__ )
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined __ARMVFP__
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __TMS470__ )
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined __TI_VFP_SUPPORT__
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __TASKING__ )
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined __FPU_VFP__
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif defined ( __CSMC__ )
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if ( __CSMC__ & 0x400U)
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #elif (__ARMCC_VERSION >= 6010050)
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #if defined __ARM_PCS_VFP
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #include "core_cmInstr.h"                /* Core Instruction Access */
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #include "core_cmFunc.h"                 /* Core Function Access */
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifdef __cplusplus
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif /* __CORE_CM0_H_GENERIC */
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifndef __CMSIS_GENERIC
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifndef __CORE_CM0_H_DEPENDANT
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define __CORE_CM0_H_DEPENDANT
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifdef __cplusplus
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  extern "C" {
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* check device defines and use defaults */
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #if defined __CHECK_DEVICE_DEFINES
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #ifndef __CM0_REV
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #define __CM0_REV               0x0000U
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #warning "__CM0_REV not defined in device header file; using default!"
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #ifndef __NVIC_PRIO_BITS
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #define __NVIC_PRIO_BITS          2U
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #ifndef __Vendor_SysTickConfig
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #define __Vendor_SysTickConfig    0U
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #endif
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /**
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     <strong>IO Type Qualifiers</strong> are used
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \li to specify the access to peripheral variables.
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \li for automatic generation of peripheral register debug information.
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #ifdef __cplusplus
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions */
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #else
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions */
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #endif
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define     __O     volatile             /*!< Defines 'write only' permissions */
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* following defines should be used for structure members */
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define     __IM     volatile const      /*! Defines 'read only' structure member permissions */
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group Cortex_M0 */
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*******************************************************************************
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  *                 Register Abstraction
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   Core Register contain:
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core Register
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core NVIC Register
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core SCB Register
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core SysTick Register
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  ******************************************************************************/
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \defgroup CMSIS_core_register Defines and Type Definitions
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief Type definitions and defines for Cortex-M processor based devices.
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup    CMSIS_core_register
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup   CMSIS_CORE  Status and Control Registers
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief  Core Register type definitions.
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Union type to access the Application Program Status Register (APSR).
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef union
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   struct
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved0:28;              /*!< bit:  0..27  Reserved */
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   } b;                                   /*!< Structure used for bit  access */
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } APSR_Type;
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* APSR Register Definitions */
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_N_Pos                         31U                                            /*!< APSR
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_N_Msk                         (1UL << APSR_N_Pos)                            /*!< APSR
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_Z_Pos                         30U                                            /*!< APSR
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_Z_Msk                         (1UL << APSR_Z_Pos)                            /*!< APSR
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_C_Pos                         29U                                            /*!< APSR
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_C_Msk                         (1UL << APSR_C_Pos)                            /*!< APSR
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_V_Pos                         28U                                            /*!< APSR
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define APSR_V_Msk                         (1UL << APSR_V_Pos)                            /*!< APSR
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 269:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 270:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 271:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef union
+ 272:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 273:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   struct
+ 274:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 275:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 276:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
+ 277:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   } b;                                   /*!< Structure used for bit  access */
+ 278:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 279:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } IPSR_Type;
+ 280:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 281:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* IPSR Register Definitions */
+ 282:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ 283:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
+ 284:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 285:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 286:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 287:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 288:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef union
+ 289:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 290:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   struct
+ 291:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 292:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 293:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved */
+ 294:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0) */
+ 295:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved1:3;               /*!< bit: 25..27  Reserved */
+ 296:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 297:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 298:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 299:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 300:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   } b;                                   /*!< Structure used for bit  access */
+ 301:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 302:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } xPSR_Type;
+ 303:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 304:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* xPSR Register Definitions */
+ 305:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_N_Pos                         31U                                            /*!< xPSR
+ 306:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_N_Msk                         (1UL << xPSR_N_Pos)                            /*!< xPSR
+ 307:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 308:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_Z_Pos                         30U                                            /*!< xPSR
+ 309:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_Z_Msk                         (1UL << xPSR_Z_Pos)                            /*!< xPSR
+ 310:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 311:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_C_Pos                         29U                                            /*!< xPSR
+ 312:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_C_Msk                         (1UL << xPSR_C_Pos)                            /*!< xPSR
+ 313:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 314:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_V_Pos                         28U                                            /*!< xPSR
+ 315:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_V_Msk                         (1UL << xPSR_V_Pos)                            /*!< xPSR
+ 316:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 317:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_T_Pos                         24U                                            /*!< xPSR
+ 318:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_T_Msk                         (1UL << xPSR_T_Pos)                            /*!< xPSR
+ 319:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 320:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
+ 321:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
+ 322:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 323:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 324:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Union type to access the Control Registers (CONTROL).
+ 325:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 326:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef union
+ 327:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 328:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   struct
+ 329:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 330:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved0:1;               /*!< bit:      0  Reserved */
+ 331:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used */
+ 332:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     uint32_t _reserved1:30;              /*!< bit:  2..31  Reserved */
+ 333:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   } b;                                   /*!< Structure used for bit  access */
+ 334:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 335:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } CONTROL_Type;
+ 336:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 337:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* CONTROL Register Definitions */
+ 338:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define CONTROL_SPSEL_Pos                   1U                                            /*!< CONT
+ 339:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define CONTROL_SPSEL_Msk                  (1UL << CONTROL_SPSEL_Pos)                     /*!< CONT
+ 340:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 341:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_CORE */
+ 342:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 343:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 344:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup    CMSIS_core_register
+ 345:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 346:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Type definitions for the NVIC Registers
+ 347:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 348:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 349:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 350:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 351:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 352:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef struct
+ 353:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 354:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t ISER[1U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 355:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED0[31U];
+ 356:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t ICER[1U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 357:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RSERVED1[31U];
+ 358:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t ISPR[1U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register *
+ 359:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED2[31U];
+ 360:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t ICPR[1U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 361:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED3[31U];
+ 362:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED4[64U];
+ 363:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t IP[8U];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+ 364:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }  NVIC_Type;
+ 365:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 366:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_NVIC */
+ 367:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 368:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 369:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup  CMSIS_core_register
+ 370:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup CMSIS_SCB     System Control Block (SCB)
+ 371:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Type definitions for the System Control Block Registers
+ 372:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 373:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 374:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 375:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Structure type to access the System Control Block (SCB).
+ 376:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 377:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef struct
+ 378:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 379:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 380:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 381:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED0;
+ 382:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+ 384:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register *
+ 385:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****         uint32_t RESERVED1;
+ 386:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t SHP[2U];                /*!< Offset: 0x01C (R/W)  System Handlers Priority Registe
+ 387:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 388:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } SCB_Type;
+ 389:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 390:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB CPUID Register Definitions */
+ 391:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24U                                            /*!< SCB 
+ 392:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 393:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 394:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_VARIANT_Pos              20U                                            /*!< SCB 
+ 395:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 396:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 397:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
+ 398:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 399:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 400:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
+ 401:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 402:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 403:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
+ 404:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
+ 405:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 406:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB Interrupt Control State Register Definitions */
+ 407:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_NMIPENDSET_Pos            31U                                            /*!< SCB 
+ 408:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 409:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 410:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSVSET_Pos             28U                                            /*!< SCB 
+ 411:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 412:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 413:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSVCLR_Pos             27U                                            /*!< SCB 
+ 414:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 415:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 416:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSTSET_Pos             26U                                            /*!< SCB 
+ 417:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 418:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 419:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSTCLR_Pos             25U                                            /*!< SCB 
+ 420:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 421:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 422:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23U                                            /*!< SCB 
+ 423:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 424:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 425:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_ISRPENDING_Pos            22U                                            /*!< SCB 
+ 426:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 427:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 428:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_VECTPENDING_Pos           12U                                            /*!< SCB 
+ 429:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 430:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 431:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_VECTACTIVE_Pos             0U                                            /*!< SCB 
+ 432:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL /*<< SCB_ICSR_VECTACTIVE_Pos*/)       /*!< SCB 
+ 433:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 434:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 435:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTKEY_Pos              16U                                            /*!< SCB 
+ 436:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 437:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 438:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16U                                            /*!< SCB 
+ 439:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 440:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 441:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_ENDIANESS_Pos            15U                                            /*!< SCB 
+ 442:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 443:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 444:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
+ 445:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 446:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 447:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
+ 448:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 449:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 450:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB System Control Register Definitions */
+ 451:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
+ 452:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 453:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 454:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SLEEPDEEP_Pos               2U                                            /*!< SCB 
+ 455:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 456:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 457:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1U                                            /*!< SCB 
+ 458:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 459:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 460:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB Configuration Control Register Definitions */
+ 461:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CCR_STKALIGN_Pos                9U                                            /*!< SCB 
+ 462:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 463:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 464:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3U                                            /*!< SCB 
+ 465:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 466:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 467:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SCB System Handler Control and State Register Definitions */
+ 468:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB 
+ 469:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 470:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 471:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_SCB */
+ 472:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 473:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 474:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup  CMSIS_core_register
+ 475:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 476:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Type definitions for the System Timer Registers.
+ 477:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 478:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 479:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 480:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Structure type to access the System Timer (SysTick).
+ 481:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 482:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** typedef struct
+ 483:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 484:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 485:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+ 486:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
+ 487:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+ 488:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** } SysTick_Type;
+ 489:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 490:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SysTick Control / Status Register Definitions */
+ 491:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
+ 492:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 493:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 494:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2U                                            /*!< SysT
+ 495:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 496:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 497:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_TICKINT_Pos            1U                                            /*!< SysT
+ 498:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 499:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 500:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_ENABLE_Pos             0U                                            /*!< SysT
+ 501:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysT
+ 502:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 503:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SysTick Reload Register Definitions */
+ 504:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_LOAD_RELOAD_Pos             0U                                            /*!< SysT
+ 505:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysT
+ 506:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 507:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SysTick Current Register Definitions */
+ 508:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_VAL_CURRENT_Pos             0U                                            /*!< SysT
+ 509:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysT
+ 510:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 511:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* SysTick Calibration Register Definitions */
+ 512:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_NOREF_Pos            31U                                            /*!< SysT
+ 513:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 514:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 515:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_SKEW_Pos             30U                                            /*!< SysT
+ 516:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 517:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 518:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysT
+ 519:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysT
+ 520:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 521:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_SysTick */
+ 522:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 523:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 524:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup  CMSIS_core_register
+ 525:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+ 526:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Cortex-M0 Core Debug Registers (DCB registers, SHCSR, and DFSR)
+ 527:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****                 are only accessible over DAP and not via processor. Therefore
+ 528:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****                 they are not covered by the Cortex-M0 header file.
+ 529:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 530:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 531:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_CoreDebug */
+ 532:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 533:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 534:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup    CMSIS_core_register
+ 535:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup   CMSIS_core_bitfield     Core register bit field macros
+ 536:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Macros for use with bit field definitions (xxx_Pos, xxx_Msk).
+ 537:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 538:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 539:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 540:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /**
+ 541:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * Mask and shift a bit field value for use in a register bit range.
+ 542:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** *
+ 543:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \param[in] field Name of the register bit field.
+ 544:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \param[in] value Value of the bit field.
+ 545:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \return Masked and shifted value.
+ 546:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 547:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define _VAL2FLD(field, value)    ((value << field ## _Pos) & field ## _Msk)
+ 548:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 549:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /**
+ 550:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * Mask and shift a register value to extract a bit filed value.
+ 551:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** *
+ 552:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \param[in] field Name of the register bit field.
+ 553:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \param[in] value Value of register.
+ 554:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** * \return Masked and shifted bit field value.
+ 555:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 556:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define _FLD2VAL(field, value)    ((value & field ## _Msk) >> field ## _Pos)
+ 557:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 558:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} end of group CMSIS_core_bitfield */
+ 559:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 560:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 561:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup    CMSIS_core_register
+ 562:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup   CMSIS_core_base     Core Definitions
+ 563:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Definitions for base addresses, unions, and structures.
+ 564:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   @{
+ 565:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 566:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 567:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* Memory mapping of Cortex-M0 Hardware */
+ 568:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+ 569:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address    
+ 570:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address       
+ 571:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+ 572:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 573:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+ 574:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+ 575:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+ 576:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 577:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 578:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*@} */
+ 579:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 580:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 581:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 582:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /*******************************************************************************
+ 583:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  *                Hardware Abstraction Layer
+ 584:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   Core Function Interface contains:
+ 585:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core NVIC Functions
+ 586:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core SysTick Functions
+ 587:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   - Core Register Access Functions
+ 588:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  ******************************************************************************/
+ 589:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+ 590:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** */
+ 591:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 592:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 593:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 594:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* ##########################   NVIC functions  #################################### */
+ 595:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 596:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+ 597:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \brief      Functions that manage interrupts and exceptions via the NVIC.
+ 598:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     @{
+ 599:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 600:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 601:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* Interrupt Priorities are WORD accessible only under ARMv6M                   */
+ 602:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /* The following MACROS handle generation of the register offset and byte masks */
+ 603:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define _BIT_SHIFT(IRQn)         (  ((((uint32_t)(int32_t)(IRQn))         )      &  0x03UL) * 8UL)
+ 604:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define _SHP_IDX(IRQn)           ( (((((uint32_t)(int32_t)(IRQn)) & 0x0FUL)-8UL) >>    2UL)      )
+ 605:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** #define _IP_IDX(IRQn)            (   (((uint32_t)(int32_t)(IRQn))                >>    2UL)      )
+ 606:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 607:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 608:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Enable External Interrupt
+ 609:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 610:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function enables a device-specific interrupt in the NVIC interrupt controller.
+ 611:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 612:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+ 613:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 614:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+ 615:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 616:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) & 0x1FUL));
+ 617:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 618:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 619:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 620:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Disable External Interrupt
+ 621:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 622:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function disables a device-specific interrupt in the NVIC interrupt controller.
+ 623:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 624:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+ 625:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 626:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
+ 627:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 628:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   NVIC->ICER[0U] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) & 0x1FUL));
+ 629:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 630:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 631:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 632:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Get Pending Interrupt
+ 633:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 634:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function reads the pending register in the NVIC and returns the pending bit
+ 635:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     for the specified interrupt.
+ 636:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 637:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  Interrupt number.
+ 638:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 639:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \return             0  Interrupt status is not pending.
+ 640:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \return             1  Interrupt status is pending.
+ 641:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 642:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
+ 643:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 644:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   return((uint32_t)(((NVIC->ISPR[0U] & (1UL << (((uint32_t)(int32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL
+ 645:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 646:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 647:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 648:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Set Pending Interrupt
+ 649:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 650:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function sets the pending bit of an external interrupt.
+ 651:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 652:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  Interrupt number. Value cannot be negative.
+ 653:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 654:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
+ 655:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 656:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   NVIC->ISPR[0U] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) & 0x1FUL));
+ 657:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 658:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 659:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 660:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Clear Pending Interrupt
+ 661:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 662:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function clears the pending bit of an external interrupt.
+ 663:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 664:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+ 665:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 666:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+ 667:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 668:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   NVIC->ICPR[0U] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) & 0x1FUL));
+ 669:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 670:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 671:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 672:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Set Interrupt Priority
+ 673:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 674:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function sets the priority of an interrupt.
+ 675:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 676:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \note The priority cannot be set for every core interrupt.
+ 677:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 678:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]      IRQn  Interrupt number.
+ 679:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]  priority  Priority to set.
+ 680:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 681:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+ 682:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 683:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   if ((int32_t)(IRQn) < 0)
+ 684:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 685:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))
+ 686:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 687:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   }
+ 688:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   else
+ 689:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 690:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))
+ 691:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 692:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   }
+ 693:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 694:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 695:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 696:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  Get Interrupt Priority
+ 697:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 698:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function reads the priority of an interrupt. The interrupt
+ 699:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     number can be positive to specify an external (device specific)
+ 700:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     interrupt, or negative to specify an internal (core) interrupt.
+ 701:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 702:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 703:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \param [in]   IRQn  Interrupt number.
+ 704:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     \return             Interrupt Priority. Value is aligned automatically to the implemented
+ 705:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****                         priority bits of the microcontroller.
+ 706:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 707:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE uint32_t NVIC_GetPriority(IRQn_Type IRQn)
+ 708:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 709:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 710:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   if ((int32_t)(IRQn) < 0)
+ 711:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 712:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     return((uint32_t)(((SCB->SHP[_SHP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U -
+ 713:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   }
+ 714:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   else
+ 715:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   {
+ 716:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     return((uint32_t)(((NVIC->IP[ _IP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U -
+ 717:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   }
+ 718:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** }
+ 719:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 720:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 721:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** /** \brief  System Reset
+ 722:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** 
+ 723:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****     The function initiates a system reset request to reset the MCU.
+ 724:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****  */
+ 725:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** __STATIC_INLINE void NVIC_SystemReset(void)
+ 726:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h **** {
+ 727:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   __DSB();                                                          /* Ensure all outstanding memor
+ 728:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****                                                                        buffered write are completed
+ 729:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\core_cm0.h ****   SCB->AIRCR  = ((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+ 106              	 .loc 3 729 0
+ 107 004a 194A     	 ldr r2,.L6+24
+ 108 004c 194B     	 ldr r3,.L6+28
+ 109 004e DA60     	 str r2,[r3,#12]
+ 110              	.LBB22:
+ 111              	.LBB23:
+ 112              	 .loc 2 438 0
+ 113              	
+ 114 0050 BFF34F8F 	 dsb 0xF
+ 115              	
+ 116              	 .code 16
+ 117              	.L3:
+ 118              	.LBE23:
+ 119              	.LBE22:
+ 120              	.LBB24:
+ 121              	.LBB25:
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Include\cmsis_gcc.h **** }
+ 122              	 .loc 2 383 0
+ 123              	
+ 124 0054 C046     	 nop
+ 125              	
+ 126              	 .code 16
+ 127 0056 FDE7     	 b .L3
+ 128              	.LVL4:
+ 129              	.L2:
+ 130              	.LBE25:
+ 131              	.LBE24:
+ 132              	.LBE19:
+ 133              	.LBE18:
+ 134              	.LBE17:
+ 101:../main.c     ****     NVIC_SystemReset();
+ 102:../main.c     ****   }
+ 103:../main.c     ****   else
+ 104:../main.c     ****   {
+ 105:../main.c     ****     User_Para[0] = *MotorCONF_Addr;
+ 135              	 .loc 1 105 0
+ 136 0058 114B     	 ldr r3,.L6+8
+ 137 005a 1A60     	 str r2,[r3]
+ 106:../main.c     ****     User_Para[1] = *(MotorCONF_Addr+1);
+ 138              	 .loc 1 106 0
+ 139 005c 4268     	 ldr r2,[r0,#4]
+ 140 005e 5A60     	 str r2,[r3,#4]
+ 107:../main.c     ****     User_Para[2] = *(MotorCONF_Addr+2);
+ 141              	 .loc 1 107 0
+ 142 0060 8268     	 ldr r2,[r0,#8]
+ 143 0062 9A60     	 str r2,[r3,#8]
+ 108:../main.c     ****     User_Para[3] = *(MotorCONF_Addr+3);
+ 144              	 .loc 1 108 0
+ 145 0064 C268     	 ldr r2,[r0,#12]
+ 146 0066 DA60     	 str r2,[r3,#12]
+ 109:../main.c     ****     User_Para[4] = *(MotorCONF_Addr+4);
+ 147              	 .loc 1 109 0
+ 148 0068 0269     	 ldr r2,[r0,#16]
+ 149 006a 1A61     	 str r2,[r3,#16]
+ 110:../main.c     ****     User_Para[5] = *(MotorCONF_Addr+5);
+ 150              	 .loc 1 110 0
+ 151 006c 4269     	 ldr r2,[r0,#20]
+ 152 006e 5A61     	 str r2,[r3,#20]
+ 111:../main.c     ****     User_Para[6] = *(MotorCONF_Addr+6);
+ 153              	 .loc 1 111 0
+ 154 0070 8269     	 ldr r2,[r0,#24]
+ 155 0072 9A61     	 str r2,[r3,#24]
+ 112:../main.c     ****     User_Para[7] = *(MotorCONF_Addr+7);
+ 156              	 .loc 1 112 0
+ 157 0074 C269     	 ldr r2,[r0,#28]
+ 158 0076 DA61     	 str r2,[r3,#28]
+ 113:../main.c     ****     User_Para[8] = *(MotorCONF_Addr+8);
+ 159              	 .loc 1 113 0
+ 160 0078 026A     	 ldr r2,[r0,#32]
+ 161 007a 1A62     	 str r2,[r3,#32]
+ 114:../main.c     ****     User_Para[9] = *(MotorCONF_Addr+9);
+ 162              	 .loc 1 114 0
+ 163 007c 426A     	 ldr r2,[r0,#36]
+ 164 007e 5A62     	 str r2,[r3,#36]
+ 115:../main.c     ****     User_Para[10] = *(MotorCONF_Addr+10);
+ 165              	 .loc 1 115 0
+ 166 0080 826A     	 ldr r2,[r0,#40]
+ 167 0082 9A62     	 str r2,[r3,#40]
+ 116:../main.c     ****     User_Para[11] = *(MotorCONF_Addr+11);
+ 168              	 .loc 1 116 0
+ 169 0084 C26A     	 ldr r2,[r0,#44]
+ 170 0086 DA62     	 str r2,[r3,#44]
+ 117:../main.c     ****     User_Para[12] = *(MotorCONF_Addr+12);
+ 118:../main.c     ****     User_Para[12] = *(MotorCONF_Addr+12);
+ 171              	 .loc 1 118 0
+ 172 0088 026B     	 ldr r2,[r0,#48]
+ 173 008a 1A63     	 str r2,[r3,#48]
+ 119:../main.c     ****     User_Para[13] = *(MotorCONF_Addr+13);
+ 174              	 .loc 1 119 0
+ 175 008c 426B     	 ldr r2,[r0,#52]
+ 176 008e 5A63     	 str r2,[r3,#52]
+ 120:../main.c     ****   }
+ 121:../main.c     **** #endif
+ 122:../main.c     **** 
+ 123:../main.c     **** 
+ 124:../main.c     **** 	PMSM_FOC_Init ();
+ 177              	 .loc 1 124 0
+ 178 0090 FFF7FEFF 	 bl PMSM_FOC_Init
+ 179              	.LVL5:
+ 180              	.L4:
+ 125:../main.c     **** 
+ 126:../main.c     **** 
+ 127:../main.c     **** 	while (1)
+ 128:../main.c     **** 	 /* MCU main loop. Actually only require the processor to run when an interrupt occurs. */
+ 129:../main.c     **** 	{
+ 130:../main.c     **** 
+ 131:../main.c     **** 
+ 132:../main.c     **** 
+ 133:../main.c     **** 	}
+ 181              	 .loc 1 133 0 discriminator 1
+ 182 0094 FEE7     	 b .L4
+ 183              	.L7:
+ 184 0096 C046     	 .align 2
+ 185              	.L6:
+ 186 0098 00680010 	 .word 268462080
+ 187 009c 12100000 	 .word 4114
+ 188 00a0 00000000 	 .word User_Para
+ 189 00a4 795D0000 	 .word 23929
+ 190 00a8 FF7F0000 	 .word 32767
+ 191 00ac 717D0000 	 .word 32113
+ 192 00b0 0400FA05 	 .word 100270084
+ 193 00b4 00ED00E0 	 .word -536810240
+ 194              	 .cfi_endproc
+ 195              	.LFE201:
+ 197              	 .comm Update_KpKi,4,4
+ 198              	 .comm User_Para,160,4
+ 199              	 .text
+ 200              	.Letext0:
+ 201              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 202              	 .file 5 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 203              	 .file 6 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\midsys\\pmsm_foc_pwmsvm.h"
+ 204              	 .file 7 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\controlmodules\\pmsm_foc_functions.h"
+ 205              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 206              	 .file 9 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_flash.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+    {standard input}:18     .text.startup.main:00000000 $t
+    {standard input}:23     .text.startup.main:00000000 main
+    {standard input}:186    .text.startup.main:00000098 $d
+                            *COM*:000000a0 User_Para
+                            *COM*:00000004 Update_KpKi
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_FLASH_ProgramVerifyPage
+PMSM_FOC_Init

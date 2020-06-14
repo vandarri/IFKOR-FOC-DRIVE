@@ -1,0 +1,2220 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "xmc_usic.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_USIC_CH_Enable,"ax",%progbits
+  18              	 .align 2
+  19              	 .global XMC_USIC_CH_Enable
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	XMC_USIC_CH_Enable:
+  24              	.LFB105:
+  25              	 .file 1 "../Libraries/XMCLib/src/xmc_usic.c"
+   1:../Libraries/XMCLib/src/xmc_usic.c **** /**
+   2:../Libraries/XMCLib/src/xmc_usic.c ****  * @file xmc_usic.c
+   3:../Libraries/XMCLib/src/xmc_usic.c ****  * @date 2015-10-09
+   4:../Libraries/XMCLib/src/xmc_usic.c ****  *
+   5:../Libraries/XMCLib/src/xmc_usic.c ****  * @cond
+   6:../Libraries/XMCLib/src/xmc_usic.c ****   *************************************************************************************************
+   7:../Libraries/XMCLib/src/xmc_usic.c ****  * XMClib v2.1.0 - XMC Peripheral Driver Library 
+   8:../Libraries/XMCLib/src/xmc_usic.c ****  *
+   9:../Libraries/XMCLib/src/xmc_usic.c ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:../Libraries/XMCLib/src/xmc_usic.c ****  * All rights reserved.                        
+  11:../Libraries/XMCLib/src/xmc_usic.c ****  *                                             
+  12:../Libraries/XMCLib/src/xmc_usic.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../Libraries/XMCLib/src/xmc_usic.c ****  * following conditions are met:   
+  14:../Libraries/XMCLib/src/xmc_usic.c ****  *                                                                              
+  15:../Libraries/XMCLib/src/xmc_usic.c ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:../Libraries/XMCLib/src/xmc_usic.c ****  * disclaimer.                        
+  17:../Libraries/XMCLib/src/xmc_usic.c ****  * 
+  18:../Libraries/XMCLib/src/xmc_usic.c ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:../Libraries/XMCLib/src/xmc_usic.c ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:../Libraries/XMCLib/src/xmc_usic.c ****  * 
+  21:../Libraries/XMCLib/src/xmc_usic.c ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:../Libraries/XMCLib/src/xmc_usic.c ****  * products derived from this software without specific prior written permission.                  
+  23:../Libraries/XMCLib/src/xmc_usic.c ****  *                                                                              
+  24:../Libraries/XMCLib/src/xmc_usic.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../Libraries/XMCLib/src/xmc_usic.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../Libraries/XMCLib/src/xmc_usic.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../Libraries/XMCLib/src/xmc_usic.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../Libraries/XMCLib/src/xmc_usic.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../Libraries/XMCLib/src/xmc_usic.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../Libraries/XMCLib/src/xmc_usic.c ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:../Libraries/XMCLib/src/xmc_usic.c ****  *                                                                              
+  32:../Libraries/XMCLib/src/xmc_usic.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../Libraries/XMCLib/src/xmc_usic.c ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:../Libraries/XMCLib/src/xmc_usic.c ****  **************************************************************************************************
+  35:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  36:../Libraries/XMCLib/src/xmc_usic.c ****  * Change History
+  37:../Libraries/XMCLib/src/xmc_usic.c ****  * --------------
+  38:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  39:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-02-20:
+  40:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Initial draft <br>
+  41:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Documentation improved <br>
+  42:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  43:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-05-08:
+  44:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Clearing bit fields PDIV, PCTQ, PPPEN in XMC_USIC_CH_SetBaudrate() API <br>
+  45:../Libraries/XMCLib/src/xmc_usic.c ****  *      
+  46:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-06-20:
+  47:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Removed version macros and declaration of GetDriverVersion API <br>
+  48:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  49:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-08-27:
+  50:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Added APIs for external input for BRG configuration:XMC_USIC_CH_ConfigExternalInputSignalT
+  51:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  52:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-08-28:
+  53:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Added asserts to XMC_USIC_CH_ConfigExternalInputSignalToBRG() <br>
+  54:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  55:../Libraries/XMCLib/src/xmc_usic.c ****  * 2015-09-01:
+  56:../Libraries/XMCLib/src/xmc_usic.c ****  *     - Fixed warning in the asserts <br>
+  57:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  58:../Libraries/XMCLib/src/xmc_usic.c ****  * @endcond
+  59:../Libraries/XMCLib/src/xmc_usic.c ****  *
+  60:../Libraries/XMCLib/src/xmc_usic.c ****  */
+  61:../Libraries/XMCLib/src/xmc_usic.c **** 
+  62:../Libraries/XMCLib/src/xmc_usic.c **** /*******************************************************************************
+  63:../Libraries/XMCLib/src/xmc_usic.c ****  * HEADER FILES
+  64:../Libraries/XMCLib/src/xmc_usic.c ****  *******************************************************************************/
+  65:../Libraries/XMCLib/src/xmc_usic.c **** 
+  66:../Libraries/XMCLib/src/xmc_usic.c **** #include "xmc_usic.h"
+  67:../Libraries/XMCLib/src/xmc_usic.c **** #include "xmc_scu.h"
+  68:../Libraries/XMCLib/src/xmc_usic.c **** 
+  69:../Libraries/XMCLib/src/xmc_usic.c **** /*******************************************************************************
+  70:../Libraries/XMCLib/src/xmc_usic.c ****  * MACROS
+  71:../Libraries/XMCLib/src/xmc_usic.c ****  *******************************************************************************/
+  72:../Libraries/XMCLib/src/xmc_usic.c **** 
+  73:../Libraries/XMCLib/src/xmc_usic.c **** #define USIC_CH_INPR_Msk       (0x7UL)
+  74:../Libraries/XMCLib/src/xmc_usic.c **** 
+  75:../Libraries/XMCLib/src/xmc_usic.c **** /*******************************************************************************
+  76:../Libraries/XMCLib/src/xmc_usic.c ****  * API IMPLEMENTATION
+  77:../Libraries/XMCLib/src/xmc_usic.c ****  *******************************************************************************/
+  78:../Libraries/XMCLib/src/xmc_usic.c **** 
+  79:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_Enable(XMC_USIC_CH_t *const channel)
+  80:../Libraries/XMCLib/src/xmc_usic.c **** {
+  26              	 .loc 1 80 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  81:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_Enable: channel not valid", XMC_USIC_IsChannelValid(channel));
+  82:../Libraries/XMCLib/src/xmc_usic.c **** 
+  83:../Libraries/XMCLib/src/xmc_usic.c ****   if ((channel == XMC_USIC0_CH0) || (channel == XMC_USIC0_CH1))
+  29              	 .loc 1 83 0
+  30 0000 9023     	 mov r3,#144
+  80:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_Enable: channel not valid", XMC_USIC_IsChannelValid(channel));
+  31              	 .loc 1 80 0
+  32 0002 10B5     	 push {r4,lr}
+  33              	 .cfi_def_cfa_offset 8
+  34              	 .cfi_offset 4,-8
+  35              	 .cfi_offset 14,-4
+  36              	 .loc 1 83 0
+  37 0004 DB05     	 lsl r3,r3,#23
+  80:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_Enable: channel not valid", XMC_USIC_IsChannelValid(channel));
+  38              	 .loc 1 80 0
+  39 0006 041E     	 sub r4,r0,#0
+  40              	 .loc 1 83 0
+  41 0008 9C42     	 cmp r4,r3
+  42 000a 0DD0     	 beq .L2
+  43              	 .loc 1 83 0 is_stmt 0 discriminator 1
+  44 000c 084B     	 ldr r3,.L8
+  45 000e 9842     	 cmp r0,r3
+  46 0010 0AD0     	 beq .L2
+  47              	.LVL1:
+  48              	.L3:
+  84:../Libraries/XMCLib/src/xmc_usic.c ****   {
+  85:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_USIC_Enable(XMC_USIC0);
+  86:../Libraries/XMCLib/src/xmc_usic.c ****   }
+  87:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC1)
+  88:../Libraries/XMCLib/src/xmc_usic.c ****   else if((channel == XMC_USIC1_CH0) || (channel == XMC_USIC1_CH1))
+  89:../Libraries/XMCLib/src/xmc_usic.c ****   {
+  90:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_USIC_Enable(XMC_USIC1);
+  91:../Libraries/XMCLib/src/xmc_usic.c ****   }
+  92:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+  93:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC2)
+  94:../Libraries/XMCLib/src/xmc_usic.c ****   else if((channel == XMC_USIC2_CH0) || (channel == XMC_USIC2_CH1))
+  95:../Libraries/XMCLib/src/xmc_usic.c ****   {
+  96:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_USIC_Enable(XMC_USIC2);
+  97:../Libraries/XMCLib/src/xmc_usic.c ****   }
+  98:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+  99:../Libraries/XMCLib/src/xmc_usic.c ****   else
+ 100:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 101:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_ASSERT("USIC module not available", 0U/*Always*/);
+ 102:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 103:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 104:../Libraries/XMCLib/src/xmc_usic.c ****   /* USIC channel switched on*/
+ 105:../Libraries/XMCLib/src/xmc_usic.c ****   channel->KSCFG = (USIC_CH_KSCFG_MODEN_Msk | USIC_CH_KSCFG_BPMODEN_Msk);
+  49              	 .loc 1 105 0 is_stmt 1
+  50 0012 0323     	 mov r3,#3
+ 106:../Libraries/XMCLib/src/xmc_usic.c ****   while ((channel->KSCFG & USIC_CH_KSCFG_MODEN_Msk) == 0U)
+  51              	 .loc 1 106 0
+  52 0014 0122     	 mov r2,#1
+ 105:../Libraries/XMCLib/src/xmc_usic.c ****   while ((channel->KSCFG & USIC_CH_KSCFG_MODEN_Msk) == 0U)
+  53              	 .loc 1 105 0
+  54 0016 E360     	 str r3,[r4,#12]
+  55              	.L4:
+  56              	 .loc 1 106 0 discriminator 1
+  57 0018 E368     	 ldr r3,[r4,#12]
+  58 001a 1A42     	 tst r2,r3
+  59 001c FCD0     	 beq .L4
+ 107:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 108:../Libraries/XMCLib/src/xmc_usic.c ****     /* Wait till the channel is enabled */
+ 109:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 110:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 111:../Libraries/XMCLib/src/xmc_usic.c ****   /* Set USIC channel in IDLE mode */
+ 112:../Libraries/XMCLib/src/xmc_usic.c ****   channel->CCR &= (uint32_t)~USIC_CH_CCR_MODE_Msk;
+  60              	 .loc 1 112 0
+  61 001e 0F22     	 mov r2,#15
+  62 0020 236C     	 ldr r3,[r4,#64]
+ 113:../Libraries/XMCLib/src/xmc_usic.c **** }
+  63              	 .loc 1 113 0
+  64              	 
+ 112:../Libraries/XMCLib/src/xmc_usic.c **** }
+  65              	 .loc 1 112 0
+  66 0022 9343     	 bic r3,r2
+  67 0024 2364     	 str r3,[r4,#64]
+  68              	.LVL2:
+  69              	 .loc 1 113 0
+  70 0026 10BD     	 pop {r4,pc}
+  71              	.LVL3:
+  72              	.L2:
+  73              	.LBB8:
+  74              	.LBB9:
+ 114:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 115:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_Disable(XMC_USIC_CH_t *const channel)
+ 116:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 117:../Libraries/XMCLib/src/xmc_usic.c ****   channel->KSCFG = (uint32_t)((channel->KSCFG & (~USIC_CH_KSCFG_MODEN_Msk)) | USIC_CH_KSCFG_BPMODEN
+ 118:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 119:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 120:../Libraries/XMCLib/src/xmc_usic.c **** XMC_USIC_CH_STATUS_t XMC_USIC_CH_SetBaudrate(XMC_USIC_CH_t *const channel, uint32_t rate, uint32_t 
+ 121:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 122:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_USIC_CH_STATUS_t status;
+ 123:../Libraries/XMCLib/src/xmc_usic.c ****   
+ 124:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t peripheral_clock;
+ 125:../Libraries/XMCLib/src/xmc_usic.c ****   
+ 126:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t clock_divider;
+ 127:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t clock_divider_min;
+ 128:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 129:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t pdiv;
+ 130:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t pdiv_int;
+ 131:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t pdiv_int_min;
+ 132:../Libraries/XMCLib/src/xmc_usic.c ****   
+ 133:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t pdiv_frac;
+ 134:../Libraries/XMCLib/src/xmc_usic.c ****   uint32_t pdiv_frac_min;
+ 135:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 136:../Libraries/XMCLib/src/xmc_usic.c ****   /* The rate and peripheral clock are divided by 100 to be able to use only 32bit arithmetic */
+ 137:../Libraries/XMCLib/src/xmc_usic.c ****   if ((rate >= 100U) && (oversampling != 0U))
+ 138:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 139:../Libraries/XMCLib/src/xmc_usic.c ****     peripheral_clock = XMC_SCU_CLOCK_GetPeripheralClockFrequency() / 100U;
+ 140:../Libraries/XMCLib/src/xmc_usic.c ****     rate = rate / 100U;
+ 141:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 142:../Libraries/XMCLib/src/xmc_usic.c ****     clock_divider_min = 1U;
+ 143:../Libraries/XMCLib/src/xmc_usic.c ****     pdiv_int_min = 1U;
+ 144:../Libraries/XMCLib/src/xmc_usic.c ****     pdiv_frac_min = 0x3ffU;
+ 145:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 146:../Libraries/XMCLib/src/xmc_usic.c ****     for(clock_divider = 1023U; clock_divider > 0U; --clock_divider)
+ 147:../Libraries/XMCLib/src/xmc_usic.c ****     {
+ 148:../Libraries/XMCLib/src/xmc_usic.c ****       pdiv = ((peripheral_clock * clock_divider) / (rate * oversampling));
+ 149:../Libraries/XMCLib/src/xmc_usic.c ****       pdiv_int = pdiv >> 10U;
+ 150:../Libraries/XMCLib/src/xmc_usic.c ****       pdiv_frac = pdiv & 0x3ffU;
+ 151:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 152:../Libraries/XMCLib/src/xmc_usic.c ****       if ((pdiv_int < 1024U) && (pdiv_frac < pdiv_frac_min))
+ 153:../Libraries/XMCLib/src/xmc_usic.c ****       {
+ 154:../Libraries/XMCLib/src/xmc_usic.c ****         pdiv_frac_min = pdiv_frac;
+ 155:../Libraries/XMCLib/src/xmc_usic.c ****         pdiv_int_min = pdiv_int;
+ 156:../Libraries/XMCLib/src/xmc_usic.c ****         clock_divider_min = clock_divider;
+ 157:../Libraries/XMCLib/src/xmc_usic.c ****       }
+ 158:../Libraries/XMCLib/src/xmc_usic.c ****     }
+ 159:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 160:../Libraries/XMCLib/src/xmc_usic.c ****     channel->FDR = XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE_FRACTIONAL |
+ 161:../Libraries/XMCLib/src/xmc_usic.c ****                    (clock_divider_min << USIC_CH_FDR_STEP_Pos);
+ 162:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 163:../Libraries/XMCLib/src/xmc_usic.c ****     channel->BRG = (channel->BRG & ~(USIC_CH_BRG_DCTQ_Msk |
+ 164:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PDIV_Msk |
+ 165:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PCTQ_Msk |
+ 166:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PPPEN_Msk)) |
+ 167:../Libraries/XMCLib/src/xmc_usic.c ****                    ((oversampling - 1U) << USIC_CH_BRG_DCTQ_Pos) |
+ 168:../Libraries/XMCLib/src/xmc_usic.c ****                    ((pdiv_int_min - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 169:../Libraries/XMCLib/src/xmc_usic.c ****                     
+ 170:../Libraries/XMCLib/src/xmc_usic.c ****     status = XMC_USIC_CH_STATUS_OK;
+ 171:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 172:../Libraries/XMCLib/src/xmc_usic.c ****   else 
+ 173:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 174:../Libraries/XMCLib/src/xmc_usic.c ****     status = XMC_USIC_CH_STATUS_ERROR;
+ 175:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 176:../Libraries/XMCLib/src/xmc_usic.c ****   
+ 177:../Libraries/XMCLib/src/xmc_usic.c ****   return status;
+ 178:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 179:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 180:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_ConfigExternalInputSignalToBRG(XMC_USIC_CH_t *const channel,
+ 181:../Libraries/XMCLib/src/xmc_usic.c **** 		                                        const uint16_t pdiv,
+ 182:../Libraries/XMCLib/src/xmc_usic.c **** 												const uint32_t oversampling,
+ 183:../Libraries/XMCLib/src/xmc_usic.c **** 												const XMC_USIC_CH_INPUT_COMBINATION_MODE_t combination_mode)
+ 184:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 185:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_ConfigExternalInputSignalToBRG: Divider out of range", ((1U < pdiv) || (p
+ 186:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_ConfigExternalInputSignalToBRG: Oversampling out of range", ((1U < oversa
+ 187:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 188:../Libraries/XMCLib/src/xmc_usic.c ****   /* Setting the external input frequency source through DX1 */
+ 189:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_USIC_CH_SetBRGInputClockSource(channel, XMC_USIC_CH_BRG_CLOCK_SOURCE_DX1T);
+ 190:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 191:../Libraries/XMCLib/src/xmc_usic.c ****   /* Setting the trigger combination mode */
+ 192:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_USIC_CH_SetInputTriggerCombinationMode(channel,XMC_USIC_CH_INPUT_DX1,combination_mode);
+ 193:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 194:../Libraries/XMCLib/src/xmc_usic.c ****   /* Configuring the dividers and oversampling */
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****   channel->BRG = (channel->BRG & ~(USIC_CH_BRG_DCTQ_Msk |
+ 196:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 197:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PCTQ_Msk |
+ 198:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PPPEN_Msk)) |
+ 199:../Libraries/XMCLib/src/xmc_usic.c ****                   (((oversampling) - 1U) << USIC_CH_BRG_DCTQ_Pos) |
+ 200:../Libraries/XMCLib/src/xmc_usic.c ****                   (((pdiv) - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 201:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 202:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 203:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_TXFIFO_Configure(XMC_USIC_CH_t *const channel,
+ 204:../Libraries/XMCLib/src/xmc_usic.c ****                                   const uint32_t data_pointer,
+ 205:../Libraries/XMCLib/src/xmc_usic.c ****                                   const XMC_USIC_CH_FIFO_SIZE_t size,
+ 206:../Libraries/XMCLib/src/xmc_usic.c ****                                   const uint32_t limit)
+ 207:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 208:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 209:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR &= (uint32_t)~USIC_CH_TBCTR_SIZE_Msk;
+ 210:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 211:../Libraries/XMCLib/src/xmc_usic.c ****   /* LOF = 0, A standard transmit buffer event occurs when the filling level equals the limit value
+ 212:../Libraries/XMCLib/src/xmc_usic.c ****    * lower due to transmission of a data word
+ 213:../Libraries/XMCLib/src/xmc_usic.c ****    * STBTEN = 0, the trigger of the standard transmit buffer event is based on the transition of th
+ 214:../Libraries/XMCLib/src/xmc_usic.c ****    *  from equal to below the limit, not the fact being below
+ 215:../Libraries/XMCLib/src/xmc_usic.c ****    */
+ 216:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR = (uint32_t)(channel->TBCTR & (uint32_t)~(USIC_CH_TBCTR_LIMIT_Msk |
+ 217:../Libraries/XMCLib/src/xmc_usic.c ****                                                            USIC_CH_TBCTR_DPTR_Msk |
+ 218:../Libraries/XMCLib/src/xmc_usic.c ****                                                            USIC_CH_TBCTR_SIZE_Msk)) |
+ 219:../Libraries/XMCLib/src/xmc_usic.c ****                    (uint32_t)((limit << USIC_CH_TBCTR_LIMIT_Pos) |
+ 220:../Libraries/XMCLib/src/xmc_usic.c ****                    (data_pointer << USIC_CH_TBCTR_DPTR_Pos) |
+ 221:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_TBCTR_SIZE_Pos));
+ 222:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 223:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 224:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 225:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_RXFIFO_Configure(XMC_USIC_CH_t *const channel,
+ 226:../Libraries/XMCLib/src/xmc_usic.c ****                                   const uint32_t data_pointer,
+ 227:../Libraries/XMCLib/src/xmc_usic.c ****                                   const XMC_USIC_CH_FIFO_SIZE_t size,
+ 228:../Libraries/XMCLib/src/xmc_usic.c ****                                   const uint32_t limit)
+ 229:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 230:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 231:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR &= (uint32_t)~USIC_CH_RBCTR_SIZE_Msk;
+ 232:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 233:../Libraries/XMCLib/src/xmc_usic.c ****   /* LOF = 1, A standard receive buffer event occurs when the filling level equals the limit value 
+ 234:../Libraries/XMCLib/src/xmc_usic.c ****    *  due to the reception of a new data word
+ 235:../Libraries/XMCLib/src/xmc_usic.c ****    */
+ 236:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR = (uint32_t)((channel->RBCTR & (uint32_t)~(USIC_CH_RBCTR_LIMIT_Msk |
+ 237:../Libraries/XMCLib/src/xmc_usic.c ****                                                             USIC_CH_RBCTR_DPTR_Msk |
+ 238:../Libraries/XMCLib/src/xmc_usic.c ****                                                             USIC_CH_RBCTR_LOF_Msk)) |
+ 239:../Libraries/XMCLib/src/xmc_usic.c ****                    ((limit << USIC_CH_RBCTR_LIMIT_Pos) |
+ 240:../Libraries/XMCLib/src/xmc_usic.c ****                    (data_pointer << USIC_CH_RBCTR_DPTR_Pos) |
+ 241:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_RBCTR_SIZE_Pos) |
+ 242:../Libraries/XMCLib/src/xmc_usic.c ****                    (uint32_t)USIC_CH_RBCTR_LOF_Msk));
+ 243:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 244:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 245:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit(XMC_USIC_CH_t *const channel,
+ 246:../Libraries/XMCLib/src/xmc_usic.c ****                                             const XMC_USIC_CH_FIFO_SIZE_t size,
+ 247:../Libraries/XMCLib/src/xmc_usic.c ****                                             const uint32_t limit)
+ 248:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 249:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 250:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR &= (uint32_t)~USIC_CH_TBCTR_SIZE_Msk;
+ 251:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 252:../Libraries/XMCLib/src/xmc_usic.c ****   /* STBTEN = 0, the trigger of the standard transmit buffer event is based on the transition of th
+ 253:../Libraries/XMCLib/src/xmc_usic.c ****    *  from equal to below the limit, not the fact being below
+ 254:../Libraries/XMCLib/src/xmc_usic.c ****    */
+ 255:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR = (uint32_t)((uint32_t)(channel->TBCTR & (uint32_t)~USIC_CH_TBCTR_LIMIT_Msk) |
+ 256:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_TBCTR_LIMIT_Pos) |
+ 257:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_TBCTR_SIZE_Pos));
+ 258:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 259:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 260:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit(XMC_USIC_CH_t *const channel,
+ 261:../Libraries/XMCLib/src/xmc_usic.c ****                                             const XMC_USIC_CH_FIFO_SIZE_t size,
+ 262:../Libraries/XMCLib/src/xmc_usic.c ****                                             const uint32_t limit)
+ 263:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 264:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 265:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR &= (uint32_t)~USIC_CH_RBCTR_SIZE_Msk;
+ 266:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 267:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR = (uint32_t)((uint32_t)(channel->RBCTR & (uint32_t)~USIC_CH_RBCTR_LIMIT_Msk) |
+ 268:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_RBCTR_LIMIT_Pos) |
+ 269:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_RBCTR_SIZE_Pos));
+ 270:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 271:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 272:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_SetInterruptNodePointer(XMC_USIC_CH_t *const channel,
+ 273:../Libraries/XMCLib/src/xmc_usic.c ****                                          const XMC_USIC_CH_INTERRUPT_NODE_POINTER_t interrupt_node,
+ 274:../Libraries/XMCLib/src/xmc_usic.c ****                                          const uint32_t service_request)
+ 275:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 276:../Libraries/XMCLib/src/xmc_usic.c ****   channel->INPR = (uint32_t)((channel->INPR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrupt_
+ 277:../Libraries/XMCLib/src/xmc_usic.c ****                   (service_request << (uint32_t)interrupt_node));
+ 278:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 279:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 280:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(XMC_USIC_CH_t *const channel,
+ 281:../Libraries/XMCLib/src/xmc_usic.c ****                                                 const XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_t i
+ 282:../Libraries/XMCLib/src/xmc_usic.c ****                                                 const uint32_t service_request)
+ 283:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 284:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR = (uint32_t)((channel->TBCTR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrup
+ 285:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 286:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 287:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 288:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(XMC_USIC_CH_t *const channel,
+ 289:../Libraries/XMCLib/src/xmc_usic.c ****                                                 const XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_t i
+ 290:../Libraries/XMCLib/src/xmc_usic.c ****                                                 const uint32_t service_request)
+ 291:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 292:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR = (uint32_t)((channel->RBCTR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrup
+ 293:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 294:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 295:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 296:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_Enable(XMC_USIC_t *const usic)
+ 297:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 298:../Libraries/XMCLib/src/xmc_usic.c ****   if (usic == USIC0)
+ 299:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 300:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED)
+ 301:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC0);
+  75              	 .loc 1 301 0
+  76 0028 0820     	 mov r0,#8
+  77              	.LVL4:
+  78 002a FFF7FEFF 	 bl XMC_SCU_CLOCK_UngatePeripheralClock
+  79              	.LVL5:
+  80 002e F0E7     	 b .L3
+  81              	.L9:
+  82              	 .align 2
+  83              	.L8:
+  84 0030 00020048 	 .word 1207960064
+  85              	.LBE9:
+  86              	.LBE8:
+  87              	 .cfi_endproc
+  88              	.LFE105:
+  90              	 .section .text.XMC_USIC_CH_Disable,"ax",%progbits
+  91              	 .align 2
+  92              	 .global XMC_USIC_CH_Disable
+  93              	 .code 16
+  94              	 .thumb_func
+  96              	XMC_USIC_CH_Disable:
+  97              	.LFB106:
+ 116:../Libraries/XMCLib/src/xmc_usic.c ****   channel->KSCFG = (uint32_t)((channel->KSCFG & (~USIC_CH_KSCFG_MODEN_Msk)) | USIC_CH_KSCFG_BPMODEN
+  98              	 .loc 1 116 0
+  99              	 .cfi_startproc
+ 100              	.LVL6:
+ 117:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 101              	 .loc 1 117 0
+ 102 0000 0322     	 mov r2,#3
+ 103 0002 C368     	 ldr r3,[r0,#12]
+ 118:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 104              	 .loc 1 118 0
+ 105              	 
+ 117:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 106              	 .loc 1 117 0
+ 107 0004 9343     	 bic r3,r2
+ 108 0006 013A     	 sub r2,r2,#1
+ 109 0008 1343     	 orr r3,r2
+ 110 000a C360     	 str r3,[r0,#12]
+ 118:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 111              	 .loc 1 118 0
+ 112 000c 7047     	 bx lr
+ 113              	 .cfi_endproc
+ 114              	.LFE106:
+ 116              	 .global __aeabi_uidiv
+ 117 000e C046     	 .section .text.XMC_USIC_CH_SetBaudrate,"ax",%progbits
+ 118              	 .align 2
+ 119              	 .global XMC_USIC_CH_SetBaudrate
+ 120              	 .code 16
+ 121              	 .thumb_func
+ 123              	XMC_USIC_CH_SetBaudrate:
+ 124              	.LFB107:
+ 121:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_USIC_CH_STATUS_t status;
+ 125              	 .loc 1 121 0
+ 126              	 .cfi_startproc
+ 127              	.LVL7:
+ 128 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+ 129              	 .cfi_def_cfa_offset 20
+ 130              	 .cfi_offset 4,-20
+ 131              	 .cfi_offset 5,-16
+ 132              	 .cfi_offset 6,-12
+ 133              	 .cfi_offset 7,-8
+ 134              	 .cfi_offset 14,-4
+ 135 0002 5F46     	 mov r7,fp
+ 136 0004 5646     	 mov r6,r10
+ 137 0006 4D46     	 mov r5,r9
+ 138 0008 4446     	 mov r4,r8
+ 139 000a F0B4     	 push {r4,r5,r6,r7}
+ 140              	 .cfi_def_cfa_offset 36
+ 141              	 .cfi_offset 8,-36
+ 142              	 .cfi_offset 9,-32
+ 143              	 .cfi_offset 10,-28
+ 144              	 .cfi_offset 11,-24
+ 174:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 145              	 .loc 1 174 0
+ 146 000c 0123     	 mov r3,#1
+ 121:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_USIC_CH_STATUS_t status;
+ 147              	 .loc 1 121 0
+ 148 000e 83B0     	 sub sp,sp,#12
+ 149              	 .cfi_def_cfa_offset 48
+ 137:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 150              	 .loc 1 137 0
+ 151 0010 6329     	 cmp r1,#99
+ 152 0012 01D9     	 bls .L12
+ 137:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 153              	 .loc 1 137 0 is_stmt 0 discriminator 1
+ 154 0014 002A     	 cmp r2,#0
+ 155 0016 07D1     	 bne .L19
+ 156              	.LVL8:
+ 157              	.L12:
+ 178:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 158              	 .loc 1 178 0 is_stmt 1
+ 159 0018 181C     	 mov r0,r3
+ 160 001a 03B0     	 add sp,sp,#12
+ 161              	 
+ 162 001c 3CBC     	 pop {r2,r3,r4,r5}
+ 163 001e 9046     	 mov r8,r2
+ 164 0020 9946     	 mov r9,r3
+ 165 0022 A246     	 mov r10,r4
+ 166 0024 AB46     	 mov fp,r5
+ 167 0026 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 168              	.LVL9:
+ 169              	.L19:
+ 170 0028 171C     	 mov r7,r2
+ 171 002a 0C1C     	 mov r4,r1
+ 172 002c 0192     	 str r2,[sp,#4]
+ 173 002e 0090     	 str r0,[sp]
+ 139:../Libraries/XMCLib/src/xmc_usic.c ****     rate = rate / 100U;
+ 174              	 .loc 1 139 0
+ 175 0030 FFF7FEFF 	 bl XMC_SCU_CLOCK_GetPeripheralClockFrequency
+ 176              	.LVL10:
+ 177 0034 6421     	 mov r1,#100
+ 178 0036 FFF7FEFF 	 bl __aeabi_uidiv
+ 179              	.LVL11:
+ 140:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 180              	 .loc 1 140 0
+ 181 003a 6421     	 mov r1,#100
+ 139:../Libraries/XMCLib/src/xmc_usic.c ****     rate = rate / 100U;
+ 182              	 .loc 1 139 0
+ 183 003c 061C     	 mov r6,r0
+ 184              	.LVL12:
+ 140:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 185              	 .loc 1 140 0
+ 186 003e 201C     	 mov r0,r4
+ 187              	.LVL13:
+ 188 0040 FFF7FEFF 	 bl __aeabi_uidiv
+ 189              	.LVL14:
+ 144:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 190              	 .loc 1 144 0
+ 191 0044 174B     	 ldr r3,.L20
+ 192 0046 4743     	 mul r7,r0
+ 193              	.LVL15:
+ 194 0048 9946     	 mov r9,r3
+ 143:../Libraries/XMCLib/src/xmc_usic.c ****     pdiv_frac_min = 0x3ffU;
+ 195              	 .loc 1 143 0
+ 196 004a 0123     	 mov r3,#1
+ 146:../Libraries/XMCLib/src/xmc_usic.c ****     {
+ 197              	 .loc 1 146 0
+ 198 004c 4C46     	 mov r4,r9
+ 199              	.LVL16:
+ 143:../Libraries/XMCLib/src/xmc_usic.c ****     pdiv_frac_min = 0x3ffU;
+ 200              	 .loc 1 143 0
+ 201 004e 9A46     	 mov r10,r3
+ 142:../Libraries/XMCLib/src/xmc_usic.c ****     pdiv_int_min = 1U;
+ 202              	 .loc 1 142 0
+ 203 0050 9B46     	 mov fp,r3
+ 152:../Libraries/XMCLib/src/xmc_usic.c ****       {
+ 204              	 .loc 1 152 0
+ 205 0052 C846     	 mov r8,r9
+ 206 0054 B502     	 lsl r5,r6,#10
+ 207 0056 AD1B     	 sub r5,r5,r6
+ 208              	.LVL17:
+ 209              	.L14:
+ 148:../Libraries/XMCLib/src/xmc_usic.c ****       pdiv_int = pdiv >> 10U;
+ 210              	 .loc 1 148 0
+ 211 0058 281C     	 mov r0,r5
+ 212 005a 391C     	 mov r1,r7
+ 213 005c FFF7FEFF 	 bl __aeabi_uidiv
+ 214              	.LVL18:
+ 149:../Libraries/XMCLib/src/xmc_usic.c ****       pdiv_frac = pdiv & 0x3ffU;
+ 215              	 .loc 1 149 0
+ 216 0060 830A     	 lsr r3,r0,#10
+ 217              	.LVL19:
+ 152:../Libraries/XMCLib/src/xmc_usic.c ****       {
+ 218              	 .loc 1 152 0
+ 219 0062 4345     	 cmp r3,r8
+ 220 0064 06D8     	 bhi .L13
+ 150:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 221              	 .loc 1 150 0 discriminator 1
+ 222 0066 8005     	 lsl r0,r0,#22
+ 223              	.LVL20:
+ 224 0068 800D     	 lsr r0,r0,#22
+ 152:../Libraries/XMCLib/src/xmc_usic.c ****       {
+ 225              	 .loc 1 152 0 discriminator 1
+ 226 006a 4845     	 cmp r0,r9
+ 227 006c 02D2     	 bcs .L13
+ 152:../Libraries/XMCLib/src/xmc_usic.c ****       {
+ 228              	 .loc 1 152 0 is_stmt 0
+ 229 006e 8146     	 mov r9,r0
+ 230              	.LVL21:
+ 231 0070 9A46     	 mov r10,r3
+ 232 0072 A346     	 mov fp,r4
+ 233              	.L13:
+ 234              	.LVL22:
+ 146:../Libraries/XMCLib/src/xmc_usic.c ****     {
+ 235              	 .loc 1 146 0 is_stmt 1 discriminator 2
+ 236 0074 013C     	 sub r4,r4,#1
+ 237              	.LVL23:
+ 238 0076 AD1B     	 sub r5,r5,r6
+ 239 0078 002C     	 cmp r4,#0
+ 240 007a EDD1     	 bne .L14
+ 160:../Libraries/XMCLib/src/xmc_usic.c ****                    (clock_divider_min << USIC_CH_FDR_STEP_Pos);
+ 241              	 .loc 1 160 0
+ 242 007c 8023     	 mov r3,#128
+ 243              	.LVL24:
+ 244 007e 5A46     	 mov r2,fp
+ 245 0080 0098     	 ldr r0,[sp]
+ 246 0082 1B02     	 lsl r3,r3,#8
+ 247 0084 1343     	 orr r3,r2
+ 248 0086 0361     	 str r3,[r0,#16]
+ 167:../Libraries/XMCLib/src/xmc_usic.c ****                    ((pdiv_int_min - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 249              	 .loc 1 167 0
+ 250 0088 019A     	 ldr r2,[sp,#4]
+ 163:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PDIV_Msk |
+ 251              	 .loc 1 163 0
+ 252 008a 4169     	 ldr r1,[r0,#20]
+ 253 008c 064B     	 ldr r3,.L20+4
+ 167:../Libraries/XMCLib/src/xmc_usic.c ****                    ((pdiv_int_min - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 254              	 .loc 1 167 0
+ 255 008e 013A     	 sub r2,r2,#1
+ 256 0090 9202     	 lsl r2,r2,#10
+ 163:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PDIV_Msk |
+ 257              	 .loc 1 163 0
+ 258 0092 0B40     	 and r3,r1
+ 166:../Libraries/XMCLib/src/xmc_usic.c ****                    ((oversampling - 1U) << USIC_CH_BRG_DCTQ_Pos) |
+ 259              	 .loc 1 166 0
+ 260 0094 1343     	 orr r3,r2
+ 168:../Libraries/XMCLib/src/xmc_usic.c ****                     
+ 261              	 .loc 1 168 0
+ 262 0096 5246     	 mov r2,r10
+ 263 0098 013A     	 sub r2,r2,#1
+ 264 009a 1204     	 lsl r2,r2,#16
+ 167:../Libraries/XMCLib/src/xmc_usic.c ****                    ((pdiv_int_min - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 265              	 .loc 1 167 0
+ 266 009c 1343     	 orr r3,r2
+ 163:../Libraries/XMCLib/src/xmc_usic.c ****                                      USIC_CH_BRG_PDIV_Msk |
+ 267              	 .loc 1 163 0
+ 268 009e 4361     	 str r3,[r0,#20]
+ 269              	.LVL25:
+ 170:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 270              	 .loc 1 170 0
+ 271 00a0 0023     	 mov r3,#0
+ 272 00a2 B9E7     	 b .L12
+ 273              	.L21:
+ 274              	 .align 2
+ 275              	.L20:
+ 276 00a4 FF030000 	 .word 1023
+ 277 00a8 EF8000FC 	 .word -67075857
+ 278              	 .cfi_endproc
+ 279              	.LFE107:
+ 281              	 .section .text.XMC_USIC_CH_ConfigExternalInputSignalToBRG,"ax",%progbits
+ 282              	 .align 2
+ 283              	 .global XMC_USIC_CH_ConfigExternalInputSignalToBRG
+ 284              	 .code 16
+ 285              	 .thumb_func
+ 287              	XMC_USIC_CH_ConfigExternalInputSignalToBRG:
+ 288              	.LFB108:
+ 184:../Libraries/XMCLib/src/xmc_usic.c ****   XMC_ASSERT("XMC_USIC_CH_ConfigExternalInputSignalToBRG: Divider out of range", ((1U < pdiv) || (p
+ 289              	 .loc 1 184 0
+ 290              	 .cfi_startproc
+ 291              	.LVL26:
+ 292 0000 30B5     	 push {r4,r5,lr}
+ 293              	 .cfi_def_cfa_offset 12
+ 294              	 .cfi_offset 4,-12
+ 295              	 .cfi_offset 5,-8
+ 296              	 .cfi_offset 14,-4
+ 297              	.LBB10:
+ 298              	.LBB11:
+ 299              	 .file 2 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_usic.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @file xmc_usic.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @date 2015-10-09
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @cond
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   *************************************************************************************************
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMClib v2.1.0 - XMC Peripheral Driver Library 
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * All rights reserved.                        
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *                                             
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * following conditions are met:   
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *                                                                              
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * disclaimer.                        
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *                                                                              
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *                                                                              
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  **************************************************************************************************
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Change History
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * --------------
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-02-20:
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Initial draft<br>
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Documentation improved <br>
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-05-08:
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added XMC_USIC_CH_SetInputTriggerCombinationMode() and XMC_USIC_CH_SetTransmitBufferStatus
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *      
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-06-20:
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-08-17:
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Bug fixed in XMC_USIC_CH_SetTransmitBufferStatus API. OR operator removed.
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-08-24:
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added APIs for enabling/disabling delay compensation XMC_USIC_CH_DisableDelayCompensation(
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *       XMC_USIC_CH_DisableDelayCompensation()
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-08-25:
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added APIs for defining if the data shift unit input is derived
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *       from the input data path DXn or from the selected protocol pre-processors: XMC_USIC_CH_Con
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *       and XMC_USIC_CH_ConnectInputDataShiftToDataInput()
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-08-27:
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Fixed bug in XMC_USIC_CH_BRG_CLOCK_SOURCE_DX1T value.
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added APIs for direct TBUF access: XMC_USIC_CH_WriteToTBUF() and XMC_USIC_CH_WriteToTBUFTC
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added APIs for external input for BRG configuration:XMC_USIC_CH_ConfigExternalInputSignalT
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 2015-08-28:
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *     - Added API for enabling the transfer trigger unit to set bit TCSR.TE if the trigger signal 
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *       Clear to Send (CTS) signal: XMC_USIC_CH_EnableTBUFDataValidTrigger() and XMC_USIC_CH_Disab
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @endcond
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #ifndef XMC_USIC_H
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC_H
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*******************************************************************************
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * HEADER FILES
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *******************************************************************************/
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #include "xmc_common.h"
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @addtogroup XMClib XMC Peripheral Library
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @{
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @addtogroup USIC
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @brief Universal Serial Interface Channel(USIC) driver for serial communication.
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * The Universal Serial Interface Channel(USIC) module is a flexible interface module
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * covering several serial communication protocols. A USIC module contains two
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * independent communication channels named USICx_CH0 and USICx_CH1, with x
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * being the number of the USIC module. The user can program, during run-time, which protocol will 
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * by each communication channel and which pins are used.
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * The driver provides APIs, configuration structures and enumerations to configure common features
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * communication protocols.
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC driver features:
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Allows configuration of FIFO for transmit and receive functions.
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Provides a structure type XMC_USIC_CH_t to represent the USIC channel registers in a programm
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  friendly format.
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Allows configuration of automatic update for frame length, word length, slave select or slave
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Allows transmission of data to FIFO using XMC_USIC_CH_TXFIFO_PutData() and XMC_USIC_CH_TXFIFO
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Allows reading of received data in FIFO using XMC_USIC_CH_RXFIFO_GetData()
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Allows configuration of baudrate using XMC_USIC_CH_SetBaudrate()
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * -# Provides API to trigger interrupts using XMC_USIC_CH_TriggerServiceRequest()
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @{
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*******************************************************************************
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * MACROS
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *******************************************************************************/
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC0 ((XMC_USIC_t *)USIC0_BASE)			/**< USIC0 module base address */
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC0_CH0 ((XMC_USIC_CH_t *)USIC0_CH0_BASE)	/**< USIC0 channel 0 base address */
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC0_CH1 ((XMC_USIC_CH_t *)USIC0_CH1_BASE)	/**< USIC0 channel 1 base address */
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(USIC1)
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC1 ((XMC_USIC_t *)USIC1_BASE)			/**< USIC1 module base address */
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC1_CH0 ((XMC_USIC_CH_t *)USIC1_CH0_BASE)	/**< USIC1 channel 0 base address */
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC1_CH1 ((XMC_USIC_CH_t *)USIC1_CH1_BASE)	/**< USIC1 channel 1 base address */
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(USIC2)
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC2 ((XMC_USIC_t *)USIC2_BASE)			/**< USIC2 module base address */
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC2_CH0 ((XMC_USIC_CH_t *)USIC2_CH0_BASE)	/**< USIC2 channel 0 base address */
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define XMC_USIC2_CH1 ((XMC_USIC_CH_t *)USIC2_CH1_BASE)	/**< USIC2 channel 1 base address */
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_DSEL_Msk  USIC_CH_DX0CR_DSEL_Msk   /**< Common mask for DSEL bitfield mask in 
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_DSEL_Pos  USIC_CH_DX0CR_DSEL_Pos   /**< Common mask for DSEL bitfield position
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_SFSEL_Pos USIC_CH_DX0CR_SFSEL_Pos  /**< Common mask for SFSEL bitfield positio
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_SFSEL_Msk USIC_CH_DX0CR_SFSEL_Msk  /**< Common mask for SFSEL bitfield mask in
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_DPOL_Msk  USIC_CH_DX0CR_DPOL_Msk   /**< Common mask for DPOL bitfield mask in 
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_DFEN_Msk  USIC_CH_DX0CR_DFEN_Msk   /**< Common mask for DFEN bitfield mask in 
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_DSEN_Msk  USIC_CH_DX0CR_DSEN_Msk   /**< Common mask for DSEN bitfield mask in 
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_CM_Pos    USIC_CH_DX0CR_CM_Pos     /**< Common mask for CM bitfield position i
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_CM_Msk    USIC_CH_DX0CR_CM_Msk     /**< Common mask for CM bitfield mask in DX
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_INSW_Msk  USIC_CH_DX0CR_INSW_Msk   /**< Common mask for INSW bitfield mask in 
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #define USIC_CH_DXCR_INSW_pos  USIC_CH_DX0CR_INSW_Pos   /**< Common mask for INSW bitfield position
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if UC_FAMILY == XMC1
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  #include "xmc1_usic_map.h"
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if UC_FAMILY == XMC4
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  #include "xmc4_usic_map.h"
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*******************************************************************************
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * ENUMS
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *******************************************************************************/
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel driver status
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_STATUS
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_STATUS_OK,    /**< USIC driver status : OK */
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_STATUS_ERROR, /**< USIC driver status : ERROR */
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_STATUS_BUSY   /**< USIC driver status : BUSY */
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_STATUS_t;
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel kernel mode
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_KERNEL_MODE
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_KERNEL_MODE_RUN_0  = 0x0UL,  /**< Run mode 0 (transmission and reception possible)*/
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_KERNEL_MODE_RUN_1  = 0x1UL << USIC_CH_KSCFG_NOMCFG_Pos,  /**< Run mode 1 (transmissio
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_KERNEL_MODE_STOP_0 = 0x2UL << USIC_CH_KSCFG_NOMCFG_Pos,  /**< Stop mode 0 (no transmi
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_KERNEL_MODE_STOP_1 = 0x3UL << USIC_CH_KSCFG_NOMCFG_Pos   /**< Stop mode 1 (both trans
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_KERNEL_MODE_t;
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel operating mode
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_OPERATING_MODE
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_OPERATING_MODE_IDLE = 0x0UL, /**< USIC channel idle */
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_OPERATING_MODE_SPI  = 0x1UL << USIC_CH_CCR_MODE_Pos, /**< SPI mode */
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_OPERATING_MODE_UART = 0x2UL << USIC_CH_CCR_MODE_Pos, /**< UART mode */
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_OPERATING_MODE_I2S  = 0x3UL << USIC_CH_CCR_MODE_Pos, /**< I2S mode */
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_OPERATING_MODE_I2C  = 0x4UL << USIC_CH_CCR_MODE_Pos  /**< I2C mode */
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_OPERATING_MODE_t;
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel inputs
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_INPUT
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX0, /**< DX0 input */
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX1, /**< DX1 input */
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX2, /**< DX2 input */
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX3, /**< DX3 input */
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX4, /**< DX4 input */
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_DX5  /**< DX5 input */
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_INPUT_t;
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel input source sampling frequency
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_INPUT_SAMPLING_FREQ
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_SAMPLING_FREQ_FPERIPH            = 0x0UL, /**< Use fperiph frequency for input 
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_SAMPLING_FREQ_FRACTIONAL_DIVIDER = 0x1UL << USIC_CH_DXCR_SFSEL_Pos  /**< Use fF
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_INPUT_SAMPLING_FREQ_t;
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel input combination mode
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_INPUT_COMBINATION_MODE
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_COMBINATION_MODE_TRIGGER_DISABLED = 0x0UL, /**< The trigger activation is disab
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_COMBINATION_MODE_RISING_EDGE      = 0x1UL, /**< A rising edge activates DXnT*/
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_COMBINATION_MODE_FALLING_EDGE     = 0x2UL, /**< A falling edge activates DXnT*/
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INPUT_COMBINATION_MODE_BOTH_EDGES       = 0x3UL, /**< Both edges activate DXnT*/
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_INPUT_COMBINATION_MODE_t;
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel data transmission start modes.
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Data shifted out of the transmit pin depends on the value configured for the
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * TDEN bitfield of the TCSR register. Following enum values are used for configuring
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * the TCSR->TDEN bitfield.
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_START_TRANSMISION_MODE
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_START_TRANSMISION_DISABLED      = 0x0U, /**< Passive data level is sent out on transm
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_START_TRANSMISION_ON_TDV        = 0x1UL << USIC_CH_TCSR_TDEN_Pos, /**< Transmission o
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_START_TRANSMISION_ON_TDV_DX2S_0 = 0x2UL << USIC_CH_TCSR_TDEN_Pos, /**< Transmission o
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_START_TRANSMISION_ON_TDV_DX2S_1 = 0x3UL << USIC_CH_TCSR_TDEN_Pos  /**< Transmission o
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_START_TRANSMISION_MODE_t;
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel interrupt node pointers
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_INTERRUPT_NODE_POINTER
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INTERRUPT_NODE_POINTER_TRANSMIT_SHIFT      = USIC_CH_INPR_TSINP_Pos, /**< Node pointe
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INTERRUPT_NODE_POINTER_TRANSMIT_BUFFER     = USIC_CH_INPR_TBINP_Pos, /**< Node pointe
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INTERRUPT_NODE_POINTER_RECEIVE             = USIC_CH_INPR_RINP_Pos,  /**< Node pointe
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INTERRUPT_NODE_POINTER_ALTERNATE_RECEIVE   = USIC_CH_INPR_AINP_Pos,  /**< Node pointe
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_INTERRUPT_NODE_POINTER_PROTOCOL            = USIC_CH_INPR_PINP_Pos   /**< Node pointe
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_INTERRUPT_NODE_POINTER_t;
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel events
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_EVENT
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_RECEIVE_START       = USIC_CH_CCR_RSIEN_Msk, /**< Receive start event */
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_DATA_LOST           = USIC_CH_CCR_DLIEN_Msk, /**< Data lost event */
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_TRANSMIT_SHIFT      = USIC_CH_CCR_TSIEN_Msk, /**< Transmit shift event */
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_TRANSMIT_BUFFER     = USIC_CH_CCR_TBIEN_Msk, /**< Transmit buffer event */
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_STANDARD_RECEIVE    = USIC_CH_CCR_RIEN_Msk,  /**< Receive event */
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_ALTERNATIVE_RECEIVE = USIC_CH_CCR_AIEN_Msk,  /**< Alternate receive event */
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_EVENT_BAUD_RATE_GENERATOR = USIC_CH_CCR_BRGIEN_Msk /**< Baudrate generator event */
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_EVENT_t;
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel parity mode
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_PARITY_MODE
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_PARITY_MODE_NONE     = 0x0UL,  /**< Disable parity mode */
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_PARITY_MODE_EVEN     = 0x2UL << USIC_CH_CCR_PM_Pos,  /**< Enable even parity mode */
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_PARITY_MODE_ODD      = 0x3UL << USIC_CH_CCR_PM_Pos   /**< Enable odd parity mode */
+ 269:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_PARITY_MODE_t;
+ 270:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 271:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 272:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel data output mode
+ 273:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 274:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_DATA_OUTPUT_MODE
+ 275:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 276:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_DATA_OUTPUT_MODE_NORMAL   = 0x0UL,  /**< Data output normal mode */
+ 277:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_DATA_OUTPUT_MODE_INVERTED = 0x1UL << USIC_CH_SCTR_DOCFG_Pos   /**< Data output invert
+ 278:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_DATA_OUTPUT_MODE_t;
+ 279:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 280:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 281:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel data transmit buffer status
+ 282:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 283:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_TBUF_STATUS
+ 284:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 285:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TBUF_STATUS_IDLE = 0x0UL,                 /**< Transfer buffer is currently idle*/
+ 286:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TBUF_STATUS_BUSY = USIC_CH_TCSR_TDV_Msk   /**< Transfer buffer is currently busy*/
+ 287:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_TBUF_STATUS_t;
+ 288:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 289:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 290:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 291:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 292:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel data transmit buffer status modification
+ 293:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 294:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_TBUF_STATUS_SET
+ 295:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 296:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TBUF_STATUS_SET_BUSY   = 0x1UL, /**< Set Transfer buffer status to busy*/
+ 297:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TBUF_STATUS_SET_IDLE   = 0x2UL  /**< Set Transfer buffer status to idle*/
+ 298:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_TBUF_STATUS_SET_t;
+ 299:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 300:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 301:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel receive buffer status
+ 302:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 303:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_RBUF_STATUS
+ 304:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 305:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RBUF_STATUS_DATA_VALID0 = USIC_CH_RBUFSR_RDV0_Msk, /**< RBUF0 data has not yet been r
+ 306:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RBUF_STATUS_DATA_VALID1 = USIC_CH_RBUFSR_RDV1_Msk  /**< RBUF1 data has not yet been r
+ 307:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_RBUF_STATUS_t;
+ 308:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 309:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 310:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel output signal passive data level
+ 311:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 312:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USCI_CH_PASSIVE_DATA_LEVEL
+ 313:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 314:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_PASSIVE_DATA_LEVEL0 = 0x0UL, /**< Passive level(idle mode signal level) 0 */
+ 315:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_PASSIVE_DATA_LEVEL1 = 0x1UL << USIC_CH_SCTR_PDL_Pos  /**< Passive level(idle mode sig
+ 316:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_PASSIVE_DATA_LEVEL_t;
+ 317:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 318:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 319:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel receive FIFO size
+ 320:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 321:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_FIFO_SIZE
+ 322:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 323:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_DISABLED     = 0x0U,  /**< FIFO Disabled */
+ 324:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_2WORDS  = 0x1U,  /**< FIFO size: 2 words */
+ 325:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_4WORDS  = 0x2U,  /**< FIFO size: 4 words */
+ 326:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_8WORDS  = 0x3U,  /**< FIFO size: 8 words */
+ 327:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_16WORDS = 0x4U,  /**< FIFO size: 16 words */
+ 328:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_32WORDS = 0x5U,  /**< FIFO size: 32 words */
+ 329:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_FIFO_SIZE_64WORDS = 0x6U   /**< FIFO size: 64 words */
+ 330:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_FIFO_SIZE_t;
+ 331:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 332:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 333:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel transmit FIFO interrupt node pointers
+ 334:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 335:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER
+ 336:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 337:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD  = USIC_CH_TBCTR_STBINP_Pos,  /**< Node pointe
+ 338:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE = USIC_CH_TBCTR_ATBINP_Pos   /**< Node pointe
+ 339:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_t;
+ 340:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 341:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 342:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel transmit FIFO event configuration
+ 343:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 344:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_TXFIFO_EVENT_CONF
+ 345:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 346:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD  = USIC_CH_TBCTR_STBIEN_Msk,   /**< Enable FIFO standard t
+ 347:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_EVENT_CONF_ERROR     = (int32_t)USIC_CH_TBCTR_TBERIEN_Msk  /**< Enable transmi
+ 348:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_TXFIFO_EVENT_CONF_t;
+ 349:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 350:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 351:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel transmit FIFO status
+ 352:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 353:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_TXFIFO_EVENT
+ 354:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 355:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_EVENT_STANDARD = USIC_CH_TRBSR_STBI_Msk,    /**< Transmit FIFO status: Standar
+ 356:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_TXFIFO_EVENT_ERROR    = USIC_CH_TRBSR_TBERI_Msk    /**< Transmit FIFO status: Error e
+ 357:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_TXFIFO_EVENT_t;
+ 358:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 359:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 360:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel receive FIFO interrupt node pointers
+ 361:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 362:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER
+ 363:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 364:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_STANDARD  = USIC_CH_RBCTR_SRBINP_Pos, /**< Node pointer
+ 365:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE = USIC_CH_RBCTR_ARBINP_Pos  /**< Node pointer
+ 366:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_t;
+ 367:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 368:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 369:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel receive FIFO event configuration
+ 370:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 371:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_RXFIFO_EVENT_CONF
+ 372:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 373:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_CONF_STANDARD  = USIC_CH_RBCTR_SRBIEN_Msk,   /**< Enable FIFO standard r
+ 374:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_CONF_ERROR     = (int32_t)USIC_CH_RBCTR_RBERIEN_Msk,  /**< Enable receiv
+ 375:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_CONF_ALTERNATE = USIC_CH_RBCTR_ARBIEN_Msk   /**< Enable FIFO alternative
+ 376:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_RXFIFO_EVENT_CONF_t;
+ 377:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 378:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 379:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel receive FIFO status
+ 380:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 381:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_RXFIFO_EVENT
+ 382:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_STANDARD  = USIC_CH_TRBSR_SRBI_Msk,   /**< Receive FIFO status: Standard
+ 384:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_ERROR     = USIC_CH_TRBSR_RBERI_Msk,  /**< Receive FIFO status: Error ev
+ 385:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_RXFIFO_EVENT_ALTERNATE = USIC_CH_TRBSR_ARBI_Msk    /**< Receive FIFO status: Alternat
+ 386:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_RXFIFO_EVENT_t;
+ 387:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 388:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 389:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel baudrate generator clock source
+ 390:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 391:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_BRG_CLOCK_SOURCE
+ 392:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 393:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_CLOCK_SOURCE_DIVIDER = 0x0UL, /**< Baudrate generator clock source : Source divid
+ 394:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_CLOCK_SOURCE_DX1T    = 0x2UL << USIC_CH_BRG_CLKSEL_Pos  /**< Baudrate generator c
+ 395:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_BRG_CLOCK_SOURCE_t;
+ 396:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 397:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 398:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel baudrate generator divider mode
+ 399:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 400:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE
+ 401:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 402:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE_DISABLED   = 0x0UL, /**< Baudrate generator clock divider: Dis
+ 403:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE_NORMAL     = 0x1UL << USIC_CH_FDR_DM_Pos, /**< Baudrate genera
+ 404:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE_FRACTIONAL = 0x2UL << USIC_CH_FDR_DM_Pos  /**< Baudrate genera
+ 405:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_BRG_CLOCK_DIVIDER_MODE_t;
+ 406:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 407:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 408:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel baudrate generator master clock passive level
+ 409:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 410:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_BRG_MASTER_CLOCK_PASSIVE_LEVEL
+ 411:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 412:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_MASTER_CLOCK_PASSIVE_LEVEL_0 = 0x0UL, /**< Baudrate generator master clock passiv
+ 413:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_MASTER_CLOCK_PASSIVE_LEVEL_1 = 0x1UL << USIC_CH_BRG_MCLKCFG_Pos  /**< Baudrate ge
+ 414:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_BRG_MASTER_CLOCK_PASSIVE_LEVEL_t;
+ 415:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 416:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 417:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel baudrate generator shift clock passive level
+ 418:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 419:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL
+ 420:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 421:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_DISABLED = 0x0UL, /**< Shift clock passive leve
+ 422:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_DISABLED = 0x1UL << USIC_CH_BRG_SCLKCFG_Pos, /*
+ 423:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED  = (int32_t)(0x2UL << USIC_CH_BRG_SCLKC
+ 424:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED  = (int32_t)(0x3UL << USIC_CH_BRG_SCLKC
+ 425:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_t;
+ 426:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 427:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 428:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** * USIC channel baudrate generator shift clock output
+ 429:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** */
+ 430:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef enum XMC_USIC_CH_BRG_SHIFT_CLOCK_OUTPUT
+ 431:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 432:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK = 0x0UL, /**< Baudrate generator shift clock output: SCL.
+ 433:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   XMC_USIC_CH_BRG_SHIFT_CLOCK_OUTPUT_DX1 = 0x1UL << USIC_CH_BRG_SCLKOSEL_Pos   /**< Baudrate genera
+ 434:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_BRG_SHIFT_CLOCK_OUTPUT_t;
+ 435:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 436:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*******************************************************************************
+ 437:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * DATA STRUCTURES
+ 438:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *******************************************************************************/
+ 439:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 440:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*Anonymous structure/union guard start*/
+ 441:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(__CC_ARM)
+ 442:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   #pragma push
+ 443:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   #pragma anon_unions
+ 444:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #elif defined(__TASKING__)
+ 445:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   #pragma warning 586
+ 446:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 447:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 448:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 449:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC module structure
+ 450:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 451:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef USIC_GLOBAL_TypeDef XMC_USIC_t;
+ 452:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 453:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 454:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel structure.<br> The members of the structure are same as in the device header file, 
+ 455:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * except for some registers.
+ 456:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * DX0CR, DX1CR, DX2CR, DX3CR, DX4CR and DX5CR are replaced with the array DXCR[6].
+ 457:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * TBUF0 to TBUF31 are replaced with TBUF[32].
+ 458:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * IN0 to IN31 are replaced with IN[32].
+ 459:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 460:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** typedef struct XMC_USIC_CH
+ 461:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 462:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RESERVED0;
+ 463:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  CCFG;			/**< Channel configuration register*/
+ 464:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RESERVED1;
+ 465:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  KSCFG;			/**< Kernel state configuration register*/
+ 466:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  FDR;			/**< Fractional divider configuration register*/
+ 467:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  BRG;			/**< Baud rate generator register*/
+ 468:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  INPR;			/**< Interrupt node pointer register*/
+ 469:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  DXCR[6];		/**< Input control registers DX0 to DX5.*/
+ 470:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  SCTR;			/**< Shift control register*/
+ 471:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  TCSR;
+ 472:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 473:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   union {
+ 474:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PCR_IICMode;	/**< I2C protocol configuration register*/
+ 475:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PCR_IISMode; /**< I2S protocol configuration register*/
+ 476:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PCR_SSCMode;	/**< SPI protocol configuration register*/
+ 477:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PCR;			/**< Protocol configuration register*/
+ 478:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PCR_ASCMode;	/**< UART protocol configuration register*/
+ 479:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   };
+ 480:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  CCR;			/**< Channel control register*/
+ 481:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  CMTR;			/**< Capture mode timer register*/
+ 482:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 483:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   union {
+ 484:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PSR_IICMode;	/**< I2C protocol status register*/
+ 485:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PSR_IISMode;	/**< I2S protocol status register*/
+ 486:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PSR_SSCMode;	/**< SPI protocol status register*/
+ 487:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PSR;			/**< Protocol status register*/
+ 488:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****     __IO uint32_t  PSR_ASCMode;	/**< UART protocol status register*/
+ 489:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   };
+ 490:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __O  uint32_t  PSCR;			/**< Protocol status clear register*/
+ 491:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUFSR;		/**< Receive buffer status register*/
+ 492:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUF;			/**< Receive buffer register*/
+ 493:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUFD;			/**< Debug mode receive buffer register*/
+ 494:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUF0;			/**< Receive buffer 0*/
+ 495:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUF1;			/**< Receive buffer 1*/
+ 496:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RBUF01SR;		/**< Receive buffer status register*/
+ 497:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __O  uint32_t  FMR;			/**< Flag modification register*/
+ 498:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RESERVED2[5];
+ 499:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  TBUF[32];		/**< Tranmsit buffer registers*/
+ 500:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  BYP;			/**< FIFO bypass register*/
+ 501:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  BYPCR;			/**< FIFO bypass control register*/
+ 502:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  TBCTR;			/**< Transmit FIFO control register*/
+ 503:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  RBCTR;			/**< Receive FIFO control register*/
+ 504:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  TRBPTR;		/**< Transmit/recive buffer pointer register*/
+ 505:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __IO uint32_t  TRBSR;			/**< Transmit/receive buffer status register*/
+ 506:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __O  uint32_t  TRBSCR;		/**< Transmit/receive buffer status clear register*/
+ 507:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  OUTR;			/**< Receive FIFO output register*/
+ 508:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  OUTDR;			/**< Receive FIFO debug output register*/
+ 509:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __I  uint32_t  RESERVED3[23];
+ 510:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   __O  uint32_t  IN[32];		/**< Transmit FIFO input register*/
+ 511:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** } XMC_USIC_CH_t;
+ 512:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 513:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 514:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*Anonymous structure/union guard end*/
+ 515:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(__CC_ARM)
+ 516:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   #pragma pop
+ 517:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #elif defined(__TASKING__)
+ 518:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   #pragma warning restore
+ 519:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 520:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 521:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /*******************************************************************************
+ 522:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * API PROTOTYPES
+ 523:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  ******************************************************************************/
+ 524:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 525:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #ifdef __cplusplus
+ 526:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** extern "C" {
+ 527:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 528:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 529:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE bool XMC_USIC_IsModuleValid(const XMC_USIC_t *const module)
+ 530:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 531:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   bool tmp;
+ 532:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 533:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = (module == XMC_USIC0);
+ 534:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(XMC_USIC1)  
+ 535:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = tmp || (module == XMC_USIC1);
+ 536:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 537:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(XMC_USIC2)  
+ 538:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = tmp || (module == XMC_USIC2);
+ 539:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 540:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 541:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   return tmp;
+ 542:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 543:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 544:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE bool XMC_USIC_IsChannelValid(const XMC_USIC_CH_t *const channel)
+ 545:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 546:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   bool tmp;
+ 547:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 548:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = ((channel == XMC_USIC0_CH0) || (channel == XMC_USIC0_CH1));
+ 549:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(XMC_USIC1)  
+ 550:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = tmp || ((channel == XMC_USIC1_CH0) || (channel == XMC_USIC1_CH1));
+ 551:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 552:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #if defined(XMC_USIC2)  
+ 553:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   tmp = tmp || ((channel == XMC_USIC2_CH0) || (channel == XMC_USIC2_CH1));
+ 554:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** #endif
+ 555:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 556:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   return tmp;
+ 557:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 558:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 559:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /* Common APIs */
+ 560:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 561:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 562:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  usic Pointer to USIC module handler of type @ref XMC_USIC_t.\n
+ 563:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				\b Range: @ref XMC_USIC0 to @ref XMC_USIC2 based on device support.
+ 564:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 565:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 
+ 566:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 567:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables the USIC module.\n\n
+ 568:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables the clock for the USIC module by following the
+ 569:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * clock enabling sequence for the selected device.
+ 570:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 571:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 572:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_Enable(), XMC_USIC_Disable() \n\n\n
+ 573:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 574:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** void XMC_USIC_Enable(XMC_USIC_t *const usic);
+ 575:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 576:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  usic Pointer to USIC module handler of type @ref XMC_USIC_t.\n
+ 577:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				\b Range: @ref XMC_USIC0 to @ref XMC_USIC2 based on device support.
+ 578:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 579:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 580:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 581:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables the USIC module.\n\n
+ 582:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables the clock for the USIC module by following the clock
+ 583:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * disabling sequence for the selected device.
+ 584:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 585:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 586:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_Disable(), XMC_USIC_Enable() \n\n\n
+ 587:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 588:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** void XMC_USIC_Disable(XMC_USIC_t *const usic);
+ 589:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 590:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 591:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 592:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 593:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 594:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 595:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables the USIC channel. \n\n
+ 596:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel is enabled by setting the module enable bit in KSCFG register bitfield MODEN.
+ 597:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * On enabling, the channel is set to idle mode.
+ 598:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 599:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 600:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_Disable(), XMC_USIC_Enable() \n\n\n
+ 601:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 602:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** void XMC_USIC_CH_Enable(XMC_USIC_CH_t *const channel);
+ 603:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 604:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 605:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 606:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 607:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 608:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 609:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables the USIC channel.\n\n
+ 610:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * USIC channel is disabled by setting the module enable bit(MDEN) to 0 in the register KSCFG.
+ 611:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 612:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 613:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_Enable(), XMC_USIC_Disable() \n\n\n
+ 614:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 615:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** void XMC_USIC_CH_Disable(XMC_USIC_CH_t *const channel);
+ 616:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 617:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 618:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 619:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 620:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  rate Desired baudrate. \b Range: minimum value = 100, maximum value depends on the perip
+ 621:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				and \a oversampling. Maximum baudrate can be derived using the formula: (fperiph * 1023)/(10
+ 622:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  oversampling Required oversampling. The value indicates the number of time quanta for on
+ 623:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 						This can be related to the number of samples for each logic state of the data signal. \n
+ 624:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 						\b Range: 1 to 32. Value should be chosen based on the protocol used.
+ 625:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return Status indicating the baudrate configuration.\n
+ 626:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 			\b Range: @ref XMC_USIC_CH_STATUS_OK if baudrate is successfully configured,
+ 627:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 					  @ref XMC_USIC_CH_STATUS_ERROR if desired baudrate or oversampling is invalid.
+ 628:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 629:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 630:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Configures the baudrate of the USIC channel. \n\n
+ 631:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Baudrate is configured by considering the peripheral frequency and the desired baudrate.
+ 632:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Optimum values of FDR->STEP and BRG->PDIV are calulated and used for generating the desired
+ 633:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * baudrate.
+ 634:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 635:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 636:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetStartTransmisionMode(), XMC_USIC_CH_SetInputSource() \n\n\n
+ 637:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 638:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** XMC_USIC_CH_STATUS_t XMC_USIC_CH_SetBaudrate(XMC_USIC_CH_t *const channel, uint32_t rate, uint32_t 
+ 639:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 640:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 641:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 642:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 643:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  pdiv Desired divider for the external frequency input. \b Range: minimum value = 1, maxi
+ 644:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  oversampling Required oversampling. The value indicates the number of time quanta for on
+ 645:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 						This can be related to the number of samples for each logic state of the data signal. \n
+ 646:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 						\b Range: 1 to 32. Value should be chosen based on the protocol used.
+ 647:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 648:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 649:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 650:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables the external frequency input for the Baudrate Generator and configures the divider, over
+ 651:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * the combination mode of the USIC channel. \n\n
+ 652:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 653:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 654:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetBRGInputClockSource(), XMC_USIC_CH_SetInputTriggerCombinationMode() \n\n\n
+ 655:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 656:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** void XMC_USIC_CH_ConfigExternalInputSignalToBRG(XMC_USIC_CH_t *const channel,
+ 657:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 		                                         const uint16_t pdiv,
+ 658:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 												 const uint32_t oversampling,
+ 659:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 												 const XMC_USIC_CH_INPUT_COMBINATION_MODE_t combination_mode);
+ 660:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 661:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 662:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 663:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 664:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 665:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 666:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  source Input source select for the input stage. The table below maps the enum value with
+ 667:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * <table><tr><td>0</td><td>DXnA</td></tr><tr><td>1</td><td>DXnB</td></tr><tr><td>2</td><td>DXnC</t
+ 668:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * <tr><td>4</td><td>DXnE</td></tr><tr><td>5</td><td>DXnF</td></tr><tr><td>6</td><td>DXnG</td></tr>
+ 669:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * </tr></table>
+ 670:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 671:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 672:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 673:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Selects the data source for USIC input stage.\n\n
+ 674:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Selects the input data signal source among DXnA, DXnB.. DXnG for the input stage. The API can be
+ 675:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * like DX0CR, DX1CR etc. 
+ 676:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *  
+ 677:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 678:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_EnableInputInversion(), XMC_USIC_CH_EnableInputDigitalFilter(), XMC_USIC_CH_EnableIn
+ 679:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetInputSamplingFreq()\n\n\n
+ 680:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 681:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_SetInputSource(XMC_USIC_CH_t *const channel, const XMC_USIC_CH_INP
+ 682:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 683:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] = (uint32_t)((channel->DXCR[input] & (uint32_t)(~USIC_CH_DXCR_DSEL_Msk)) |
+ 684:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****                          ((uint32_t)source << USIC_CH_DXCR_DSEL_Pos));
+ 685:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 686:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 687:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 688:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 689:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 690:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 691:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 692:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 693:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 694:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * The input of the data shift unit is controlled by the
+ 695:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * protocol pre-processor. \n\n
+ 696:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 697:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 698:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_ConnectInputDataShiftToDataInput()\n\n\n
+ 699:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 700:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_ConnectInputDataShiftToPPP(XMC_USIC_CH_t *const channel, const XMC
+ 701:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 702:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] &=(uint32_t)~USIC_CH_DXCR_INSW_Msk;
+ 703:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 704:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 705:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 706:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 707:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 708:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 709:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 710:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 711:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 712:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 713:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * The input of the data shift unit is connected to
+ 714:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * the selected data input line. \n\n
+ 715:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 716:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * This setting is used
+ 717:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * if the signals are directly derived from an input
+ 718:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * pin without treatment by the protocol preprocessor.
+ 719:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 720:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_ConnectInputDataShiftToPPP()\n\n\n
+ 721:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 722:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_ConnectInputDataShiftToDataInput(XMC_USIC_CH_t *const channel, con
+ 723:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 724:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] |= USIC_CH_DXCR_INSW_Msk;
+ 725:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 726:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 727:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 728:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 729:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 730:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 731:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 732:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 733:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 734:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 735:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables input inversion for USIC channel input data signal. \n\n
+ 736:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 737:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Polarity of the input source can be changed to provide inverted data input.
+ 738:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 739:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_DisableInputInversion()\n\n\n
+ 740:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 741:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_EnableInputInversion(XMC_USIC_CH_t *const channel, const XMC_USIC_
+ 742:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 743:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] |= USIC_CH_DXCR_DPOL_Msk;
+ 744:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 745:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 746:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 747:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 748:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 749:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 750:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 751:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 752:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 753:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 754:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables input inversion for USIC channel. \n\n
+ 755:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 756:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Resets the input data polarity for the USIC channel input data signal.
+ 757:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 758:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_EnableInputInversion()\n\n\n
+ 759:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 760:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_DisableInputInversion(XMC_USIC_CH_t *const channel, const XMC_USIC
+ 761:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 762:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] &=(uint32_t)~USIC_CH_DXCR_DPOL_Msk;
+ 763:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 764:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 765:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 766:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 767:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 768:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 769:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 770:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 771:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables delay compensation. \n\n
+ 772:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 773:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Delay compensation can be applied to the receive path.
+ 774:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 775:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_DisableDelayCompensation()\n\n\n
+ 776:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 777:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_EnableDelayCompensation(XMC_USIC_CH_t *const channel)
+ 778:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 779:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[1U] |= USIC_CH_DX1CR_DCEN_Msk;
+ 780:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 781:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 782:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 783:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 784:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 785:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 786:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 787:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 788:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables delay compensation.. \n\n
+ 789:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 790:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 791:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_EnableDelayCompensation()\n\n\n
+ 792:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 793:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_DisableDelayCompensation(XMC_USIC_CH_t *const channel)
+ 794:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 795:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[1U] &=(uint32_t)~USIC_CH_DX1CR_DCEN_Msk;
+ 796:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 797:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 798:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 799:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 800:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 801:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 802:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 803:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 804:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 805:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 806:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables the input digital filter for USIC channel input data signal. \n\n
+ 807:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Input data signal from the selected multiplexer will be digitally filtered.
+ 808:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 809:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 810:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_DisableInputDigitalFilter()\n\n\n
+ 811:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 812:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_EnableInputDigitalFilter(XMC_USIC_CH_t *const channel, const XMC_U
+ 813:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 814:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] |= (uint32_t)USIC_CH_DXCR_DFEN_Msk;
+ 815:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 816:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 817:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 818:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 819:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 820:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 821:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 822:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 823:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 824:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables the input digital filter for USIC channel input data signal. \n\n
+ 825:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Input data signal from the selected multiplexer will not be digitally filtered.
+ 826:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 827:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 828:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_EnableInputDigitalFilter()\n\n\n
+ 829:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 830:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_DisableInputDigitalFilter(XMC_USIC_CH_t *const channel, const XMC_
+ 831:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 832:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] &=(uint32_t)~USIC_CH_DXCR_DFEN_Msk;
+ 833:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 834:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 835:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 836:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 837:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 838:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 839:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 840:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 841:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 842:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Enables input synchronization for the USIC channel input data signal. \n\n
+ 843:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Input data signal from the selected multiplexer will be synchronized with fPERIPH.
+ 844:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * A noisy signal can be synchronized and filtered by enabling the digital filter.
+ 845:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 846:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 847:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_DisableInputSync(), XMC_USIC_CH_EnableInputDigitalFilter()\n\n\n
+ 848:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 849:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_EnableInputSync(XMC_USIC_CH_t *const channel, const XMC_USIC_CH_IN
+ 850:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 851:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] |=(uint32_t)USIC_CH_DXCR_DSEN_Msk;
+ 852:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 853:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 854:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 855:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 856:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 857:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 858:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 859:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 860:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 861:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Disables input synchronization for the USIC channel input data signal. \n\n
+ 862:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Input data signal from the selected multiplexer will not be synchronized.
+ 863:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 864:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 865:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_EnableInputSync(), XMC_USIC_CH_DisableInputDigitalFilter() \n\n\n
+ 866:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 867:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_DisableInputSync(XMC_USIC_CH_t *const channel, const XMC_USIC_CH_I
+ 868:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 869:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] &=(uint32_t)~USIC_CH_DXCR_DSEN_Msk;
+ 870:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 871:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 872:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 873:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 874:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 875:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 876:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  sampling_freq Sampling frequency value of type \a XMC_USIC_CH_INPUT_SAMPLING_FREQ_t.
+ 877:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 878:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 879:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 880:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Sets sampling frequency for USIC channel input data signal. \n\n
+ 881:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 882:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 883:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetInputSource(), XMC_USIC_CH_EnableInputSync(), XMC_USIC_CH_EnableInputDigitalFilte
+ 884:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 885:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_SetInputSamplingFreq(XMC_USIC_CH_t *const channel,
+ 886:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 		                                              const XMC_USIC_CH_INPUT_t input,
+ 887:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 		                                              const XMC_USIC_CH_INPUT_SAMPLING_FREQ_t sampling_fr
+ 888:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 889:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] = (uint32_t)(channel->DXCR[input] & (~USIC_CH_DXCR_SFSEL_Msk)) |
+ 890:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****                          ((uint32_t)sampling_freq);
+ 891:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 892:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 893:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 894:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 895:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 896:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  input USIC channel input stage of type @ref XMC_USIC_CH_INPUT_t. \n
+ 897:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				 \b Range: @ref XMC_USIC_CH_INPUT_DX0 to @ref XMC_USIC_CH_INPUT_DX5
+ 898:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  combination_mode Combination mode value of type \a XMC_USIC_CH_INPUT_COMBINATION_MODE_t.
+ 899:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 900:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 901:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 902:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Selects which edge of the synchronized signal DXnS activates the trigger output DXnT of the inpu
+ 903:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 904:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 905:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetInputSource(), XMC_USIC_CH_EnableInputSync(), XMC_USIC_CH_EnableInputDigitalFilte
+ 906:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 907:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_SetInputTriggerCombinationMode(XMC_USIC_CH_t *const channel,
+ 908:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 		                                                        const XMC_USIC_CH_INPUT_t input,
+ 909:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 		                                                        const XMC_USIC_CH_INPUT_COMBINATION_MODE_
+ 910:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 911:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->DXCR[input] = (uint32_t)(channel->DXCR[input] & (~USIC_CH_DXCR_CM_Msk)) |
+ 912:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****                          ((uint32_t)combination_mode << USIC_CH_DXCR_CM_Pos);
+ 913:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 914:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** 
+ 915:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** /**
+ 916:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  channel Pointer to USIC channel handler of type @ref XMC_USIC_CH_t \n
+ 917:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * 				   \b Range: @ref XMC_USIC0_CH0, @ref XMC_USIC0_CH1 to @ref XMC_USIC2_CH1 based on device su
+ 918:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @param  clock_source clock source for the BRG.
+ 919:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * @return None
+ 920:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 921:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Description</b><br>
+ 922:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * Sets the clock source for the BRG. \n\n
+ 923:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  *
+ 924:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * \par<b>Related APIs:</b><BR>
+ 925:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  * XMC_USIC_CH_SetInputTriggerCombinationMode(), XMC_USIC_CH_SetExternalClockBRGDivider()\n\n\n
+ 926:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****  */
+ 927:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** __STATIC_INLINE void XMC_USIC_CH_SetBRGInputClockSource(XMC_USIC_CH_t *const channel, const XMC_USI
+ 928:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** {
+ 929:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****   channel->BRG = (uint32_t)(channel->BRG & (~USIC_CH_BRG_CLKSEL_Msk)) | (uint32_t)(clock_source);
+ 300              	 .loc 2 929 0
+ 301 0002 0325     	 mov r5,#3
+ 302 0004 4469     	 ldr r4,[r0,#20]
+ 303              	.LBE11:
+ 304              	.LBE10:
+ 305              	.LBB13:
+ 306              	.LBB14:
+ 912:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h **** }
+ 307              	 .loc 2 912 0
+ 308 0006 9B02     	 lsl r3,r3,#10
+ 309              	.LVL27:
+ 310              	.LBE14:
+ 311              	.LBE13:
+ 312              	.LBB17:
+ 313              	.LBB12:
+ 314              	 .loc 2 929 0
+ 315 0008 AC43     	 bic r4,r5
+ 316 000a 013D     	 sub r5,r5,#1
+ 317 000c 2C43     	 orr r4,r5
+ 318 000e 4461     	 str r4,[r0,#20]
+ 319              	.LVL28:
+ 320              	.LBE12:
+ 321              	.LBE17:
+ 322              	.LBB18:
+ 323              	.LBB15:
+ 911:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****                          ((uint32_t)combination_mode << USIC_CH_DXCR_CM_Pos);
+ 324              	 .loc 2 911 0
+ 325 0010 056A     	 ldr r5,[r0,#32]
+ 326 0012 084C     	 ldr r4,.L23
+ 327              	.LBE15:
+ 328              	.LBE18:
+ 200:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 329              	 .loc 1 200 0
+ 330 0014 0139     	 sub r1,r1,#1
+ 331              	.LVL29:
+ 332              	.LBB19:
+ 333              	.LBB16:
+ 911:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_usic.h ****                          ((uint32_t)combination_mode << USIC_CH_DXCR_CM_Pos);
+ 334              	 .loc 2 911 0
+ 335 0016 2C40     	 and r4,r5
+ 336 0018 2343     	 orr r3,r4
+ 337 001a 0362     	 str r3,[r0,#32]
+ 338              	.LBE16:
+ 339              	.LBE19:
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 340              	 .loc 1 195 0
+ 341 001c 4469     	 ldr r4,[r0,#20]
+ 199:../Libraries/XMCLib/src/xmc_usic.c ****                   (((pdiv) - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 342              	 .loc 1 199 0
+ 343 001e 531E     	 sub r3,r2,#1
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 344              	 .loc 1 195 0
+ 345 0020 221C     	 mov r2,r4
+ 346              	.LVL30:
+ 199:../Libraries/XMCLib/src/xmc_usic.c ****                   (((pdiv) - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 347              	 .loc 1 199 0
+ 348 0022 9B02     	 lsl r3,r3,#10
+ 349              	.LVL31:
+ 200:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 350              	 .loc 1 200 0
+ 351 0024 0904     	 lsl r1,r1,#16
+ 352 0026 1943     	 orr r1,r3
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 353              	 .loc 1 195 0
+ 354 0028 034B     	 ldr r3,.L23+4
+ 201:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 355              	 .loc 1 201 0
+ 356              	 
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 357              	 .loc 1 195 0
+ 358 002a 1A40     	 and r2,r3
+ 199:../Libraries/XMCLib/src/xmc_usic.c ****                   (((pdiv) - 1U) << USIC_CH_BRG_PDIV_Pos);
+ 359              	 .loc 1 199 0
+ 360 002c 1143     	 orr r1,r2
+ 195:../Libraries/XMCLib/src/xmc_usic.c ****                                    USIC_CH_BRG_PDIV_Msk |
+ 361              	 .loc 1 195 0
+ 362 002e 4161     	 str r1,[r0,#20]
+ 201:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 363              	 .loc 1 201 0
+ 364 0030 30BD     	 pop {r4,r5,pc}
+ 365              	.L24:
+ 366 0032 C046     	 .align 2
+ 367              	.L23:
+ 368 0034 FFF3FFFF 	 .word -3073
+ 369 0038 EF8000FC 	 .word -67075857
+ 370              	 .cfi_endproc
+ 371              	.LFE108:
+ 373              	 .section .text.XMC_USIC_CH_TXFIFO_Configure,"ax",%progbits
+ 374              	 .align 2
+ 375              	 .global XMC_USIC_CH_TXFIFO_Configure
+ 376              	 .code 16
+ 377              	 .thumb_func
+ 379              	XMC_USIC_CH_TXFIFO_Configure:
+ 380              	.LFB109:
+ 207:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 381              	 .loc 1 207 0
+ 382              	 .cfi_startproc
+ 383              	.LVL32:
+ 384 0000 70B5     	 push {r4,r5,r6,lr}
+ 385              	 .cfi_def_cfa_offset 16
+ 386              	 .cfi_offset 4,-16
+ 387              	 .cfi_offset 5,-12
+ 388              	 .cfi_offset 6,-8
+ 389              	 .cfi_offset 14,-4
+ 209:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 390              	 .loc 1 209 0
+ 391 0002 8425     	 mov r5,#132
+ 392 0004 6D00     	 lsl r5,r5,#1
+ 393 0006 4659     	 ldr r6,[r0,r5]
+ 394 0008 064C     	 ldr r4,.L26
+ 221:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 395              	 .loc 1 221 0
+ 396 000a 1206     	 lsl r2,r2,#24
+ 397              	.LVL33:
+ 209:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 398              	 .loc 1 209 0
+ 399 000c 3440     	 and r4,r6
+ 400 000e 4451     	 str r4,[r0,r5]
+ 216:../Libraries/XMCLib/src/xmc_usic.c ****                                                            USIC_CH_TBCTR_DPTR_Msk |
+ 401              	 .loc 1 216 0
+ 402 0010 4659     	 ldr r6,[r0,r5]
+ 403 0012 054C     	 ldr r4,.L26+4
+ 219:../Libraries/XMCLib/src/xmc_usic.c ****                    (data_pointer << USIC_CH_TBCTR_DPTR_Pos) |
+ 404              	 .loc 1 219 0
+ 405 0014 1B02     	 lsl r3,r3,#8
+ 406              	.LVL34:
+ 216:../Libraries/XMCLib/src/xmc_usic.c ****                                                            USIC_CH_TBCTR_DPTR_Msk |
+ 407              	 .loc 1 216 0
+ 408 0016 3440     	 and r4,r6
+ 409 0018 2143     	 orr r1,r4
+ 410              	.LVL35:
+ 411 001a 0A43     	 orr r2,r1
+ 218:../Libraries/XMCLib/src/xmc_usic.c ****                    (uint32_t)((limit << USIC_CH_TBCTR_LIMIT_Pos) |
+ 412              	 .loc 1 218 0
+ 413 001c 1343     	 orr r3,r2
+ 216:../Libraries/XMCLib/src/xmc_usic.c ****                                                            USIC_CH_TBCTR_DPTR_Msk |
+ 414              	 .loc 1 216 0
+ 415 001e 4351     	 str r3,[r0,r5]
+ 222:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 416              	 .loc 1 222 0
+ 417              	 
+ 418 0020 70BD     	 pop {r4,r5,r6,pc}
+ 419              	.L27:
+ 420 0022 C046     	 .align 2
+ 421              	.L26:
+ 422 0024 FFFFFFF8 	 .word -117440513
+ 423 0028 C0C0FFF8 	 .word -117456704
+ 424              	 .cfi_endproc
+ 425              	.LFE109:
+ 427              	 .section .text.XMC_USIC_CH_RXFIFO_Configure,"ax",%progbits
+ 428              	 .align 2
+ 429              	 .global XMC_USIC_CH_RXFIFO_Configure
+ 430              	 .code 16
+ 431              	 .thumb_func
+ 433              	XMC_USIC_CH_RXFIFO_Configure:
+ 434              	.LFB110:
+ 229:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 435              	 .loc 1 229 0
+ 436              	 .cfi_startproc
+ 437              	.LVL36:
+ 438 0000 70B5     	 push {r4,r5,r6,lr}
+ 439              	 .cfi_def_cfa_offset 16
+ 440              	 .cfi_offset 4,-16
+ 441              	 .cfi_offset 5,-12
+ 442              	 .cfi_offset 6,-8
+ 443              	 .cfi_offset 14,-4
+ 231:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 444              	 .loc 1 231 0
+ 445 0002 8626     	 mov r6,#134
+ 446 0004 7600     	 lsl r6,r6,#1
+ 447 0006 8559     	 ldr r5,[r0,r6]
+ 448 0008 074C     	 ldr r4,.L29
+ 241:../Libraries/XMCLib/src/xmc_usic.c ****                    (uint32_t)USIC_CH_RBCTR_LOF_Msk));
+ 449              	 .loc 1 241 0
+ 450 000a 1206     	 lsl r2,r2,#24
+ 451              	.LVL37:
+ 231:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 452              	 .loc 1 231 0
+ 453 000c 2C40     	 and r4,r5
+ 454 000e 8451     	 str r4,[r0,r6]
+ 236:../Libraries/XMCLib/src/xmc_usic.c ****                                                             USIC_CH_RBCTR_DPTR_Msk |
+ 455              	 .loc 1 236 0
+ 456 0010 8459     	 ldr r4,[r0,r6]
+ 457 0012 064D     	 ldr r5,.L29+4
+ 239:../Libraries/XMCLib/src/xmc_usic.c ****                    (data_pointer << USIC_CH_RBCTR_DPTR_Pos) |
+ 458              	 .loc 1 239 0
+ 459 0014 1B02     	 lsl r3,r3,#8
+ 460              	.LVL38:
+ 236:../Libraries/XMCLib/src/xmc_usic.c ****                                                             USIC_CH_RBCTR_DPTR_Msk |
+ 461              	 .loc 1 236 0
+ 462 0016 2540     	 and r5,r4
+ 463 0018 8024     	 mov r4,#128
+ 464 001a 6405     	 lsl r4,r4,#21
+ 465 001c 2C43     	 orr r4,r5
+ 466 001e 2143     	 orr r1,r4
+ 467              	.LVL39:
+ 468 0020 0A43     	 orr r2,r1
+ 469 0022 1343     	 orr r3,r2
+ 470 0024 8351     	 str r3,[r0,r6]
+ 243:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 471              	 .loc 1 243 0
+ 472              	 
+ 473 0026 70BD     	 pop {r4,r5,r6,pc}
+ 474              	.L30:
+ 475              	 .align 2
+ 476              	.L29:
+ 477 0028 FFFFFFF8 	 .word -117440513
+ 478 002c C0C0FFEF 	 .word -268451648
+ 479              	 .cfi_endproc
+ 480              	.LFE110:
+ 482              	 .section .text.XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit,"ax",%progbits
+ 483              	 .align 2
+ 484              	 .global XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit
+ 485              	 .code 16
+ 486              	 .thumb_func
+ 488              	XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit:
+ 489              	.LFB111:
+ 248:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 490              	 .loc 1 248 0
+ 491              	 .cfi_startproc
+ 492              	.LVL40:
+ 493 0000 30B5     	 push {r4,r5,lr}
+ 494              	 .cfi_def_cfa_offset 12
+ 495              	 .cfi_offset 4,-12
+ 496              	 .cfi_offset 5,-8
+ 497              	 .cfi_offset 14,-4
+ 250:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 498              	 .loc 1 250 0
+ 499 0002 8424     	 mov r4,#132
+ 256:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_TBCTR_SIZE_Pos));
+ 500              	 .loc 1 256 0
+ 501 0004 1202     	 lsl r2,r2,#8
+ 502              	.LVL41:
+ 257:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 503              	 .loc 1 257 0
+ 504 0006 0906     	 lsl r1,r1,#24
+ 505              	.LVL42:
+ 506 0008 1143     	 orr r1,r2
+ 255:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_TBCTR_LIMIT_Pos) |
+ 507              	 .loc 1 255 0
+ 508 000a 0A1C     	 mov r2,r1
+ 250:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 509              	 .loc 1 250 0
+ 510 000c 6400     	 lsl r4,r4,#1
+ 511 000e 0559     	 ldr r5,[r0,r4]
+ 512 0010 044B     	 ldr r3,.L32
+ 258:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 513              	 .loc 1 258 0
+ 514              	 
+ 250:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 515              	 .loc 1 250 0
+ 516 0012 2B40     	 and r3,r5
+ 517 0014 0351     	 str r3,[r0,r4]
+ 255:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_TBCTR_LIMIT_Pos) |
+ 518              	 .loc 1 255 0
+ 519 0016 0559     	 ldr r5,[r0,r4]
+ 520 0018 034B     	 ldr r3,.L32+4
+ 521 001a 2B40     	 and r3,r5
+ 522 001c 1A43     	 orr r2,r3
+ 523 001e 0251     	 str r2,[r0,r4]
+ 258:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 524              	 .loc 1 258 0
+ 525 0020 30BD     	 pop {r4,r5,pc}
+ 526              	.L33:
+ 527 0022 C046     	 .align 2
+ 528              	.L32:
+ 529 0024 FFFFFFF8 	 .word -117440513
+ 530 0028 FFC0FFFF 	 .word -16129
+ 531              	 .cfi_endproc
+ 532              	.LFE111:
+ 534              	 .section .text.XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit,"ax",%progbits
+ 535              	 .align 2
+ 536              	 .global XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit
+ 537              	 .code 16
+ 538              	 .thumb_func
+ 540              	XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit:
+ 541              	.LFB112:
+ 263:../Libraries/XMCLib/src/xmc_usic.c ****   /* Disable FIFO */
+ 542              	 .loc 1 263 0
+ 543              	 .cfi_startproc
+ 544              	.LVL43:
+ 545 0000 30B5     	 push {r4,r5,lr}
+ 546              	 .cfi_def_cfa_offset 12
+ 547              	 .cfi_offset 4,-12
+ 548              	 .cfi_offset 5,-8
+ 549              	 .cfi_offset 14,-4
+ 265:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 550              	 .loc 1 265 0
+ 551 0002 8624     	 mov r4,#134
+ 268:../Libraries/XMCLib/src/xmc_usic.c ****                    ((uint32_t)size << USIC_CH_RBCTR_SIZE_Pos));
+ 552              	 .loc 1 268 0
+ 553 0004 1202     	 lsl r2,r2,#8
+ 554              	.LVL44:
+ 269:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 555              	 .loc 1 269 0
+ 556 0006 0906     	 lsl r1,r1,#24
+ 557              	.LVL45:
+ 558 0008 1143     	 orr r1,r2
+ 267:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_RBCTR_LIMIT_Pos) |
+ 559              	 .loc 1 267 0
+ 560 000a 0A1C     	 mov r2,r1
+ 265:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 561              	 .loc 1 265 0
+ 562 000c 6400     	 lsl r4,r4,#1
+ 563 000e 0559     	 ldr r5,[r0,r4]
+ 564 0010 044B     	 ldr r3,.L35
+ 270:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 565              	 .loc 1 270 0
+ 566              	 
+ 265:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 567              	 .loc 1 265 0
+ 568 0012 2B40     	 and r3,r5
+ 569 0014 0351     	 str r3,[r0,r4]
+ 267:../Libraries/XMCLib/src/xmc_usic.c ****                    (limit << USIC_CH_RBCTR_LIMIT_Pos) |
+ 570              	 .loc 1 267 0
+ 571 0016 0559     	 ldr r5,[r0,r4]
+ 572 0018 034B     	 ldr r3,.L35+4
+ 573 001a 2B40     	 and r3,r5
+ 574 001c 1A43     	 orr r2,r3
+ 575 001e 0251     	 str r2,[r0,r4]
+ 270:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 576              	 .loc 1 270 0
+ 577 0020 30BD     	 pop {r4,r5,pc}
+ 578              	.L36:
+ 579 0022 C046     	 .align 2
+ 580              	.L35:
+ 581 0024 FFFFFFF8 	 .word -117440513
+ 582 0028 FFC0FFFF 	 .word -16129
+ 583              	 .cfi_endproc
+ 584              	.LFE112:
+ 586              	 .section .text.XMC_USIC_CH_SetInterruptNodePointer,"ax",%progbits
+ 587              	 .align 2
+ 588              	 .global XMC_USIC_CH_SetInterruptNodePointer
+ 589              	 .code 16
+ 590              	 .thumb_func
+ 592              	XMC_USIC_CH_SetInterruptNodePointer:
+ 593              	.LFB113:
+ 275:../Libraries/XMCLib/src/xmc_usic.c ****   channel->INPR = (uint32_t)((channel->INPR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrupt_
+ 594              	 .loc 1 275 0
+ 595              	 .cfi_startproc
+ 596              	.LVL46:
+ 597 0000 10B5     	 push {r4,lr}
+ 598              	 .cfi_def_cfa_offset 8
+ 599              	 .cfi_offset 4,-8
+ 600              	 .cfi_offset 14,-4
+ 276:../Libraries/XMCLib/src/xmc_usic.c ****                   (service_request << (uint32_t)interrupt_node));
+ 601              	 .loc 1 276 0
+ 602 0002 0724     	 mov r4,#7
+ 603 0004 8C40     	 lsl r4,r4,r1
+ 277:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 604              	 .loc 1 277 0
+ 605 0006 8A40     	 lsl r2,r2,r1
+ 606              	.LVL47:
+ 276:../Libraries/XMCLib/src/xmc_usic.c ****                   (service_request << (uint32_t)interrupt_node));
+ 607              	 .loc 1 276 0
+ 608 0008 8369     	 ldr r3,[r0,#24]
+ 278:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 609              	 .loc 1 278 0
+ 610              	 
+ 276:../Libraries/XMCLib/src/xmc_usic.c ****                   (service_request << (uint32_t)interrupt_node));
+ 611              	 .loc 1 276 0
+ 612 000a A343     	 bic r3,r4
+ 613 000c 1343     	 orr r3,r2
+ 614 000e 8361     	 str r3,[r0,#24]
+ 278:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 615              	 .loc 1 278 0
+ 616 0010 10BD     	 pop {r4,pc}
+ 617              	 .cfi_endproc
+ 618              	.LFE113:
+ 620 0012 C046     	 .section .text.XMC_USIC_CH_TXFIFO_SetInterruptNodePointer,"ax",%progbits
+ 621              	 .align 2
+ 622              	 .global XMC_USIC_CH_TXFIFO_SetInterruptNodePointer
+ 623              	 .code 16
+ 624              	 .thumb_func
+ 626              	XMC_USIC_CH_TXFIFO_SetInterruptNodePointer:
+ 627              	.LFB114:
+ 283:../Libraries/XMCLib/src/xmc_usic.c ****   channel->TBCTR = (uint32_t)((channel->TBCTR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrup
+ 628              	 .loc 1 283 0
+ 629              	 .cfi_startproc
+ 630              	.LVL48:
+ 631 0000 30B5     	 push {r4,r5,lr}
+ 632              	 .cfi_def_cfa_offset 12
+ 633              	 .cfi_offset 4,-12
+ 634              	 .cfi_offset 5,-8
+ 635              	 .cfi_offset 14,-4
+ 284:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 636              	 .loc 1 284 0
+ 637 0002 0724     	 mov r4,#7
+ 638 0004 8425     	 mov r5,#132
+ 639 0006 8C40     	 lsl r4,r4,r1
+ 285:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 640              	 .loc 1 285 0
+ 641 0008 8A40     	 lsl r2,r2,r1
+ 642              	.LVL49:
+ 284:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 643              	 .loc 1 284 0
+ 644 000a 6D00     	 lsl r5,r5,#1
+ 645 000c 4359     	 ldr r3,[r0,r5]
+ 286:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 646              	 .loc 1 286 0
+ 647              	 
+ 284:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 648              	 .loc 1 284 0
+ 649 000e A343     	 bic r3,r4
+ 650 0010 1343     	 orr r3,r2
+ 651 0012 4351     	 str r3,[r0,r5]
+ 286:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 652              	 .loc 1 286 0
+ 653 0014 30BD     	 pop {r4,r5,pc}
+ 654              	 .cfi_endproc
+ 655              	.LFE114:
+ 657 0016 C046     	 .section .text.XMC_USIC_CH_RXFIFO_SetInterruptNodePointer,"ax",%progbits
+ 658              	 .align 2
+ 659              	 .global XMC_USIC_CH_RXFIFO_SetInterruptNodePointer
+ 660              	 .code 16
+ 661              	 .thumb_func
+ 663              	XMC_USIC_CH_RXFIFO_SetInterruptNodePointer:
+ 664              	.LFB115:
+ 291:../Libraries/XMCLib/src/xmc_usic.c ****   channel->RBCTR = (uint32_t)((channel->RBCTR & (~(uint32_t)(USIC_CH_INPR_Msk << (uint32_t)interrup
+ 665              	 .loc 1 291 0
+ 666              	 .cfi_startproc
+ 667              	.LVL50:
+ 668 0000 30B5     	 push {r4,r5,lr}
+ 669              	 .cfi_def_cfa_offset 12
+ 670              	 .cfi_offset 4,-12
+ 671              	 .cfi_offset 5,-8
+ 672              	 .cfi_offset 14,-4
+ 292:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 673              	 .loc 1 292 0
+ 674 0002 0724     	 mov r4,#7
+ 675 0004 8625     	 mov r5,#134
+ 676 0006 8C40     	 lsl r4,r4,r1
+ 293:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 677              	 .loc 1 293 0
+ 678 0008 8A40     	 lsl r2,r2,r1
+ 679              	.LVL51:
+ 292:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 680              	 .loc 1 292 0
+ 681 000a 6D00     	 lsl r5,r5,#1
+ 682 000c 4359     	 ldr r3,[r0,r5]
+ 294:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 683              	 .loc 1 294 0
+ 684              	 
+ 292:../Libraries/XMCLib/src/xmc_usic.c ****                    (service_request << (uint32_t)interrupt_node));
+ 685              	 .loc 1 292 0
+ 686 000e A343     	 bic r3,r4
+ 687 0010 1343     	 orr r3,r2
+ 688 0012 4351     	 str r3,[r0,r5]
+ 294:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 689              	 .loc 1 294 0
+ 690 0014 30BD     	 pop {r4,r5,pc}
+ 691              	 .cfi_endproc
+ 692              	.LFE115:
+ 694 0016 C046     	 .section .text.XMC_USIC_Enable,"ax",%progbits
+ 695              	 .align 2
+ 696              	 .global XMC_USIC_Enable
+ 697              	 .code 16
+ 698              	 .thumb_func
+ 700              	XMC_USIC_Enable:
+ 701              	.LFB116:
+ 297:../Libraries/XMCLib/src/xmc_usic.c ****   if (usic == USIC0)
+ 702              	 .loc 1 297 0
+ 703              	 .cfi_startproc
+ 704              	.LVL52:
+ 705 0000 08B5     	 push {r3,lr}
+ 706              	 .cfi_def_cfa_offset 8
+ 707              	 .cfi_offset 3,-8
+ 708              	 .cfi_offset 14,-4
+ 298:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 709              	 .loc 1 298 0
+ 710 0002 044B     	 ldr r3,.L43
+ 711 0004 9842     	 cmp r0,r3
+ 712 0006 00D0     	 beq .L42
+ 713              	.LVL53:
+ 714              	.L40:
+ 302:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 303:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)
+ 304:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC0);
+ 305:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 306:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 307:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC1)  
+ 308:../Libraries/XMCLib/src/xmc_usic.c ****   else if (usic == USIC1)
+ 309:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 310:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED)
+ 311:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC1);
+ 312:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 313:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)
+ 314:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC1);
+ 315:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 316:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 317:../Libraries/XMCLib/src/xmc_usic.c **** #endif  
+ 318:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC2)  
+ 319:../Libraries/XMCLib/src/xmc_usic.c ****   else if (usic == USIC2)
+ 320:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 321:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED) 
+ 322:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC2);
+ 323:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 324:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)
+ 325:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC2);
+ 326:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 327:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 328:../Libraries/XMCLib/src/xmc_usic.c **** #endif  
+ 329:../Libraries/XMCLib/src/xmc_usic.c ****   else
+ 330:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 331:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_ASSERT("USIC module not available", 0/*Always*/);
+ 332:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 333:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 715              	 .loc 1 333 0
+ 716              	 
+ 717 0008 08BD     	 pop {r3,pc}
+ 718              	.LVL54:
+ 719              	.L42:
+ 301:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 720              	 .loc 1 301 0
+ 721 000a 0820     	 mov r0,#8
+ 722              	.LVL55:
+ 723 000c FFF7FEFF 	 bl XMC_SCU_CLOCK_UngatePeripheralClock
+ 724              	.LVL56:
+ 725 0010 FAE7     	 b .L40
+ 726              	.L44:
+ 727 0012 C046     	 .align 2
+ 728              	.L43:
+ 729 0014 08000048 	 .word 1207959560
+ 730              	 .cfi_endproc
+ 731              	.LFE116:
+ 733              	 .section .text.XMC_USIC_Disable,"ax",%progbits
+ 734              	 .align 2
+ 735              	 .global XMC_USIC_Disable
+ 736              	 .code 16
+ 737              	 .thumb_func
+ 739              	XMC_USIC_Disable:
+ 740              	.LFB117:
+ 334:../Libraries/XMCLib/src/xmc_usic.c **** 
+ 335:../Libraries/XMCLib/src/xmc_usic.c **** void XMC_USIC_Disable(XMC_USIC_t *const usic)
+ 336:../Libraries/XMCLib/src/xmc_usic.c **** {
+ 741              	 .loc 1 336 0
+ 742              	 .cfi_startproc
+ 743              	.LVL57:
+ 744 0000 08B5     	 push {r3,lr}
+ 745              	 .cfi_def_cfa_offset 8
+ 746              	 .cfi_offset 3,-8
+ 747              	 .cfi_offset 14,-4
+ 337:../Libraries/XMCLib/src/xmc_usic.c ****   if (usic == (XMC_USIC_t *)USIC0)
+ 748              	 .loc 1 337 0
+ 749 0002 044B     	 ldr r3,.L48
+ 750 0004 9842     	 cmp r0,r3
+ 751 0006 00D0     	 beq .L47
+ 752              	.LVL58:
+ 753              	.L45:
+ 338:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 339:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)  
+ 340:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC0);
+ 341:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 342:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED) 
+ 343:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC0);
+ 344:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 345:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 346:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC1)  
+ 347:../Libraries/XMCLib/src/xmc_usic.c ****   else if (usic == (XMC_USIC_t *)USIC1)
+ 348:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 349:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)  
+ 350:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC1);
+ 351:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 352:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED) 
+ 353:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC1);
+ 354:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 355:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 356:../Libraries/XMCLib/src/xmc_usic.c **** #endif  
+ 357:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(USIC2)  
+ 358:../Libraries/XMCLib/src/xmc_usic.c ****   else if (usic == (XMC_USIC_t *)USIC2)
+ 359:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 360:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(PERIPHERAL_RESET_SUPPORTED)  
+ 361:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USIC2);
+ 362:../Libraries/XMCLib/src/xmc_usic.c **** #endif	
+ 363:../Libraries/XMCLib/src/xmc_usic.c **** #if defined(CLOCK_GATING_SUPPORTED) 
+ 364:../Libraries/XMCLib/src/xmc_usic.c ****     XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_USIC2);
+ 365:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 366:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 367:../Libraries/XMCLib/src/xmc_usic.c **** #endif  
+ 368:../Libraries/XMCLib/src/xmc_usic.c ****   else
+ 369:../Libraries/XMCLib/src/xmc_usic.c ****   {
+ 370:../Libraries/XMCLib/src/xmc_usic.c **** 	  XMC_ASSERT("USIC module not available", 0/*Always*/);
+ 371:../Libraries/XMCLib/src/xmc_usic.c ****   }
+ 372:../Libraries/XMCLib/src/xmc_usic.c ****   
+ 373:../Libraries/XMCLib/src/xmc_usic.c **** }
+ 754              	 .loc 1 373 0
+ 755              	 
+ 756 0008 08BD     	 pop {r3,pc}
+ 757              	.LVL59:
+ 758              	.L47:
+ 343:../Libraries/XMCLib/src/xmc_usic.c **** #endif
+ 759              	 .loc 1 343 0
+ 760 000a 0820     	 mov r0,#8
+ 761              	.LVL60:
+ 762 000c FFF7FEFF 	 bl XMC_SCU_CLOCK_GatePeripheralClock
+ 763              	.LVL61:
+ 764 0010 FAE7     	 b .L45
+ 765              	.L49:
+ 766 0012 C046     	 .align 2
+ 767              	.L48:
+ 768 0014 08000048 	 .word 1207959560
+ 769              	 .cfi_endproc
+ 770              	.LFE117:
+ 772              	 .text
+ 773              	.Letext0:
+ 774              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 775              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 776              	 .file 5 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 777              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_scu.h"
+ 778              	 .file 7 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_scu.h"
+ 779              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc_usic.c
+    {standard input}:18     .text.XMC_USIC_CH_Enable:00000000 $t
+    {standard input}:23     .text.XMC_USIC_CH_Enable:00000000 XMC_USIC_CH_Enable
+    {standard input}:84     .text.XMC_USIC_CH_Enable:00000030 $d
+    {standard input}:91     .text.XMC_USIC_CH_Disable:00000000 $t
+    {standard input}:96     .text.XMC_USIC_CH_Disable:00000000 XMC_USIC_CH_Disable
+    {standard input}:118    .text.XMC_USIC_CH_SetBaudrate:00000000 $t
+    {standard input}:123    .text.XMC_USIC_CH_SetBaudrate:00000000 XMC_USIC_CH_SetBaudrate
+    {standard input}:276    .text.XMC_USIC_CH_SetBaudrate:000000a4 $d
+    {standard input}:282    .text.XMC_USIC_CH_ConfigExternalInputSignalToBRG:00000000 $t
+    {standard input}:287    .text.XMC_USIC_CH_ConfigExternalInputSignalToBRG:00000000 XMC_USIC_CH_ConfigExternalInputSignalToBRG
+    {standard input}:368    .text.XMC_USIC_CH_ConfigExternalInputSignalToBRG:00000034 $d
+    {standard input}:374    .text.XMC_USIC_CH_TXFIFO_Configure:00000000 $t
+    {standard input}:379    .text.XMC_USIC_CH_TXFIFO_Configure:00000000 XMC_USIC_CH_TXFIFO_Configure
+    {standard input}:422    .text.XMC_USIC_CH_TXFIFO_Configure:00000024 $d
+    {standard input}:428    .text.XMC_USIC_CH_RXFIFO_Configure:00000000 $t
+    {standard input}:433    .text.XMC_USIC_CH_RXFIFO_Configure:00000000 XMC_USIC_CH_RXFIFO_Configure
+    {standard input}:477    .text.XMC_USIC_CH_RXFIFO_Configure:00000028 $d
+    {standard input}:483    .text.XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit:00000000 $t
+    {standard input}:488    .text.XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit:00000000 XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit
+    {standard input}:529    .text.XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit:00000024 $d
+    {standard input}:535    .text.XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit:00000000 $t
+    {standard input}:540    .text.XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit:00000000 XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit
+    {standard input}:581    .text.XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit:00000024 $d
+    {standard input}:587    .text.XMC_USIC_CH_SetInterruptNodePointer:00000000 $t
+    {standard input}:592    .text.XMC_USIC_CH_SetInterruptNodePointer:00000000 XMC_USIC_CH_SetInterruptNodePointer
+    {standard input}:621    .text.XMC_USIC_CH_TXFIFO_SetInterruptNodePointer:00000000 $t
+    {standard input}:626    .text.XMC_USIC_CH_TXFIFO_SetInterruptNodePointer:00000000 XMC_USIC_CH_TXFIFO_SetInterruptNodePointer
+    {standard input}:658    .text.XMC_USIC_CH_RXFIFO_SetInterruptNodePointer:00000000 $t
+    {standard input}:663    .text.XMC_USIC_CH_RXFIFO_SetInterruptNodePointer:00000000 XMC_USIC_CH_RXFIFO_SetInterruptNodePointer
+    {standard input}:695    .text.XMC_USIC_Enable:00000000 $t
+    {standard input}:700    .text.XMC_USIC_Enable:00000000 XMC_USIC_Enable
+    {standard input}:729    .text.XMC_USIC_Enable:00000014 $d
+    {standard input}:734    .text.XMC_USIC_Disable:00000000 $t
+    {standard input}:739    .text.XMC_USIC_Disable:00000000 XMC_USIC_Disable
+    {standard input}:768    .text.XMC_USIC_Disable:00000014 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_SCU_CLOCK_UngatePeripheralClock
+__aeabi_uidiv
+XMC_SCU_CLOCK_GetPeripheralClockFrequency
+XMC_SCU_CLOCK_GatePeripheralClock

@@ -1,0 +1,1056 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_pwmsvm.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .ram_code,"ax",%progbits
+  18              	 .align 2
+  19              	 .global PWMSVM01_Update
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	PWMSVM01_Update:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c"
+   1:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /**
+   2:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @file pmsm_foc_pwmsvm.c
+   3:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @date 2015-12-15
+   4:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+   5:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @cond
+   6:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+   9:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * All rights reserved.
+  11:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  12:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * following conditions are met:
+  14:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  15:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   disclaimer.
+  17:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  18:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  21:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  24:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  32:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  36:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @file pmsm_foc_pwmsvm.c
+  37:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @date 15 Dec, 2015
+  38:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  40:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  42:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  46:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * History
+  47:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  48:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * 15 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *      Initial version
+  50:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * @endcond
+  51:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  *
+  52:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  */
+  53:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  54:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * HEADER FILES
+  56:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  58:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #include <XMC1300.h>              /* SFR declarations of the selected device */
+  59:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #include "../ControlModules/pmsm_foc_functions.h"
+  60:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  61:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  62:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /**************************************************************************************************
+  63:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * MACROS
+  64:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  **************************************************************************************************
+  65:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define DEGREE_60       (10922U)                   /* 60Â° angle (0 ~ 2^16 represent electrical a
+  66:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define RATIO_T0_111    (2U)                       /* = 2 for standard SVM. */
+  67:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define PERIOD_OF_PWM   ((uint16_t)PERIOD_REG + 1U) /* Period of a CCU8 PWM. */
+  68:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define RATIO_T0_111    (2U)                       /* = 2 for standard SVM.*/
+  69:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define CCU8_PERIOD_2ND  (PERIOD_REG - TZ_PZVX2-1)   // Second CCU83 period, for ADC trigger
+  70:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #define SPEED_SS_THRESHOLD ((SPEED_HIGH_LIMIT * 3U) >> 2U)
+  71:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /**************************************************************************************************
+  72:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * GLOBAL DATA
+  73:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** ***************************************************************************************************
+  74:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** SVMType SVM;		     						 /* SVM information, such as sector 0 ~ 5 (A ~ F) in SVM space vector hexa
+  75:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** extern const uint16_t Sinus60_tab[];	/* Sine LUT used for SVM calculations, array size 256 or 1024.
+  76:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** extern ADCType ADC;
+  77:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** extern MotorControlType Motor;
+  78:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /**************************************************************************************************
+  79:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  * API IMPLEMENTATION
+  80:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  **************************************************************************************************
+  81:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  82:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+  83:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /* API to update SVPWM CCU8 duty cycles, use Pseudo Zero Vectors PWM) */
+  84:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** RAM_ATTRIBUTE void PWMSVM01_Update(uint16_t Amplitude, uint16_t Angle)
+  85:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** {
+  86:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* SVM time T1, T2. */
+  87:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T1;
+  88:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T2;
+  89:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  90:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Time (T1+T2+2Tz) */
+  91:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T1T2n2Tz;
+  92:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  93:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Time of zero vector [000], i.e.: first portion of T0, and Ts - T0_111. */
+  94:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0_000;
+  95:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t Period_T0_111;
+  96:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  97:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t AngleTemp;
+  98:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t SectorAngle;
+  99:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 100:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* 4 segment SVM PWM variables */
+ 101:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T1nT2;
+ 102:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t HalfT0;
+ 103:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 104:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SVM.PreviousSectorNo = SVM.CurrentSectorNo;           /* Record sector information of last PWM cy
+ 105:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 106:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Angle: 0 ~ 2^16 represent electrical angle 0° ~ 360°. Or = (uint16_t)(Angle >> 8) * 6; */
+ 107:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   AngleTemp = (Angle >> ANGLETEMP_SHIFT) * 6U;
+ 108:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SectorAngle = AngleTemp & SECTOR_ANGLE_AND;         /* Relative angle θrel in each sector. */
+ 109:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SVM.CurrentSectorNo = AngleTemp >> SECTOR_NO_SHIFT; /* Update new SVM sector number. Or = (AngleT
+ 110:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 111:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Calculate T1 / T2 by LUT. */
+ 112:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T1 = (((Amplitude * Sinus60_tab[MAX_LUT_INDEX - SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+ 113:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+ 114:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 115:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   if ((Motor.Speed < SPEED_SS_THRESHOLD) || (T1 < TZ_PZV ) || (T2 < TZ_PZV ))
+ 116:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 117:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     SVM.SVM_Flag = SVM_USE_PZV;
+ 118:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     CCU80_CC83->PRS = TZ_PZVX2; /* First CCU83 period is a constant, e.g.: 2Tz. */
+ 119:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     CCU80_CC83->CR1S = TRIGGER_POINT; /* For ADCTz1 trigger. */
+ 120:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     CCU80_CC83->CR2S = TZ_PZV + TRIGGER_POINT; /* For ADCTz2 trigger. */
+ 121:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 122:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T1 += TZ_PZV; /* Add Tz, the time of Pseudo Zero Vectors. */
+ 123:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T2 += TZ_PZV;
+ 124:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 125:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T1T2n2Tz = T1 + T2 + TZ_PZVX2;
+ 126:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     if (T1T2n2Tz > PERIOD_REG)
+ 127:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     {
+ 128:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       T1T2n2Tz = PERIOD_REG; /* Make sure below T0/2 >= 0 and Ts-T0/2 <= Ts. */
+ 129:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     }
+ 130:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 131:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T0_000 = (PERIOD_REG - T1T2n2Tz) >> 1U; /* T0_000 = T0/2. */
+ 132:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     Period_T0_111 = (PERIOD_REG + T1T2n2Tz) >> 1U; /* Temp variable for Ts-T0/2. */
+ 133:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 134:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     /* To use 6-segment (with two Tz at beginning) switching sequences of SVM with Pseudo Zero Vect
+ 135:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     switch (SVM.CurrentSectorNo)
+ 136:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     {
+ 137:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 0: /* Sector A */
+ 138:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0;
+ 139:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = TZ_PZVX2 + T0_000;
+ 140:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = TZ_PZV;
+ 141:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = Period_T0_111 - T2;
+ 142:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = TZ_PZVX2;
+ 143:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = Period_T0_111;
+ 144:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 145:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 146:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T1 >> 1);    // For ADC 3 trigger.
+ 147:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       //ADC.ADC4Trig_Point = T0_000 + T1 + (T2 >> 1); // For ADC 4 trigger.
+ 148:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T2 >> 1); // For ADC 4 trigger.
+ 149:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 150:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 151:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 1: /*Sector B */
+ 152:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = TZ_PZV;
+ 153:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = Period_T0_111 - T1;
+ 154:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0;
+ 155:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = TZ_PZVX2 + T0_000;
+ 156:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = TZ_PZVX2;
+ 157:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = Period_T0_111;
+ 158:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 159:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 160:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T2 >> 1);
+ 161:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         //ADC.ADC4Trig_Point = T0_000 + T2 + (T1 >> 1);
+ 162:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T1 >> 1); // For ADC 4 trigger.
+ 163:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 164:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 165:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 2: /* Sector C */
+ 166:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = TZ_PZVX2;
+ 167:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = Period_T0_111;
+ 168:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0;
+ 169:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = TZ_PZVX2 + T0_000;
+ 170:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = TZ_PZV;
+ 171:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = Period_T0_111 - T2;
+ 172:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 173:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 174:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T1 >> 1);
+ 175:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         //ADC.ADC4Trig_Point = T0_000 + T1 + (T2 >> 1);
+ 176:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T2 >> 1); // For ADC 4 trigger.
+ 177:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 178:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 179:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 3: /* Sector D */
+ 180:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = TZ_PZVX2;
+ 181:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = Period_T0_111;
+ 182:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = TZ_PZV;
+ 183:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = Period_T0_111 - T1;
+ 184:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0;
+ 185:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = TZ_PZVX2 + T0_000;
+ 186:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 187:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 188:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T2 >> 1);
+ 189:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //        ADC.ADC4Trig_Point = T0_000 + T2 + (T1 >> 1);
+ 190:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T1 >> 1); // For ADC 4 trigger.
+ 191:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 192:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 193:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 194:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 4: /* Sector E */
+ 195:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = TZ_PZV;
+ 196:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = Period_T0_111 - T2;
+ 197:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = TZ_PZVX2;
+ 198:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = Period_T0_111;
+ 199:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0;
+ 200:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = TZ_PZVX2 + T0_000;
+ 201:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 202:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 203:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T1 >> 1);
+ 204:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         //ADC.ADC4Trig_Point = T0_000 + T1 + (T2 >> 1);
+ 205:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T2 >> 1); // For ADC 4 trigger.
+ 206:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 207:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 208:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       default: /* Process for all other cases, Sector F = 5. */
+ 209:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0;
+ 210:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = TZ_PZVX2 + T0_000;
+ 211:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = TZ_PZVX2;
+ 212:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = Period_T0_111;
+ 213:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = TZ_PZV;
+ 214:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = Period_T0_111 - T1;
+ 215:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 216:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         /* To trigger ADC at centre of active segments T1 and T2. */
+ 217:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC3Trig_Point = T0_000 + (T2 >> 1);
+ 218:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         //ADC.ADC4Trig_Point = T0_000 + T2 + (T1 >> 1);
+ 219:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         ADC.ADC4Trig_Point = CCU8_PERIOD_2ND - (T0_000) - (T1 >> 1); // For ADC 4 trigger.
+ 220:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 221:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     }
+ 222:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 223:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   else
+ 224:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 225:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     SVM.SVM_Flag = SVM_USE_STANDARD;
+ 226:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     CCU80_CC83->PRS = PERIOD_REG;
+ 227:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 228:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T1nT2 = T1 + T2; /* Temp variable for (T1+T2) <= PERIOD_REG. */
+ 229:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     if (T1nT2 > PERIOD_REG)
+ 230:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     {
+ 231:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       T1nT2 = PERIOD_REG; /* Make sure below T0/2 >= 0. */
+ 232:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     }
+ 233:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 234:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     HalfT0 = (PERIOD_REG - T1nT2) >> 1U;
+ 235:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 236:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     /* Standard 4-segment PWM: */
+ 237:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     switch (SVM.CurrentSectorNo)
+ 238:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     {
+ 239:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 0: /* Sector A */
+ 240:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 241:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) HalfT0;
+ 242:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 243:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 244:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) HalfT0 + T1;
+ 245:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 246:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 247:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 248:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 249:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T1 >> 1);      // For ADC trigger at centre of active segments
+ 250:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T1 + (T2 >> 1);
+ 251:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 252:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 1: /* Sector B */
+ 253:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 254:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) HalfT0 + T2;
+ 255:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 256:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 257:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) HalfT0;
+ 258:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 259:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 260:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 261:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 262:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T2 >> 1);      // For ADC trigger at centre of active segments
+ 263:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T2 + (T1 >> 1);
+ 264:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 265:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 266:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 2: /* Sector C */
+ 267:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 268:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 269:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 270:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 271:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) HalfT0;
+ 272:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 273:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 274:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) HalfT0 + T1;
+ 275:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 276:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T1 >> 1);      // For ADC trigger at centre of active segments
+ 277:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T1 + (T2 >> 1);
+ 278:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 279:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 280:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 3: /* Sector D */
+ 281:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 282:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 283:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 284:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 285:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) HalfT0 + T2;
+ 286:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 287:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 288:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) HalfT0;
+ 289:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 290:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T2 >> 1);      // For ADC trigger at centre of active segments
+ 291:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T2 + (T1 >> 1);
+ 292:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 293:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 294:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 4: /* Sector E */
+ 295:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 296:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) HalfT0 + T1;
+ 297:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 298:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 299:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 300:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 301:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 302:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) HalfT0;
+ 303:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 304:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T1 >> 1);      // For ADC trigger at centre of active segments
+ 305:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T1 + (T2 >> 1);
+ 306:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 307:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 308:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       default: /* Process for all other cases, Sector F = 5. */
+ 309:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = 0U;
+ 310:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) HalfT0;
+ 311:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 312:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = 0U;
+ 313:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + T1nT2) >> 1U;
+ 314:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 315:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = 0U;
+ 316:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) HalfT0 + T2;
+ 317:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 318:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR1S = HalfT0 + (T2 >> 1);      // For ADC trigger at centre of active segments
+ 319:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU80_CC83->CR2S = HalfT0 + T2 + (T1 >> 1);
+ 320:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 321:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 322:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     } /* End of switch (SVM.CurrentSectorNo), standard 4-segment symmetric PWM. */
+ 323:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 324:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 325:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Enable shadow transfer for slice 0,1,2 for CCU80 Kernel. */
+ 326:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   CCU8_MODULE->GCSS |= (uint32_t)(XMC_CCU8_SHADOW_TRANSFER_SLICE_0|XMC_CCU8_SHADOW_TRANSFER_SLICE_1
+ 327:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****  }
+ 328:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #else
+ 329:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** /* API to update SVPWM CCU8 duty cycles, use standard SVM (7-segment symmetric PWM) */
+ 330:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** RAM_ATTRIBUTE void PWMSVM01_Update(uint16_t Amplitude, uint16_t Angle)
+ 331:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** {
+  26              	 .loc 1 331 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+ 332:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 333:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* SVM time T1, T2. */
+ 334:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T1;
+ 335:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T2;
+ 336:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T1nT2;               /* Time (T1+T2). */
+ 337:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0;
+ 338:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 339:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t AngleTemp;
+ 340:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t SectorAngle;
+ 341:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 342:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SVM.PreviousSectorNo = SVM.CurrentSectorNo;           /* Record sector information of last PWM cy
+ 343:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 344:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Angle: 0 ~ 2^16 represent electrical angle 0° ~ 360°. Or = (uint16_t)(Angle >> 8) * 6; */
+ 345:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   AngleTemp = (Angle >> ANGLETEMP_SHIFT) * 6U;
+ 346:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SectorAngle = AngleTemp & SECTOR_ANGLE_AND;					/* Relative angle θrel in each sector. */
+  29              	 .loc 1 346 0
+  30 0000 FF22     	 mov r2,#255
+ 331:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  31              	 .loc 1 331 0
+  32 0002 F0B5     	 push {r4,r5,r6,r7,lr}
+  33              	 .cfi_def_cfa_offset 20
+  34              	 .cfi_offset 4,-20
+  35              	 .cfi_offset 5,-16
+  36              	 .cfi_offset 6,-12
+  37              	 .cfi_offset 7,-8
+  38              	 .cfi_offset 14,-4
+ 342:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  39              	 .loc 1 342 0
+  40 0004 544D     	 ldr r5,.L19
+ 345:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SectorAngle = AngleTemp & SECTOR_ANGLE_AND;					/* Relative angle θrel in each sector. */
+  41              	 .loc 1 345 0
+  42 0006 090A     	 lsr r1,r1,#8
+  43              	.LVL1:
+ 342:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  44              	 .loc 1 342 0
+  45 0008 2B88     	 ldrh r3,[r5]
+ 345:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SectorAngle = AngleTemp & SECTOR_ANGLE_AND;					/* Relative angle θrel in each sector. */
+  46              	 .loc 1 345 0
+  47 000a 4C00     	 lsl r4,r1,#1
+ 342:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  48              	 .loc 1 342 0
+  49 000c 6B80     	 strh r3,[r5,#2]
+  50              	 .loc 1 346 0
+  51 000e 131C     	 mov r3,r2
+ 345:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SectorAngle = AngleTemp & SECTOR_ANGLE_AND;					/* Relative angle θrel in each sector. */
+  52              	 .loc 1 345 0
+  53 0010 0919     	 add r1,r1,r4
+  54 0012 4900     	 lsl r1,r1,#1
+  55              	.LVL2:
+  56              	 .loc 1 346 0
+  57 0014 0B40     	 and r3,r1
+  58              	.LVL3:
+ 347:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   SVM.CurrentSectorNo = AngleTemp >> SECTOR_NO_SHIFT; /* Update new SVM sector number. Or = (AngleT
+ 348:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 349:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Calculate T1 / T2 by LUT. */
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T1 = (((Amplitude * Sinus60_tab[MAX_LUT_INDEX - SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  59              	 .loc 1 350 0
+  60 0016 514F     	 ldr r7,.L19+4
+  61 0018 D21A     	 sub r2,r2,r3
+  62 001a 5200     	 lsl r2,r2,#1
+ 351:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  63              	 .loc 1 351 0
+  64 001c 5B00     	 lsl r3,r3,#1
+  65              	.LVL4:
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  66              	 .loc 1 350 0
+  67 001e D45B     	 ldrh r4,[r2,r7]
+  68              	 .loc 1 351 0
+  69 0020 DB5B     	 ldrh r3,[r3,r7]
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  70              	 .loc 1 350 0
+  71 0022 4443     	 mul r4,r0
+  72              	 .loc 1 351 0
+  73 0024 5843     	 mul r0,r3
+  74              	.LVL5:
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  75              	 .loc 1 350 0
+  76 0026 4E4A     	 ldr r2,.L19+8
+  77 0028 E413     	 asr r4,r4,#15
+  78              	 .loc 1 351 0
+  79 002a C013     	 asr r0,r0,#15
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  80              	 .loc 1 350 0
+  81 002c 5443     	 mul r4,r2
+  82              	 .loc 1 351 0
+  83 002e 4243     	 mul r2,r0
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  84              	 .loc 1 350 0
+  85 0030 E40B     	 lsr r4,r4,#15
+  86              	 .loc 1 351 0
+  87 0032 D20B     	 lsr r2,r2,#15
+ 350:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T2 = (((Amplitude * Sinus60_tab[SectorAngle]) >> 15) * SVM_LUT_SCALE) >> 15;
+  88              	 .loc 1 350 0
+  89 0034 A6B2     	 uxth r6,r4
+  90              	.LVL6:
+  91              	 .loc 1 351 0
+  92 0036 93B2     	 uxth r3,r2
+  93              	.LVL7:
+ 352:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 353:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T1nT2 = T1 + T2;												/* Temp variable for (T1+T2) <= PERIOD_REG. */
+  94              	 .loc 1 353 0
+  95 0038 F218     	 add r2,r6,r3
+ 347:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+  96              	 .loc 1 347 0
+  97 003a 090A     	 lsr r1,r1,#8
+  98              	.LVL8:
+  99              	 .loc 1 353 0
+ 100 003c 97B2     	 uxth r7,r2
+ 101              	.LVL9:
+ 354:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 355:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 356:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //  /* Overmodulation from Deyun */
+ 357:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //  if (T1nT2 > PERIOD_REG)
+ 358:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //  {
+ 359:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //    T1nT2 = PERIOD_REG;       /* Make sure below T0/2 >= 0. */
+ 360:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** //  }
+ 361:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 362:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   if (T1nT2 > PERIOD_OF_PWM)
+ 102              	 .loc 1 362 0
+ 103 003e 494A     	 ldr r2,.L19+12
+ 347:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 104              	 .loc 1 347 0
+ 105 0040 89B2     	 uxth r1,r1
+ 106 0042 2980     	 strh r1,[r5]
+ 107              	 .loc 1 362 0
+ 108 0044 9446     	 mov ip,r2
+ 109 0046 9742     	 cmp r7,r2
+ 110 0048 1DD9     	 bls .L2
+ 363:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 364:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     #define SHIFT_OVERMODULATION    (5U)
+ 365:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     MATH->DIVCON = (0x00008004 | (SHIFT_OVERMODULATION << 16U) | (SHIFT_OVERMODULATION << 8U));
+ 111              	 .loc 1 365 0
+ 112 004a 474A     	 ldr r2,.L19+16
+ 113 004c 474B     	 ldr r3,.L19+20
+ 114              	.LVL10:
+ 366:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     MATH->DVD = T1 * PERIOD_OF_PWM;
+ 115              	 .loc 1 366 0
+ 116 004e 2404     	 lsl r4,r4,#16
+ 365:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     MATH->DVD = T1 * PERIOD_OF_PWM;
+ 117              	 .loc 1 365 0
+ 118 0050 5363     	 str r3,[r2,#52]
+ 119              	 .loc 1 366 0
+ 120 0052 6346     	 mov r3,ip
+ 121 0054 240C     	 lsr r4,r4,#16
+ 122 0056 6343     	 mul r3,r4
+ 123 0058 1362     	 str r3,[r2,#32]
+ 367:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     MATH->DVS = T1nT2;
+ 124              	 .loc 1 367 0
+ 125 005a 5762     	 str r7,[r2,#36]
+ 126              	.LVL11:
+ 127              	.L3:
+ 368:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 369:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T1nT2 = PERIOD_OF_PWM;
+ 370:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 371:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     while (MATH->DIVST)
+ 128              	 .loc 1 371 0 discriminator 1
+ 129 005c 136B     	 ldr r3,[r2,#48]
+ 130 005e 002B     	 cmp r3,#0
+ 131 0060 FCD1     	 bne .L3
+ 372:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     {
+ 373:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       /* CPU wait */
+ 374:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     }
+ 375:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 376:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T1 = MATH->QUOT;
+ 132              	 .loc 1 376 0
+ 133 0062 414B     	 ldr r3,.L19+16
+ 377:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T2 = PERIOD_OF_PWM - T1;
+ 134              	 .loc 1 377 0
+ 135 0064 424C     	 ldr r4,.L19+24
+ 376:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T2 = PERIOD_OF_PWM - T1;
+ 136              	 .loc 1 376 0
+ 137 0066 9E6A     	 ldr r6,[r3,#40]
+ 138              	.LVL12:
+ 139              	 .loc 1 377 0
+ 140 0068 3E4B     	 ldr r3,.L19+12
+ 376:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     T2 = PERIOD_OF_PWM - T1;
+ 141              	 .loc 1 376 0
+ 142 006a B6B2     	 uxth r6,r6
+ 143              	.LVL13:
+ 144              	 .loc 1 377 0
+ 145 006c 9B1B     	 sub r3,r3,r6
+ 146 006e 414A     	 ldr r2,.L19+28
+ 147 0070 9BB2     	 uxth r3,r3
+ 148              	.LVL14:
+ 149              	.L4:
+ 378:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 379:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 380:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 381:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T0 = PERIOD_OF_PWM - T1nT2;
+ 382:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 383:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   if (T0 > T0_THRESHOLD)
+ 384:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 385:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     SVM.Flag_3or2_ADC = USE_ALL_ADC;			/* To use all (e.g.: three) ADC samplings for current recons
+ 386:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 387:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   else
+ 388:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 389:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     SVM.Flag_3or2_ADC = USE_2_ADC;				/* To use two ADC samplings for current reconstruction. */
+ 150              	 .loc 1 389 0
+ 151 0072 BB20     	 mov r0,#187
+ 390:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 391:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 392:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #if(SVM_SWITCHING_SCHEME == STANDARD_SVM_7_SEGMENT)
+ 393:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 394:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* T0, T0_111 for first [111], T0_111 + T1/2, T0_111 + T2/2, T0_111 + (T1+T2)/2. */
+ 395:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0_111;
+ 396:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0nHalfT1;
+ 397:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0nHalfT2;
+ 398:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   uint16_t T0nHalfT1nT2;
+ 399:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 400:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T0_111 = T0 >> RATIO_T0_111;												/* T0_111, time of first [111]. */
+ 401:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T0nHalfT1 = (T0 + (uint16_t)(T1 << (RATIO_T0_111 - 1U))) >> RATIO_T0_111;				/* T0_111 + T1/2. */
+ 402:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T0nHalfT2 = (T0 + (uint16_t)(T2 << (RATIO_T0_111 - 1U))) >> RATIO_T0_111;				/* T0_111 + T2/2. */
+ 403:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   T0nHalfT1nT2 = (T0 + (uint16_t)((T1 + T2) << (RATIO_T0_111 - 1U))) >> RATIO_T0_111;	/* T0_111 + (
+ 404:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 405:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Standard 7-segment symmetric PWM: */
+ 406:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   switch (SVM.CurrentSectorNo)
+ 407:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 408:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     case 0:														/* Sector A */
+ 409:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0nHalfT1nT2;
+ 410:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 411:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 412:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0nHalfT2;
+ 413:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT2);
+ 414:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 415:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0_111;
+ 416:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 417:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 418:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 419:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     case 1:														/* Sector B */
+ 420:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 421:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0nHalfT1;
+ 422:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1);
+ 423:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 424:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0nHalfT1nT2;
+ 425:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 426:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 427:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0_111;
+ 428:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 429:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 430:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 431:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     case 2:														/* Sector C */
+ 432:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0_111;
+ 433:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 434:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 435:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0nHalfT1nT2;
+ 436:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 437:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 438:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0nHalfT2;
+ 439:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT2);
+ 440:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 441:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 442:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     case 3:														/* Sector D */
+ 443:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 444:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0_111;
+ 445:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 446:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 447:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0nHalfT1;
+ 448:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1);
+ 449:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 450:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0nHalfT1nT2;
+ 451:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 452:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 453:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 454:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     case 4:														/* Sector E */
+ 455:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0nHalfT2;
+ 456:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT2);
+ 457:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 458:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0_111;
+ 459:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 460:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 461:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0nHalfT1nT2;
+ 462:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 463:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 464:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 465:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****     default:													/* Process for all other cases, Sector F = 5. */
+ 466:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR1S = (uint32_t) T0nHalfT1nT2;
+ 467:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1nT2);
+ 468:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 469:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR1S = (uint32_t) T0_111;
+ 470:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - T0_111);
+ 471:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 472:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR1S = (uint32_t) T0nHalfT1;
+ 473:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - T0nHalfT1);
+ 474:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 475:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 476:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       break;
+ 477:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }	/* End of switch (SVM.CurrentSectorNo), standard 7-segment symmetric PWM. */
+ 478:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #elif(SVM_SWITCHING_SCHEME == STANDARD_SVM_5_SEGMENT)
+ 479:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 480:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       /* 5-segment SVM, (T1+T2)/2, T2/2, T1/2 */
+ 481:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       uint16_t Half_T1nT2;
+ 482:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       uint16_t Half_T2;
+ 483:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       uint16_t Half_T1;
+ 484:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 485:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       Half_T1nT2 = T1nT2 >> 1;                // (T1+T2)/2.
+ 486:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       Half_T2 = T2 >> 1;                    // T2/2.
+ 152              	 .loc 1 486 0
+ 153 0074 5B08     	 lsr r3,r3,#1
+ 154              	.LVL15:
+ 155 0076 A880     	 strh r0,[r5,#4]
+ 156              	.LVL16:
+ 487:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       Half_T1 = T1 >> 1;                    // T1/2.
+ 157              	 .loc 1 487 0
+ 158 0078 7608     	 lsr r6,r6,#1
+ 159              	.LVL17:
+ 488:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 489:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       /* Standard 5-segment symmetric PWM: */
+ 490:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       switch (SVM.CurrentSectorNo)
+ 160              	 .loc 1 490 0
+ 161 007a 0429     	 cmp r1,#4
+ 162 007c 12D8     	 bhi .L7
+ 163              	.L18:
+ 164 007e 3E48     	 ldr r0,.L19+32
+ 165 0080 8900     	 lsl r1,r1,#2
+ 166 0082 4158     	 ldr r1,[r0,r1]
+ 167 0084 8F46     	 mov pc,r1
+ 168              	 .section .rodata
+ 169              	 .align 2
+ 170              	.L9:
+ 171 0000 06010000 	 .word .L8
+ 172 0004 22010000 	 .word .L10
+ 173 0008 34010000 	 .word .L11
+ 174 000c C0000000 	 .word .L12
+ 175 0010 EA000000 	 .word .L13
+ 176              	 .section .ram_code
+ 177              	.LVL18:
+ 178              	.L2:
+ 381:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 179              	 .loc 1 381 0
+ 180 0086 D01B     	 sub r0,r2,r7
+ 383:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   {
+ 181              	 .loc 1 383 0
+ 182 0088 E022     	 mov r2,#224
+ 183 008a 80B2     	 uxth r0,r0
+ 184 008c 9200     	 lsl r2,r2,#2
+ 185 008e 9042     	 cmp r0,r2
+ 186 0090 5ED9     	 bls .L5
+ 187 0092 6046     	 mov r0,ip
+ 188 0094 7A08     	 lsr r2,r7,#1
+ 189 0096 841A     	 sub r4,r0,r2
+ 385:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   }
+ 190              	 .loc 1 385 0
+ 191 0098 0020     	 mov r0,#0
+ 486:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       Half_T1 = T1 >> 1;                    // T1/2.
+ 192              	 .loc 1 486 0
+ 193 009a 5B08     	 lsr r3,r3,#1
+ 194              	.LVL19:
+ 195 009c A880     	 strh r0,[r5,#4]
+ 196              	.LVL20:
+ 487:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 197              	 .loc 1 487 0
+ 198 009e 7608     	 lsr r6,r6,#1
+ 199              	.LVL21:
+ 200              	 .loc 1 490 0
+ 201 00a0 0429     	 cmp r1,#4
+ 202 00a2 ECD9     	 bls .L18
+ 203              	.LVL22:
+ 204              	.L7:
+ 491:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       {
+ 492:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         case 0:                        // Sector A
+ 493:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_U->CR1S = (uint32_t) Half_T1nT2;
+ 494:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 495:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 496:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_V->CR1S = (uint32_t) Half_T2;
+ 497:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 498:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 499:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_W->CR1S = (uint32_t) 0;
+ 500:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 501:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 502:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 503:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 504:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 1:                       // Sector B
+ 505:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = (uint32_t) Half_T1;
+ 506:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 507:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 508:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = (uint32_t) Half_T1nT2;
+ 509:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 510:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 511:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = (uint32_t) 0;
+ 512:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 513:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 514:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 515:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 516:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 2:                       // Sector C
+ 517:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = (uint32_t) 0;
+ 518:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 519:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 520:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = (uint32_t) Half_T1nT2;
+ 521:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 522:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 523:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = (uint32_t) Half_T2;
+ 524:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 525:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 526:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 527:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 528:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 3:                       // Sector D
+ 529:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 530:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = (uint32_t) 0;
+ 531:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 532:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 533:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = (uint32_t) Half_T1;
+ 534:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 535:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 536:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = (uint32_t) Half_T1nT2;
+ 537:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 538:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 539:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 540:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 541:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       case 4:                       // Sector E
+ 542:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 543:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = (uint32_t) Half_T2;
+ 544:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 545:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 546:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = (uint32_t) 0;
+ 547:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 548:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 549:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = (uint32_t) Half_T1nT2;
+ 550:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 551:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 552:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 553:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 554:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       default:                      // Process for all other cases. Sector F.
+ 555:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 556:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR1S = (uint32_t) Half_T1nT2;
+ 205              	 .loc 1 556 0
+ 206 00a4 354B     	 ldr r3,.L19+36
+ 207              	.LVL23:
+ 208 00a6 DA63     	 str r2,[r3,#60]
+ 557:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 558:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 559:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR1S = (uint32_t) 0;
+ 209              	 .loc 1 559 0
+ 210 00a8 0022     	 mov r2,#0
+ 557:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 211              	 .loc 1 557 0
+ 212 00aa 5C64     	 str r4,[r3,#68]
+ 213              	 .loc 1 559 0
+ 214 00ac 344B     	 ldr r3,.L19+40
+ 215 00ae DA63     	 str r2,[r3,#60]
+ 560:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 216              	 .loc 1 560 0
+ 217 00b0 344A     	 ldr r2,.L19+44
+ 218 00b2 5A64     	 str r2,[r3,#68]
+ 561:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 562:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR1S = (uint32_t) Half_T1;
+ 219              	 .loc 1 562 0
+ 220 00b4 344A     	 ldr r2,.L19+48
+ 563:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 221              	 .loc 1 563 0
+ 222 00b6 2B4B     	 ldr r3,.L19+12
+ 562:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 223              	 .loc 1 562 0
+ 224 00b8 D663     	 str r6,[r2,#60]
+ 225              	 .loc 1 563 0
+ 226 00ba 9E1B     	 sub r6,r3,r6
+ 227              	.LVL24:
+ 228 00bc 5664     	 str r6,[r2,#68]
+ 564:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 565:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         break;
+ 229              	 .loc 1 565 0
+ 230 00be 0CE0     	 b .L14
+ 231              	.LVL25:
+ 232              	.L12:
+ 530:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 233              	 .loc 1 530 0
+ 234 00c0 0021     	 mov r1,#0
+ 235 00c2 2E4B     	 ldr r3,.L19+36
+ 236              	.LVL26:
+ 237 00c4 D963     	 str r1,[r3,#60]
+ 531:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 238              	 .loc 1 531 0
+ 239 00c6 2F49     	 ldr r1,.L19+44
+ 240 00c8 5964     	 str r1,[r3,#68]
+ 533:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 241              	 .loc 1 533 0
+ 242 00ca 2D49     	 ldr r1,.L19+40
+ 534:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 243              	 .loc 1 534 0
+ 244 00cc 254B     	 ldr r3,.L19+12
+ 533:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 245              	 .loc 1 533 0
+ 246 00ce CE63     	 str r6,[r1,#60]
+ 534:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 247              	 .loc 1 534 0
+ 248 00d0 9E1B     	 sub r6,r3,r6
+ 249              	.LVL27:
+ 536:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 250              	 .loc 1 536 0
+ 251 00d2 2D4B     	 ldr r3,.L19+48
+ 534:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 252              	 .loc 1 534 0
+ 253 00d4 4E64     	 str r6,[r1,#68]
+ 536:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 254              	 .loc 1 536 0
+ 255 00d6 DA63     	 str r2,[r3,#60]
+ 537:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 256              	 .loc 1 537 0
+ 257 00d8 5C64     	 str r4,[r3,#68]
+ 258              	.L14:
+ 566:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****       }
+ 567:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 568:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** #endif
+ 569:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* Enable shadow transfer for slice 0,1,2 for CCU80 Kernel. */
+ 570:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   CCU8_MODULE->GCSS |= (uint32_t)(XMC_CCU8_SHADOW_TRANSFER_SLICE_0|XMC_CCU8_SHADOW_TRANSFER_SLICE_1
+ 259              	 .loc 1 570 0
+ 260 00da A022     	 mov r2,#160
+ 261 00dc 1221     	 mov r1,#18
+ 262 00de D205     	 lsl r2,r2,#23
+ 263 00e0 1369     	 ldr r3,[r2,#16]
+ 264 00e2 FF31     	 add r1,r1,#255
+ 265 00e4 0B43     	 orr r3,r1
+ 266 00e6 1361     	 str r3,[r2,#16]
+ 571:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****   /* ADC triggered always at centre of [000] (fixed centre position in one PWM). */
+ 572:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** }
+ 267              	 .loc 1 572 0
+ 268              	 
+ 269 00e8 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 270              	.LVL28:
+ 271              	.L13:
+ 543:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 272              	 .loc 1 543 0
+ 273 00ea 2448     	 ldr r0,.L19+36
+ 544:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 274              	 .loc 1 544 0
+ 275 00ec 1D49     	 ldr r1,.L19+12
+ 543:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 276              	 .loc 1 543 0
+ 277 00ee C363     	 str r3,[r0,#60]
+ 544:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 278              	 .loc 1 544 0
+ 279 00f0 CB1A     	 sub r3,r1,r3
+ 280              	.LVL29:
+ 546:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 281              	 .loc 1 546 0
+ 282 00f2 0021     	 mov r1,#0
+ 544:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 283              	 .loc 1 544 0
+ 284 00f4 4364     	 str r3,[r0,#68]
+ 546:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 285              	 .loc 1 546 0
+ 286 00f6 224B     	 ldr r3,.L19+40
+ 287 00f8 D963     	 str r1,[r3,#60]
+ 547:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 288              	 .loc 1 547 0
+ 289 00fa 2249     	 ldr r1,.L19+44
+ 290 00fc 5964     	 str r1,[r3,#68]
+ 549:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 291              	 .loc 1 549 0
+ 292 00fe 224B     	 ldr r3,.L19+48
+ 293 0100 DA63     	 str r2,[r3,#60]
+ 550:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 294              	 .loc 1 550 0
+ 295 0102 5C64     	 str r4,[r3,#68]
+ 552:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 296              	 .loc 1 552 0
+ 297 0104 E9E7     	 b .L14
+ 298              	.LVL30:
+ 299              	.L8:
+ 493:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 300              	 .loc 1 493 0
+ 301 0106 1D49     	 ldr r1,.L19+36
+ 302 0108 CA63     	 str r2,[r1,#60]
+ 494:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 303              	 .loc 1 494 0
+ 304 010a 4C64     	 str r4,[r1,#68]
+ 497:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 305              	 .loc 1 497 0
+ 306 010c 154A     	 ldr r2,.L19+12
+ 496:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****           CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 307              	 .loc 1 496 0
+ 308 010e 1C49     	 ldr r1,.L19+40
+ 309 0110 CB63     	 str r3,[r1,#60]
+ 497:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 310              	 .loc 1 497 0
+ 311 0112 D31A     	 sub r3,r2,r3
+ 312              	.LVL31:
+ 313 0114 4B64     	 str r3,[r1,#68]
+ 314              	.LVL32:
+ 315              	.L16:
+ 511:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 316              	 .loc 1 511 0
+ 317 0116 0022     	 mov r2,#0
+ 318 0118 1B4B     	 ldr r3,.L19+48
+ 319 011a DA63     	 str r2,[r3,#60]
+ 512:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 320              	 .loc 1 512 0
+ 321 011c 194A     	 ldr r2,.L19+44
+ 322 011e 5A64     	 str r2,[r3,#68]
+ 514:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 323              	 .loc 1 514 0
+ 324 0120 DBE7     	 b .L14
+ 325              	.LVL33:
+ 326              	.L10:
+ 505:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 327              	 .loc 1 505 0
+ 328 0122 1649     	 ldr r1,.L19+36
+ 506:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 329              	 .loc 1 506 0
+ 330 0124 0F4B     	 ldr r3,.L19+12
+ 331              	.LVL34:
+ 505:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1);
+ 332              	 .loc 1 505 0
+ 333 0126 CE63     	 str r6,[r1,#60]
+ 506:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 334              	 .loc 1 506 0
+ 335 0128 9E1B     	 sub r6,r3,r6
+ 336              	.LVL35:
+ 508:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 337              	 .loc 1 508 0
+ 338 012a 154B     	 ldr r3,.L19+40
+ 506:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 339              	 .loc 1 506 0
+ 340 012c 4E64     	 str r6,[r1,#68]
+ 508:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 341              	 .loc 1 508 0
+ 342 012e DA63     	 str r2,[r3,#60]
+ 509:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 343              	 .loc 1 509 0
+ 344 0130 5C64     	 str r4,[r3,#68]
+ 345 0132 F0E7     	 b .L16
+ 346              	.LVL36:
+ 347              	.L11:
+ 517:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_U->CR2S = (uint32_t) (PERIOD_OF_PWM + 1);
+ 348              	 .loc 1 517 0
+ 349 0134 0020     	 mov r0,#0
+ 350 0136 1149     	 ldr r1,.L19+36
+ 351 0138 C863     	 str r0,[r1,#60]
+ 518:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 352              	 .loc 1 518 0
+ 353 013a 1248     	 ldr r0,.L19+44
+ 354 013c 4864     	 str r0,[r1,#68]
+ 520:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_V->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T1nT2);
+ 355              	 .loc 1 520 0
+ 356 013e 1049     	 ldr r1,.L19+40
+ 357 0140 CA63     	 str r2,[r1,#60]
+ 521:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 358              	 .loc 1 521 0
+ 359 0142 4C64     	 str r4,[r1,#68]
+ 524:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 360              	 .loc 1 524 0
+ 361 0144 074A     	 ldr r2,.L19+12
+ 523:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c ****         CCU8_MODULE_PHASE_W->CR2S = (uint32_t) (PERIOD_OF_PWM - Half_T2);
+ 362              	 .loc 1 523 0
+ 363 0146 1049     	 ldr r1,.L19+48
+ 364 0148 CB63     	 str r3,[r1,#60]
+ 524:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 365              	 .loc 1 524 0
+ 366 014a D31A     	 sub r3,r2,r3
+ 367              	.LVL37:
+ 368 014c 4B64     	 str r3,[r1,#68]
+ 526:../PMSM_FOC/MIDSys/pmsm_foc_pwmsvm.c **** 
+ 369              	 .loc 1 526 0
+ 370 014e C4E7     	 b .L14
+ 371              	.LVL38:
+ 372              	.L5:
+ 373 0150 6046     	 mov r0,ip
+ 374 0152 7A08     	 lsr r2,r7,#1
+ 375 0154 841A     	 sub r4,r0,r2
+ 376 0156 8CE7     	 b .L4
+ 377              	.L20:
+ 378              	 .align 2
+ 379              	.L19:
+ 380 0158 00000000 	 .word SVM
+ 381 015c 00000000 	 .word Sinus60_tab
+ 382 0160 AA100000 	 .word 4266
+ 383 0164 AB100000 	 .word 4267
+ 384 0168 00000340 	 .word 1073938432
+ 385 016c 04850500 	 .word 361732
+ 386 0170 56080000 	 .word 2134
+ 387 0174 55080000 	 .word 2133
+ 388 0178 00000000 	 .word .L9
+ 389 017c 00010050 	 .word 1342177536
+ 390 0180 00020050 	 .word 1342177792
+ 391 0184 AC100000 	 .word 4268
+ 392 0188 00030050 	 .word 1342178048
+ 393              	 .cfi_endproc
+ 394              	.LFE201:
+ 396              	 .comm SVM,8,4
+ 397              	 .text
+ 398              	.Letext0:
+ 399              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 400              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 401              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 402              	 .file 5 "../PMSM_FOC/MIDSys/../ControlModules/..\\MIDSys\\pmsm_foc_pwmsvm.h"
+ 403              	 .file 6 "../PMSM_FOC/MIDSys/../ControlModules/pmsm_foc_functions.h"
+ 404              	 .file 7 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 405              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_ccu8.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_pwmsvm.c
+    {standard input}:18     .ram_code:00000000 $t
+    {standard input}:23     .ram_code:00000000 PWMSVM01_Update
+    {standard input}:169    .rodata:00000000 $d
+    {standard input}:380    .ram_code:00000158 $d
+                            *COM*:00000008 SVM
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Sinus60_tab

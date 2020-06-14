@@ -1,0 +1,1160 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_directfoc_startup.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global __aeabi_ui2f
+  18              	 .global __aeabi_fcmpgt
+  19              	 .section .text.DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge,"ax",%progbits
+  20              	 .align 2
+  21              	 .global DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge
+  22              	 .code 16
+  23              	 .thumb_func
+  25              	DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge:
+  26              	.LFB201:
+  27              	 .file 1 "../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c"
+   1:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /**
+   2:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @file pmsm_foc_directfoc_startup.c
+   3:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @date 2015-12-23
+   4:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+   5:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @cond
+   6:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  **************************************************************************************************
+   7:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+   9:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * All rights reserved.
+  11:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  12:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * following conditions are met:
+  14:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  15:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   disclaimer.
+  17:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  18:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  21:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  24:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  32:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  **************************************************************************************************
+  35:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  36:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @file pmsm_foc_directfoc_startup.c
+  37:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @date 23 Dec, 2015
+  38:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @version 1.0.0
+  39:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  40:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  42:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  46:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * History
+  47:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  48:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * 23 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *      Initial version
+  50:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * @endcond
+  51:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  *
+  52:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  */
+  53:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  54:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /**************************************************************************************************
+  55:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * HEADER FILES
+  56:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  **************************************************************************************************
+  57:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #include "pmsm_foc_directfoc_startup.h"
+  58:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  59:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /**************************************************************************************************
+  60:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * MACROS
+  61:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  **************************************************************************************************
+  62:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  63:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define IV_ADC_BIAS   (2045)
+  64:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define IW_ADC_BIAS   (2048)
+  65:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define VREF_INC_STEP   (10U)                        /* Step that voltage increases. */
+  66:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define PRE_POSIT_VOLT ((VQ_VF_OFFSET * 2U) >> 1)   /* Voltage for rotor preposition/alignment. */
+  67:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define PI_SPEED_IK_DEFAULT (1U << 10)
+  68:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /**************************************************************************************************
+  69:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * GLOBAL DATA
+  70:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** ***************************************************************************************************
+  71:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern ADCType ADC;                             /* ADC results, trigger positions. */
+  72:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern SVMType SVM;                             /* SVM information, such as sector 0 ~ 5 (A ~ F) in
+  73:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern CurrentType Current;                     /* Motor current and current space vector. */
+  74:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern MotorControlType Motor;                  /* Motor control information */
+  75:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern FOCOutputType FOCOutput;                 /* Output for FOC LIB. */
+  76:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern FOCInputType FOCInput;                   /* Parameters input for FOC LIB. */
+  77:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern ClarkeTransformType Clarke_Transform;
+  78:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern Car2PolType Car2Polar;
+  79:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  80:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern PI_Coefs_Type PI_Speed;                  /* Speed PI controller. */
+  81:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern PI_Coefs_Type PI_Torque;                 /* Torque / Iq PI controller. */
+  82:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern PI_Coefs_Type PI_Flux;                   /* Flux /Id PI controller. */
+  83:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** extern PI_Coefs_Type PI_PLL;                    /* PLL rotor speed PI controller. */
+  84:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  85:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  86:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /**************************************************************************************************
+  87:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  * API IMPLEMENTATION
+  88:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****  **************************************************************************************************
+  89:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /* API to brake the motor, charge gate driver bootstrap capacitors */
+  90:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** void DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge(void)
+  91:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** {
+  28              	 .loc 1 91 0
+  29              	 .cfi_startproc
+  30 0000 38B5     	 push {r3,r4,r5,lr}
+  31              	 .cfi_def_cfa_offset 16
+  32              	 .cfi_offset 3,-16
+  33              	 .cfi_offset 4,-12
+  34              	 .cfi_offset 5,-8
+  35              	 .cfi_offset 14,-4
+  92:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+  93:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****    ADC.ADC_Bias = (uint32_t) ((ADC.ADC_Bias * (((uint32_t) 1 << SHIFT_BIAS_LPF) - 1U)) + ADC.ADC_Re
+  94:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  95:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #else
+  96:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Get_ADCPhaseCurrent(SVM.PreviousSectorNo, SVM.CurrentSectorNo, &ADC);
+  36              	 .loc 1 96 0
+  37 0002 1C4C     	 ldr r4,.L7
+  38 0004 1C4B     	 ldr r3,.L7+4
+  39 0006 221C     	 mov r2,r4
+  40 0008 5888     	 ldrh r0,[r3,#2]
+  41 000a 1988     	 ldrh r1,[r3]
+  42 000c FFF7FEFF 	 bl Get_ADCPhaseCurrent
+  43              	.LVL0:
+  97:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  98:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  99:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Read Iu ADC bias */
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   ADC.ADC_Bias_Iu = (uint32_t) ((ADC.ADC_Bias_Iu * (((uint32_t) 1 << SHIFT_BIAS_LPF) - 1U)) + ADC.A
+  44              	 .loc 1 100 0
+  45 0010 A168     	 ldr r1,[r4,#8]
+  46 0012 2088     	 ldrh r0,[r4]
+  47 0014 CA00     	 lsl r2,r1,#3
+  48 0016 531A     	 sub r3,r2,r1
+ 101:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+ 102:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Read Iv ADC bias */
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   ADC.ADC_Bias_Iv = (uint32_t) ((ADC.ADC_Bias_Iv * (((uint32_t) 1 << SHIFT_BIAS_LPF) - 1U)) + ADC.A
+  49              	 .loc 1 103 0
+  50 0018 E168     	 ldr r1,[r4,#12]
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  51              	 .loc 1 100 0
+  52 001a C318     	 add r3,r0,r3
+  53              	 .loc 1 103 0
+  54 001c CA00     	 lsl r2,r1,#3
+  55 001e 6088     	 ldrh r0,[r4,#2]
+ 101:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  56              	 .loc 1 101 0
+  57 0020 DB08     	 lsr r3,r3,#3
+ 100:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  58              	 .loc 1 100 0
+  59 0022 A360     	 str r3,[r4,#8]
+  60              	 .loc 1 103 0
+  61 0024 531A     	 sub r3,r2,r1
+ 104:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+ 105:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Read Iw ADC bias */
+ 106:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   ADC.ADC_Bias_Iw = (uint32_t) ((ADC.ADC_Bias_Iw * (((uint32_t) 1 << SHIFT_BIAS_LPF) - 1U)) + ADC.A
+  62              	 .loc 1 106 0
+  63 0026 2169     	 ldr r1,[r4,#16]
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  64              	 .loc 1 103 0
+  65 0028 C318     	 add r3,r0,r3
+ 104:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  66              	 .loc 1 104 0
+  67 002a DB08     	 lsr r3,r3,#3
+  68              	 .loc 1 106 0
+  69 002c A088     	 ldrh r0,[r4,#4]
+  70 002e CA00     	 lsl r2,r1,#3
+ 103:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  71              	 .loc 1 103 0
+  72 0030 E360     	 str r3,[r4,#12]
+  73              	 .loc 1 106 0
+  74 0032 531A     	 sub r3,r2,r1
+  75 0034 C318     	 add r3,r0,r3
+ 107:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+ 108:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #endif
+ 109:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Motor.Counter++;
+  76              	 .loc 1 109 0
+  77 0036 114D     	 ldr r5,.L7+8
+ 107:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  78              	 .loc 1 107 0
+  79 0038 DB08     	 lsr r3,r3,#3
+ 106:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****                                  >> SHIFT_BIAS_LPF;
+  80              	 .loc 1 106 0
+  81 003a 2361     	 str r3,[r4,#16]
+  82              	 .loc 1 109 0
+  83 003c EB6B     	 ldr r3,[r5,#60]
+  84 003e 581C     	 add r0,r3,#1
+ 110:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 111:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 112:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   if (ADC.ADC_POT < TH_POT_ADC)
+  85              	 .loc 1 112 0
+  86 0040 236A     	 ldr r3,[r4,#32]
+ 109:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+  87              	 .loc 1 109 0
+  88 0042 E863     	 str r0,[r5,#60]
+  89              	 .loc 1 112 0
+  90 0044 312B     	 cmp r3,#49
+  91 0046 02DC     	 bgt .L2
+ 113:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 114:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* If system is idle, i.e.: PWM duty cycle or POT ADC too low. */
+ 115:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Counter = 0U; /* cannot go to ramp up, keep motor braking. */
+  92              	 .loc 1 115 0
+  93 0048 0023     	 mov r3,#0
+  94 004a EB63     	 str r3,[r5,#60]
+  95              	.L1:
+ 116:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   }
+ 117:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 118:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /*Timer decides when to stop motor braking. */
+ 119:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   if (Motor.Counter > BRAKE_TIME)
+ 120:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 121:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Next, go to rotor initial preposition/alignment. */
+ 122:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.State = (uint32_t) PRE_POSITIONING;
+ 123:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 124:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor in transition mode. */
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Mode_Flag = MOTOR_TRANSITION;
+ 126:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Clear counters. */
+ 127:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Counter = 0U;
+ 128:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Ramp_Counter = 0U;
+ 129:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_U = 0;
+ 131:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_V = 0;
+ 132:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_W = 0;
+ 133:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 134:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 135:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADC.ADC3Trig_Point = 0;
+ 136:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADC.ADC4Trig_Point = 0;
+ 137:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADC.ADC_Result1 = 0;
+ 138:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADC.ADC_Result2 = 0;
+ 139:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADC.Result_Flag = RESULTS_ADCTZ12;
+ 140:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Set ADC trigger for ADCTz1/Tz2, for single-shunt current sensing only. */
+ 141:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     ADCTZ12_TriggerSetting ();
+ 142:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #endif
+ 143:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   }
+ 144:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 145:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** }
+  96              	 .loc 1 145 0
+  97              	 
+  98 004c 38BD     	 pop {r3,r4,r5,pc}
+  99              	.L2:
+ 119:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 100              	 .loc 1 119 0
+ 101 004e FFF7FEFF 	 bl __aeabi_ui2f
+ 102              	.LVL1:
+ 103 0052 0B49     	 ldr r1,.L7+12
+ 104 0054 FFF7FEFF 	 bl __aeabi_fcmpgt
+ 105              	.LVL2:
+ 106 0058 0028     	 cmp r0,#0
+ 107 005a F7D0     	 beq .L1
+ 122:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 108              	 .loc 1 122 0
+ 109 005c 0623     	 mov r3,#6
+ 110 005e EB62     	 str r3,[r5,#44]
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Clear counters. */
+ 111              	 .loc 1 125 0
+ 112 0060 0023     	 mov r3,#0
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_V = 0;
+ 113              	 .loc 1 130 0
+ 114 0062 084A     	 ldr r2,.L7+16
+ 125:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Clear counters. */
+ 115              	 .loc 1 125 0
+ 116 0064 6B86     	 strh r3,[r5,#50]
+ 127:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Ramp_Counter = 0U;
+ 117              	 .loc 1 127 0
+ 118 0066 EB63     	 str r3,[r5,#60]
+ 128:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 119              	 .loc 1 128 0
+ 120 0068 2B64     	 str r3,[r5,#64]
+ 130:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_V = 0;
+ 121              	 .loc 1 130 0
+ 122 006a 1360     	 str r3,[r2]
+ 131:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Current.I_W = 0;
+ 123              	 .loc 1 131 0
+ 124 006c 5360     	 str r3,[r2,#4]
+ 132:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 125              	 .loc 1 132 0
+ 126 006e 9360     	 str r3,[r2,#8]
+ 127 0070 ECE7     	 b .L1
+ 128              	.L8:
+ 129 0072 C046     	 .align 2
+ 130              	.L7:
+ 131 0074 00000000 	 .word ADC
+ 132 0078 00000000 	 .word SVM
+ 133 007c 00000000 	 .word Motor
+ 134 0080 00009643 	 .word 1133903872
+ 135 0084 00000000 	 .word Current
+ 136              	 .cfi_endproc
+ 137              	.LFE201:
+ 139              	 .section .text.DirectFOCRotor_Pre_Positioning,"ax",%progbits
+ 140              	 .align 2
+ 141              	 .global DirectFOCRotor_Pre_Positioning
+ 142              	 .code 16
+ 143              	 .thumb_func
+ 145              	DirectFOCRotor_Pre_Positioning:
+ 146              	.LFB202:
+ 146:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /* End of DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge () */
+ 147:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 148:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** /* API to set the Rotor initial preposition/alignment */
+ 149:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #define MIN_TORQUE_TOSTART  (USER_IQ_REF_HIGH_LIMIT * 0.3)
+ 150:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** void DirectFOCRotor_Pre_Positioning(void)
+ 151:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** {
+ 147              	 .loc 1 151 0
+ 148              	 .cfi_startproc
+ 149 0000 38B5     	 push {r3,r4,r5,lr}
+ 150              	 .cfi_def_cfa_offset 16
+ 151              	 .cfi_offset 3,-16
+ 152              	 .cfi_offset 4,-12
+ 153              	 .cfi_offset 5,-8
+ 154              	 .cfi_offset 14,-4
+ 152:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   uint32_t Ik_unsigned;
+ 153:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 154:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Single-shunt or 2or3-shunt 3-phase current reconstruction, to get Iu and Iv. */
+ 155:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 156:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Current_Reconstruction(FOCOutput.Previous_SVM_SectorNo, ADC.ADC_Result1, ADC.ADC_Result2, &Curren
+ 157:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #else
+ 158:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Current_Reconstruction(ADC.ADC_Iu, ADC.ADC_Iv, ADC.ADC_Iw, &Current);
+ 155              	 .loc 1 158 0
+ 156 0002 394B     	 ldr r3,.L26
+ 157 0004 394C     	 ldr r4,.L26+4
+ 158 0006 5988     	 ldrh r1,[r3,#2]
+ 159 0008 9A88     	 ldrh r2,[r3,#4]
+ 160 000a 1888     	 ldrh r0,[r3]
+ 161 000c 231C     	 mov r3,r4
+ 162 000e FFF7FEFF 	 bl Current_Reconstruction
+ 163              	.LVL3:
+ 164              	.LBB4:
+ 165              	.LBB5:
+ 166              	 .file 2 "../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h"
+   1:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** /**
+   2:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @file pmsm_foc_functions.h
+   3:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @date 2015-06-29
+   4:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+   5:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @cond
+   6:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *******************************************************************************
+   7:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+   9:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * All rights reserved.
+  11:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  12:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * following conditions are met:
+  14:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  15:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   disclaimer.
+  17:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  18:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  21:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  24:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  32:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  **************************************************************************************************
+  35:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  36:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @file pmsm_foc_functions.h
+  37:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @date 29 Jun, 2015
+  38:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @version 1.0.0
+  39:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  40:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  42:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  46:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * History
+  47:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  48:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * 29 Jun 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *      Initial version
+  50:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @endcond
+  51:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+  52:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  */
+  53:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  54:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #ifndef PMSM_FOC_CONTROLMODULES_PMSM_FOC_FUNCTIONS_H
+  55:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define PMSM_FOC_CONTROLMODULES_PMSM_FOC_FUNCTIONS_H
+  56:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  57:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** /**************************************************************************************************
+  58:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * HEADER FILES
+  59:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  **************************************************************************************************
+  60:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  61:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#include "..\MCUInit\wdt.h"
+  62:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#include "..\MCUInit\uart.h"
+  63:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#include "..\MIDSys\pmsm_foc_current_threeshunt.h"
+  64:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   #include "..\MIDSys\pmsm_foc_current_singleshunt.h"
+  65:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#include "pmsm_foc_pi.h"
+  66:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#include "..\MIDSys\pmsm_foc_pwmsvm.h"
+  67:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  68:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** /**
+  69:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @addtogroup
+  70:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @{
+  71:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  */
+  72:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  73:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** /**
+  74:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @addtogroup
+  75:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @{
+  76:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  */
+  77:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  78:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define FOC_LIB_NO_SVM		1			/* To remove SVM to outside of FOC LIB. Do NOT comment out. */
+  79:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define CALIB00   0x480340E0
+  80:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define CALIB01   0x480340E4
+  81:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+  82:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct FOCInputType
+  83:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+  84:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Phase_L;
+  85:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Phase_R;
+  86:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Phase_L_Scale;
+  87:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t CCU8_Period;
+  88:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Res_Inc;
+  89:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int16_t SVM_Scale;
+  90:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t LPF_N_BEMF;
+  91:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Threshold;
+  92:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Threshold_LOW;
+  93:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Threshold_HIGH;
+  94:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Flag_State;
+  95:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t overcurrent_factor;
+  96:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t BEMF1;
+  97:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t BEMF2;
+  98:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_5_Segment_Flag;
+  99:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 100:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 101:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_U;
+ 102:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_V;
+ 103:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_W;
+ 104:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Speed;
+ 105:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vq_Flag;
+ 106:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vq;
+ 107:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id;
+ 108:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Iq;
+ 109:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Iq_PI_Flag;
+ 110:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t RotorAngleQ31;
+ 111:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t RotorSpeed_In;
+ 112:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t ACIM_Flag;
+ 113:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Slip_Ratio;
+ 114:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Slip_Scale;
+ 115:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Slip_Speed_Max;
+ 116:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id_Min;
+ 117:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id_Max;
+ 118:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Ref_Id_Shift;
+ 119:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 120:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Single_Shunt_Flag;
+ 121:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } FOCInputType;
+ 122:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 123:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct FOCOutputType
+ 124:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 125:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_Alpha_1Q31;
+ 126:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_Beta_1Q31;
+ 127:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_d;
+ 128:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_q;
+ 129:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Speed_by_Estimator;
+ 130:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Rotor_PositionQ31;
+ 131:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Previous_SVM_SectorNo;
+ 132:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t New_SVM_SectorNo;
+ 133:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 134:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 135:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 136:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 137:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_U_CR1S;
+ 138:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_V_CR1S;
+ 139:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_W_CR1S;
+ 140:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 141:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Debug_1;
+ 142:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } FOCOutputType;
+ 143:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 144:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 145:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct CurrentType
+ 146:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 147:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_U; /* Current of motor phase U, Iu */
+ 148:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_V; /* Current of motor phase V, Iv */
+ 149:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_W; /* Current of motor phase W, Iw */
+ 150:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 151:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t I_Mag; /* |I|, magnitude of current space vector */
+ 152:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 153:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_Speed; /* ωi, current space vector speed */
+ 154:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } CurrentType;
+ 155:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 156:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 157:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct ClarkeTransformType
+ 158:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 159:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_Alpha_1Q31; /* Iα (1Q31), Alpha value of current space vector */
+ 160:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t I_Beta_1Q31; /* Iβ (1Q31) */
+ 161:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 162:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } ClarkeTransformType;
+ 163:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 164:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct ParkTransformType
+ 165:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 166:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Id; /* Id */
+ 167:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Iq; /* Iq */
+ 168:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } ParkTransformType;
+ 169:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 170:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct Car2PolType
+ 171:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 172:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Flux_Vd; /* Vd */
+ 173:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Torque_Vq; /* Vq */
+ 174:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 175:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32;
+ 176:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31;
+ 177:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 178:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Vref32_Previous; /* |Vref| of last PWM cycle */
+ 179:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Vref_AngleQ31_Previous; /* Angle θ of last PWM cycle */
+ 180:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 181:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_Vref16; /* |Vref|, Magnitude (1Q15) of reference vector (for SVM) */
+ 182:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t SVM_Angle16; /* Angle θ (16-bit) of reference vector. 0 ~ 2^16 represent electrical ang
+ 183:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } Car2PolType;
+ 184:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 185:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 186:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 187:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 188:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define SHIFT_BIAS_LPF  (3U)      /* Shift times for unity gain LPF: Y[n] = Y[n-1] + (X[n]-Y[n-1])>
+ 189:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 190:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define MOTOR_TRANSITION  0     /* Motor is in transition mode */
+ 191:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define	MOTOR_STABLE    0xAB    /* Motor is in stable mode */
+ 192:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 193:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define DIRECTION_INC   0      /* Motor rotation direction - rotor angle increasing */
+ 194:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 195:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define ADJUST_DONE     0     /* Parameter adjustment has been done */
+ 196:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 197:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 198:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct MotorControlType
+ 199:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 200:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t L_METPLL; /* Motor inductance per phase, used in ωL|I| of MET and FOC PLL observer */
+ 201:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 202:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Speed; /* Rotor reference speed ωref, e.g.: determined by POT ADC or PWM duty cycle 
+ 203:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Speed; /* Motor shaft speed of V/f, MET (and FOC) */
+ 204:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 205:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Speed_by_POT_PWM; /* Target motor speed set by POT ADC, or PWM duty cycle */
+ 206:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t speed_in_rpm;
+ 207:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 208:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_DutyCycle; /* Duty cycle of the PWM for speed adjustment */
+ 209:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_Period; /* Period of the PWM (10kHz ~ 50kHz) for speed adjustment, almost a constant
+ 210:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t PWM_Speed_Raw; /* PWM-set speed, raw data */
+ 211:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t PWM_Freq; /* Frequency of PWM. */
+ 212:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 213:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ramp_Up_Rate; /* Motor speed ramp up rate */
+ 214:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ramp_Dn_Rate; /* Motor speed ramp down rate */
+ 215:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 216:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t State; /* Motor state (e.g.: V/f, MET, FOC) */
+ 217:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Rotation_Dir; /* Rotation direction of motor (rotor angle increasing, or decreasing) */
+ 218:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Mode_Flag; /* Flag to indicate if motor is in transition (MOTOR_TRANSITION) or stable (M
+ 219:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 220:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Control_Mode;
+ 221:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 222:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Adjust_Para_Flag; /*
+ 223:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                               * Flag to indicate parameter scheduling status,
+ 224:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                               * e.g.: for parameter adjust of PI controllers in FOC steady state.
+ 225:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                               */
+ 226:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 227:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* General purpose counter */
+ 228:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Ramp_Counter; /* General purpose counter, or counter for motor speed ramp up/down. */
+ 229:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Alignment_Counter; /* Counter for rotor initial positioning / alignment in V/f */
+ 230:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Non_RealTime_Counter; /* Counter for tasks that don't need real-time computing */
+ 231:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t FW_Counter; /* Counter for Flux Weakening (FW) */
+ 232:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t UART_Counter; /* Counter for UART communication */
+ 233:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t UART_Debug_Counter;
+ 234:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 235:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t FG_Speed; /* Motor speed for Frequency Generation (FG) only */
+ 236:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 237:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t UART_Data; /* Data received via UART */
+ 238:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 239:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Ref_Id; /* Id reference, for ACIM */
+ 240:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } MotorControlType;
+ 241:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 242:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 243:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct StallType /* For motor startup lock / fail / stall detection and protection. */
+ 244:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 245:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for detection of motor startup lock / fail / stall */
+ 246:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 247:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } StallType;
+ 248:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 249:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 250:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct TripType /* For trip / over-current detection and protection */
+ 251:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 252:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for trip / over-current protection */
+ 253:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 254:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t ADC_Ave_DC_Link; /* Average of ADC value (with LPF) for dc link current, to detect trip /
+ 255:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } TripType;
+ 256:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 257:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct OverUnderVoltType /* For over/under-voltage detection and protection */
+ 258:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 259:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Counter; /* Counter for over/under-voltage detection */
+ 260:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } OverUnderVoltType;
+ 261:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 262:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** typedef struct HallType /* For Hall signal processing */
+ 263:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 264:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Speed; /* Rotor speed obtained from Hall */
+ 265:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Speed_rpm; /* Rotor speed obtained from Hall, in rpm */
+ 266:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   int32_t Rotor_AngleQ31; /* Estimated rotor angle (1Q23 << 8) from Hall */
+ 267:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint16_t Flag; /* Flag to indicate if one Hall event has occurred */
+ 268:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Event_Counter; /* Counter for Hall events. */
+ 269:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 270:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Stall_Counter; /* Counter for Hall stall detection */
+ 271:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Restart_Counter; /* Counter for retry times to start motor if stall has been detected by
+ 272:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   uint32_t Rst_Restart_Counter; /* To reset Hall_Restart_Counter if no motor stall for certain time
+ 273:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** } HallType;
+ 274:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 275:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	typedef enum StateMachine
+ 276:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	{
+ 277:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		FOC_CLOSED_LOOP = 0,
+ 278:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		MET_CLOSED_LOOP,
+ 279:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		BRAKE_BOOTSTRAP,
+ 280:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		STOP_MOTOR,
+ 281:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		VFOPENLOOP_RAMP_UP,
+ 282:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		MET_FOC,
+ 283:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		PRE_POSITIONING,
+ 284:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		DCLINK_OVER_UNDER_VOLTAGE,
+ 285:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		MCU_SLEEP,
+ 286:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		TRAP_PROTECTION,
+ 287:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	}StateMachine;
+ 288:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 289:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define DEGREE_90   (4194304U << 8U)        /* 90° angle (0 ~ 2^23 represent electrical angle 0° 
+ 290:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define DEGREE_X    (DEGREE_90 * 1U)        /* X = 0°, 90°, 180°, or 270° */
+ 291:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define DEGREE_SHIFT  (652448U << 8U)         /* 14° angle shift */
+ 292:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 293:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define TH_POT_ADC    50              /* 50. Threshold POT ADC that motor can enter or exit motor i
+ 294:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define SYSTEM_BE_IDLE  (ADC.ADC_POT < TH_POT_ADC)  /* POT ADC is too low */
+ 295:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 296:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	/* %%%%%%%%%% PI Controller Configuration %%%%%%%%%% */
+ 297:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 298:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 299:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		#define SPEED_IK_LIMIT_MAX		PI_Speed.Ik_limit_max
+ 300:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		#define SPEED_IK_LIMIT_MIN		PI_Speed.Ik_limit_min
+ 301:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 302:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_KP				PI_Torque.Kp
+ 303:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_IK_LIMIT_MAX		PI_Torque.Ik_limit_max
+ 304:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 		#define TORQUE_IK_LIMIT_MIN		PI_Torque.Ik_limit_min
+ 305:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 306:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 307:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 308:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define	SCALE_SQRT3		  (10U)							// For √3 scaling, used in Clarke Transform.
+ 309:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define SQRT3			      (1.732050807569F)				// √3
+ 310:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define	DIV_SQRT3		    (591U)							// ((int16_t)((1/SQRT3) * (1<<SCALE_SQRT3)))
+ 311:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   #define DIV_SQRT3_Q14   (9459U)
+ 312:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 313:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define	SCALE_DIV_3		(14U)							// For 1/3 scaling.
+ 314:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define	DIV_3			(5461U)							// ((int16_t)((1/3) * (1<<SCALE_DIV_3)))
+ 315:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 316:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define	RATIO_S			(1U)							// Minimum ramp up and down ratio for S-curve profile
+ 317:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 318:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define PERIOD_ADD_0_OR_1	(1U)						// 0 or 1. Addition to period of a CCU8 PWM
+ 319:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 320:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define POR_OR_BOR			(0x01)						// RSTSTAT = 0000000001B, Power on reset or Brownout reset. Reaso
+ 321:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 322:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_500		((32768U * 1U) >> 1U)		// 500ms. MCU Sleep time before WDT reset system. 
+ 323:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_5		((327U * 1U) >> 1U)			// 5ms
+ 324:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	#define MILLISECOND_1500	((32768U * 3U) >> 1U)		// 1500ms
+ 325:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 326:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 327:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 328:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define CORDIC_VECTORING_MODE   (0x62)      // CORDIC: Circular Vectoring Mode (default). MPS: Divi
+ 329:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #define CORDIC_ROTATION_MODE    (0x6A)      // CORDIC: Circular Rotation Mode. MPS: Divide by 2 (de
+ 330:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 331:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 332:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   typedef struct PLL_EstimatorType
+ 333:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   {
+ 334:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     uint32_t Current_I_Mag;
+ 335:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     int32_t Delta_IV;
+ 336:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     int32_t VrefxSinDelta;
+ 337:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 338:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     int32_t RotorAngleQ31;
+ 339:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     int32_t RotorSpeed_In;
+ 340:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 341:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   }PLL_EstimatorType;
+ 342:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 343:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   extern FOCOutputType FOCOutput;                 // Output for FOC LIB.
+ 344:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   extern SVMType SVM;                          // SVM information, such as sector 0 ~ 5 (A ~ F) in 
+ 345:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 346:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 347:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Imag(int32_t Vref_AngleQ31, int32_t I_Alpha_1Q31, in
+ 348:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Imag_GetResult(PLL_EstimatorType* const HandlePtr);
+ 349:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Vref(int32_t Delta_IV, uint32_t Vref32, int32_t PLL_
+ 350:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                                     PLL_EstimatorType* const HandlePtr);
+ 351:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_Vref_GetResult(PLL_EstimatorType* const HandlePtr);
+ 352:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** __attribute__((section(".ram_code"))) void PLL_GetPosSpd(PLL_EstimatorType* const HandlePtr);
+ 353:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 354:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 355:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void VF_FOC_Brake_Motor_Bootstrap_Charge (void);
+ 356:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	extern void PWMSVM01_Update(uint16_t Amplitude, uint16_t Angle);
+ 357:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	extern void PI_controller_Init(void);
+ 358:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void FOC_SystemParameters_Init_OnceOnly (void);
+ 359:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 360:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 361:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 362:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Current_Reconstruction (uint16_t Previous_SVM_SectorNo,int32_t ADC_result1, int32_t ADC_result
+ 363:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #else
+ 364:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Current_Reconstruction (int32_t ADC_Iu, int32_t ADC_Iv, int32_t ADC_Iw, CurrentType * const Ha
+ 365:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #endif
+ 366:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ClarkeTransform(int32_t CurrentPhaseU, int32_t CurrentPhaseV, int32_t Cur
+ 367:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                           ClarkeTransformType* const HandlePtr);
+ 368:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform_GetResult(ParkTransformType* const HandlePtr);
+ 369:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ParkTransform (int32_t I_Alpha1Q31, int32_t I_Beta_1Q31, int32_t RotorAng
+ 370:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline void Cart2Polar(int32_t Torque_Vq, int32_t Flux_Vd, int32_t RotorAngleQ31);
+ 371:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void Car2Pol_GetResult(Car2PolType * const HandlePtr);
+ 372:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 373:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void FOC_Speed_Controller (void);
+ 374:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void SCurve_Ramp_Generator(int32_t set_val, int32_t rampup_rate, int32_t rampdown_rat
+ 375:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                          int32_t speedrampstep, int32_t *reference_val);
+ 376:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Linear_Ramp_Generator(int32_t set_val, int32_t rampup_rate, int32_t rampdown_rat
+ 377:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                          int32_t speedrampstep, int32_t *reference_val);
+ 378:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void FOC_Torque_Controller(void);
+ 379:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void Linear_Torque_Ramp_Generator(int32_t current_set,
+ 380:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                                                                int32_t dec_step,
+ 381:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                                                                FOCInputType* const 
+ 382:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void FOC_VQ_Controller(void);
+ 383:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** extern __attribute__((section(".ram_code"))) void Linear_VQ_Ramp_Generator(int32_t current_set, int
+ 384:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                                                            int32_t dec_step,
+ 385:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                                                            FOCInputType* const Hand
+ 386:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Misc_Works_of_IRQ (void);
+ 387:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 388:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Rotor_Pre_Positioning (void);
+ 389:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 390:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_Smooth_Transition_To_FOC (uint32_t Omega_Speed);
+ 391:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** uint16_t VF_Smooth_Transition_To_FOC (void);
+ 392:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Misc_Works_of_MET (void);
+ 393:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Transition_to_FOC (void);
+ 394:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_FOC_RotorAngle (void);
+ 395:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_FOC_PI_Iks (void);
+ 396:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 397:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Misc_Works_of_FOC (void);
+ 398:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 399:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Adjust_FOCSpeed_With_POT_PWM (void);
+ 400:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** RAM_ATTRIBUTE void Adjust_FOC_Parameters (void);
+ 401:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Stop_Motor (void);
+ 402:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Variables_Init (void);
+ 403:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 404:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** extern void CCU4_Debug3Output(int32_t In04, uint16_t In04_Flag, uint16_t In04_N, int32_t In10, uint
+ 405:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                               uint16_t In10_N);
+ 406:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Set_CCU4_Debug_Infor (void);
+ 407:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void CCU4_P1_3_Output (int32_t In_x, uint16_t In_x_Flag, uint16_t In_x_N);
+ 408:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 409:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Update_Vref_Angle (int32_t Speed);
+ 410:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 411:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_Single_Hall (void);
+ 412:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Hall_Speed_Detection (void);
+ 413:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Hall_Level_Detection (uint32_t Item_To_Detect);
+ 414:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 415:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_Detect_Motor_Stall (void);
+ 416:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Detect_Motor_Stall (void);
+ 417:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Detect_Trip_OverCurrent (void);
+ 418:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Detect_Over_Under_Voltage (void);
+ 419:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 420:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Init_Catch_FreeRunning_Motor (void);
+ 421:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 422:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void System_Low_Power_Mode (uint32_t Max_Sleep_Time);
+ 423:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Check_n_Go_Sleep (void);
+ 424:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 425:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 426:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	void CCU4_Init (void);
+ 427:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 	void Init_CCU8x_for_TRAP_LED_Indicator (void);
+ 428:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** void Error_Handling (void);
+ 429:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 430:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 431:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 432:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** /**
+ 433:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @brief To get current I_Alpha / I_Beta of last PWM cycle
+ 434:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * I_Alpha = I_U
+ 435:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * I_Beta = (I_U + 2 * I_V)/√3 = (I_V - I_W)/√3
+ 436:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * Above transform scales down I_Mag (i.e.: |I|) by 2/3. Need scale up by 3/2.
+ 437:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * Alternatively, can scale up inductance L in ωL|I| by 3/2 (legacy scaling).
+ 438:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+ 439:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  * @param Current.I_U
+ 440:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *      Current.I_V
+ 441:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *      Current.I_W
+ 442:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *
+ 443:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *@retval Current.I_Alpha_1Q31
+ 444:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  *      Current.I_Beta_1Q31
+ 445:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****  */
+ 446:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 447:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** inline RAM_ATTRIBUTE void ClarkeTransform(int32_t CurrentPhaseU, int32_t CurrentPhaseV, int32_t Cur
+ 448:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****                                           ClarkeTransformType* const HandlePtr)
+ 449:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** {
+ 450:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 451:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   HandlePtr->I_Alpha_1Q31 = CurrentPhaseU << CORDIC_SHIFT;
+ 452:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDIC_SHIFT-
+ 453:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 454:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** #else
+ 455:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 456:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   if(SVM.Flag_3or2_ADC == 0){
+ 167              	 .loc 2 456 0
+ 168 0012 3749     	 ldr r1,.L26+8
+ 169              	.LBE5:
+ 170              	.LBE4:
+ 159:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #endif
+ 160:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   ClarkeTransform(Current.I_U, Current.I_V, Current.I_W, &Clarke_Transform);
+ 171              	 .loc 1 160 0
+ 172 0014 2268     	 ldr r2,[r4]
+ 173              	.LBB10:
+ 174              	.LBB6:
+ 175              	 .loc 2 456 0
+ 176 0016 8988     	 ldrh r1,[r1,#4]
+ 177              	.LBE6:
+ 178              	.LBE10:
+ 179              	 .loc 1 160 0
+ 180 0018 6568     	 ldr r5,[r4,#4]
+ 181 001a A368     	 ldr r3,[r4,#8]
+ 182              	.LVL4:
+ 183              	.LBB11:
+ 184              	.LBB7:
+ 185              	 .loc 2 456 0
+ 186 001c 0029     	 cmp r1,#0
+ 187 001e 3AD1     	 bne .L10
+ 457:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     /* I_Alpha = (2 * I_U - (I_V + I_W))/3 */
+ 458:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     HandlePtr->I_Alpha_1Q31 = ((CurrentPhaseU << 1) - (CurrentPhaseV + CurrentPhaseW)) * (DIV_3 << 
+ 188              	 .loc 2 458 0
+ 189 0020 E918     	 add r1,r5,r3
+ 190 0022 5200     	 lsl r2,r2,#1
+ 191              	.LVL5:
+ 192 0024 501A     	 sub r0,r2,r1
+ 193 0026 3349     	 ldr r1,.L26+12
+ 194 0028 334C     	 ldr r4,.L26+16
+ 195              	.LVL6:
+ 196 002a 4143     	 mul r1,r0
+ 197 002c 2160     	 str r1,[r4]
+ 459:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h **** 
+ 460:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     /*  I_Beta = (I_V - I_W)/√3 in 1Q31 */
+ 461:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIFT-14))
+ 198              	 .loc 2 461 0
+ 199 002e 3349     	 ldr r1,.L26+20
+ 200 0030 EB1A     	 sub r3,r5,r3
+ 201              	.LVL7:
+ 202 0032 4B43     	 mul r3,r1
+ 203 0034 6360     	 str r3,[r4,#4]
+ 204              	.L11:
+ 205              	.LBE7:
+ 206              	.LBE11:
+ 161:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 162:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Rotor preposition/alignment counter ++. */
+ 163:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Motor.Alignment_Counter++;
+ 207              	 .loc 1 163 0
+ 208 0036 324C     	 ldr r4,.L26+24
+ 164:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   if (Motor.Alignment_Counter < ALIGNMENT_TIME)
+ 209              	 .loc 1 164 0
+ 210 0038 324A     	 ldr r2,.L26+28
+ 163:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   if (Motor.Alignment_Counter < ALIGNMENT_TIME)
+ 211              	 .loc 1 163 0
+ 212 003a 636C     	 ldr r3,[r4,#68]
+ 213 003c 0133     	 add r3,r3,#1
+ 214 003e 6364     	 str r3,[r4,#68]
+ 215              	 .loc 1 164 0
+ 216 0040 9342     	 cmp r3,r2
+ 217 0042 14D8     	 bhi .L16
+ 165:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 166:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 167:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     if (Car2Polar.SVM_Vref16 < PRE_POSIT_VOLT)
+ 218              	 .loc 1 167 0
+ 219 0044 304D     	 ldr r5,.L26+32
+ 220              	.LVL8:
+ 221 0046 288B     	 ldrh r0,[r5,#24]
+ 222 0048 7B28     	 cmp r0,#123
+ 223 004a 34D9     	 bls .L24
+ 224              	.L17:
+ 168:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     {
+ 169:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****       /* Vref increases gradually. */
+ 170:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****       Car2Polar.SVM_Vref16 += VREF_INC_STEP;
+ 171:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     }
+ 172:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   }
+ 173:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   else
+ 174:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 175:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Next, directly to FOC closed-loop for faster startup. */
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.State = (uint32_t) FOC_CLOSED_LOOP;
+ 177:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor in transition mode. */
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Mode_Flag = MOTOR_TRANSITION;
+ 179:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Clear counter. */
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Alignment_Counter = 0U;
+ 181:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Init FOC rotor speed ωr = PI_PLL.Uk, needed for ωL|I|, ωLId, ωLIq,
+ 182:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****      *  * and FG frequency calculation. */
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_PLL.Uk = (int32_t) Motor.Speed ;
+ 184:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor reference speed of FOC. */
+ 185:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Ref_Speed = (int32_t) Motor.Speed;
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Ik_unsigned = (uint32_t) Car2Polar.SVM_Vref16 << PI_TORQUE_SCALE_KPKI;
+ 187:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_Torque.Ik = (int32_t) Ik_unsigned << 0;
+ 188:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Init Vd's Ik = 0 of flux / Id PI controller. */
+ 189:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_Flux.Ik = 0;
+ 190:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #if(MY_FOC_CONTROL_SCHEME == CONSTANT_SPEED_DIRECT_FOC)
+ 191:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* no V/f or MET. */
+ 192:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Motor.Ramp_Up_Rate = (RAMPUP_RATE << 2U);
+ 193:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Slower ramp up for S-curve profile of FOC. */
+ 194:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_Speed.Ik = PI_SPEED_IK_DEFAULT << PI_SPEED_SCALE_KPKI;
+ 195:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 196:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #endif
+ 197:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   }
+ 198:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 199:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Update SVM PWM. */
+ 200:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   PWMSVM01_Update(Car2Polar.SVM_Vref16, Car2Polar.SVM_Angle16);
+ 225              	 .loc 1 200 0
+ 226 004c 698B     	 ldrh r1,[r5,#26]
+ 227 004e FFF7FEFF 	 bl PWMSVM01_Update
+ 228              	.LVL9:
+ 201:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Record SVM reference vector magnitude (32-bit) of last PWM cycle. */
+ 202:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Car2Polar.Vref32_Previous = Car2Polar.Vref32;
+ 229              	 .loc 1 202 0
+ 230 0052 AB68     	 ldr r3,[r5,#8]
+ 203:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Car2Polar.Vref32 = (uint32_t) Car2Polar.SVM_Vref16 << CORDIC_SHIFT;
+ 204:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 205:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   /* Init for smooth transition from V/f to FOC closed-loop. */
+ 206:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Init_Smooth_Transition_To_FOC(Motor.Speed);
+ 231              	 .loc 1 206 0
+ 232 0054 A068     	 ldr r0,[r4,#8]
+ 202:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Car2Polar.Vref32 = (uint32_t) Car2Polar.SVM_Vref16 << CORDIC_SHIFT;
+ 233              	 .loc 1 202 0
+ 234 0056 2B61     	 str r3,[r5,#16]
+ 203:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   Car2Polar.Vref32 = (uint32_t) Car2Polar.SVM_Vref16 << CORDIC_SHIFT;
+ 235              	 .loc 1 203 0
+ 236 0058 2B8B     	 ldrh r3,[r5,#24]
+ 237 005a 9B03     	 lsl r3,r3,#14
+ 238 005c AB60     	 str r3,[r5,#8]
+ 239              	 .loc 1 206 0
+ 240 005e FFF7FEFF 	 bl Init_Smooth_Transition_To_FOC
+ 241              	.LVL10:
+ 207:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 208:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   if (Motor.State == (uint32_t) FOC_CLOSED_LOOP)
+ 242              	 .loc 1 208 0
+ 243 0062 E36A     	 ldr r3,[r4,#44]
+ 244 0064 002B     	 cmp r3,#0
+ 245 0066 01D1     	 bne .L9
+ 209:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   {
+ 210:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Init parameters of FOC LIB. Init once only. */
+ 211:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     FOC_SystemParameters_Init_OnceOnly();
+ 246              	 .loc 1 211 0
+ 247 0068 FFF7FEFF 	 bl FOC_SystemParameters_Init_OnceOnly
+ 248              	.LVL11:
+ 249              	.L9:
+ 212:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****   }
+ 213:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** 
+ 214:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** }
+ 250              	 .loc 1 214 0
+ 251              	 
+ 252 006c 38BD     	 pop {r3,r4,r5,pc}
+ 253              	.LVL12:
+ 254              	.L16:
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor in transition mode. */
+ 255              	 .loc 1 176 0
+ 256 006e 0023     	 mov r3,#0
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor reference speed of FOC. */
+ 257              	 .loc 1 183 0
+ 258 0070 A268     	 ldr r2,[r4,#8]
+ 259 0072 2649     	 ldr r1,.L26+36
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_Torque.Ik = (int32_t) Ik_unsigned << 0;
+ 260              	 .loc 1 186 0
+ 261 0074 244D     	 ldr r5,.L26+32
+ 262              	.LVL13:
+ 183:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor reference speed of FOC. */
+ 263              	 .loc 1 183 0
+ 264 0076 4A60     	 str r2,[r1,#4]
+ 185:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     Ik_unsigned = (uint32_t) Car2Polar.SVM_Vref16 << PI_TORQUE_SCALE_KPKI;
+ 265              	 .loc 1 185 0
+ 266 0078 6260     	 str r2,[r4,#4]
+ 176:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Motor in transition mode. */
+ 267              	 .loc 1 176 0
+ 268 007a E362     	 str r3,[r4,#44]
+ 178:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Clear counter. */
+ 269              	 .loc 1 178 0
+ 270 007c 6386     	 strh r3,[r4,#50]
+ 180:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Init FOC rotor speed ωr = PI_PLL.Uk, needed for ωL|I|, ωLId, ωLIq,
+ 271              	 .loc 1 180 0
+ 272 007e 6364     	 str r3,[r4,#68]
+ 186:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     PI_Torque.Ik = (int32_t) Ik_unsigned << 0;
+ 273              	 .loc 1 186 0
+ 274 0080 288B     	 ldrh r0,[r5,#24]
+ 275              	.LVL14:
+ 276 0082 234A     	 ldr r2,.L26+40
+ 277 0084 011C     	 mov r1,r0
+ 278 0086 9269     	 ldr r2,[r2,#24]
+ 279 0088 9140     	 lsl r1,r1,r2
+ 280 008a 0A1C     	 mov r2,r1
+ 187:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     /* Init Vd's Ik = 0 of flux / Id PI controller. */
+ 281              	 .loc 1 187 0
+ 282 008c 2149     	 ldr r1,.L26+44
+ 283 008e 8A60     	 str r2,[r1,#8]
+ 189:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c **** #if(MY_FOC_CONTROL_SCHEME == CONSTANT_SPEED_DIRECT_FOC)
+ 284              	 .loc 1 189 0
+ 285 0090 214A     	 ldr r2,.L26+48
+ 286 0092 9360     	 str r3,[r2,#8]
+ 287 0094 DAE7     	 b .L17
+ 288              	.LVL15:
+ 289              	.L10:
+ 290              	.LBB12:
+ 291              	.LBB8:
+ 462:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   }
+ 463:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   else
+ 464:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****   {
+ 465:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     switch(FOCOutput.Previous_SVM_SectorNo)
+ 292              	 .loc 2 465 0
+ 293 0096 2149     	 ldr r1,.L26+52
+ 294 0098 098B     	 ldrh r1,[r1,#24]
+ 295 009a 0229     	 cmp r1,#2
+ 296 009c 0FD8     	 bhi .L13
+ 297 009e 0029     	 cmp r1,#0
+ 298 00a0 18D1     	 bne .L25
+ 299              	.L15:
+ 466:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     {
+ 467:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       case 0:
+ 468:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       case 5:
+ 469:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 = (-(CurrentPhaseV + CurrentPhaseW)) << CORDIC_SHIFT;
+ 470:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 300              	 .loc 2 470 0
+ 301 00a2 1649     	 ldr r1,.L26+20
+ 469:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 302              	 .loc 2 469 0
+ 303 00a4 EA18     	 add r2,r5,r3
+ 304              	.LVL16:
+ 305              	 .loc 2 470 0
+ 306 00a6 EB1A     	 sub r3,r5,r3
+ 307              	.LVL17:
+ 308 00a8 4B43     	 mul r3,r1
+ 469:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseV - CurrentPhaseW) * (DIV_SQRT3_Q14 << (CORDIC_SHIF
+ 309              	 .loc 2 469 0
+ 310 00aa 1348     	 ldr r0,.L26+16
+ 311 00ac 5242     	 neg r2,r2
+ 312 00ae 9203     	 lsl r2,r2,#14
+ 313 00b0 0260     	 str r2,[r0]
+ 314              	 .loc 2 470 0
+ 315 00b2 4360     	 str r3,[r0,#4]
+ 316 00b4 BFE7     	 b .L11
+ 317              	.LVL18:
+ 318              	.L24:
+ 319              	.LBE8:
+ 320              	.LBE12:
+ 170:../PMSM_FOC/ControlModules/pmsm_foc_directfoc_startup.c ****     }
+ 321              	 .loc 1 170 0
+ 322 00b6 0A30     	 add r0,r0,#10
+ 323 00b8 80B2     	 uxth r0,r0
+ 324 00ba 2883     	 strh r0,[r5,#24]
+ 325 00bc C6E7     	 b .L17
+ 326              	.LVL19:
+ 327              	.L13:
+ 328              	.LBB13:
+ 329              	.LBB9:
+ 465:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****     {
+ 330              	 .loc 2 465 0
+ 331 00be 0529     	 cmp r1,#5
+ 332 00c0 EFD0     	 beq .L15
+ 471:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       break;
+ 472:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       case 1:
+ 473:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       case 2:
+ 474:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 =  CurrentPhaseU << CORDIC_SHIFT;
+ 475:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 476:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****         break;
+ 477:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****       default:
+ 478:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Alpha_1Q31 = CurrentPhaseU << CORDIC_SHIFT;
+ 333              	 .loc 2 478 0
+ 334 00c2 0D49     	 ldr r1,.L26+16
+ 335 00c4 9303     	 lsl r3,r2,#14
+ 336              	.LVL20:
+ 337 00c6 0B60     	 str r3,[r1]
+ 479:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 = (CurrentPhaseU + (CurrentPhaseV << 1)) * (DIV_SQRT3_Q14 <<(CORDI
+ 338              	 .loc 2 479 0
+ 339 00c8 6B00     	 lsl r3,r5,#1
+ 340 00ca D218     	 add r2,r2,r3
+ 341              	.LVL21:
+ 342 00cc 0B4B     	 ldr r3,.L26+20
+ 343 00ce 5A43     	 mul r2,r3
+ 344 00d0 4A60     	 str r2,[r1,#4]
+ 345 00d2 B0E7     	 b .L11
+ 346              	.LVL22:
+ 347              	.L25:
+ 475:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****         break;
+ 348              	 .loc 2 475 0
+ 349 00d4 5B00     	 lsl r3,r3,#1
+ 350              	.LVL23:
+ 474:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 351              	 .loc 2 474 0
+ 352 00d6 9003     	 lsl r0,r2,#14
+ 475:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****         break;
+ 353              	 .loc 2 475 0
+ 354 00d8 D218     	 add r2,r2,r3
+ 355              	.LVL24:
+ 356 00da 114B     	 ldr r3,.L26+56
+ 474:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 357              	 .loc 2 474 0
+ 358 00dc 0649     	 ldr r1,.L26+16
+ 475:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****         break;
+ 359              	 .loc 2 475 0
+ 360 00de 5A43     	 mul r2,r3
+ 474:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****           HandlePtr->I_Beta_1Q31 =  (CurrentPhaseU + (CurrentPhaseW << 1)) * (-(DIV_SQRT3_Q14 <<(CO
+ 361              	 .loc 2 474 0
+ 362 00e0 0860     	 str r0,[r1]
+ 475:../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_functions.h ****         break;
+ 363              	 .loc 2 475 0
+ 364 00e2 4A60     	 str r2,[r1,#4]
+ 365 00e4 A7E7     	 b .L11
+ 366              	.L27:
+ 367 00e6 C046     	 .align 2
+ 368              	.L26:
+ 369 00e8 00000000 	 .word ADC
+ 370 00ec 00000000 	 .word Current
+ 371 00f0 00000000 	 .word SVM
+ 372 00f4 55150000 	 .word 5461
+ 373 00f8 00000000 	 .word Clarke_Transform
+ 374 00fc F3240000 	 .word 9459
+ 375 0100 00000000 	 .word Motor
+ 376 0104 DB050000 	 .word 1499
+ 377 0108 00000000 	 .word Car2Polar
+ 378 010c 00000000 	 .word PI_PLL
+ 379 0110 00000000 	 .word User_Para
+ 380 0114 00000000 	 .word PI_Torque
+ 381 0118 00000000 	 .word PI_Flux
+ 382 011c 00000000 	 .word FOCOutput
+ 383 0120 0DDBFFFF 	 .word -9459
+ 384              	.LBE9:
+ 385              	.LBE13:
+ 386              	 .cfi_endproc
+ 387              	.LFE202:
+ 389              	 .text
+ 390              	.Letext0:
+ 391              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 392              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 393              	 .file 5 "../PMSM_FOC/ControlModules/../MIDSys/../MCUInit/adc.h"
+ 394              	 .file 6 "../PMSM_FOC/ControlModules/../MIDSys/../ControlModules/pmsm_foc_pi.h"
+ 395              	 .file 7 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\midsys\\pmsm_foc_pwmsvm.h"
+ 396              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 397              	 .file 9 "../PMSM_FOC/ControlModules/../Configuration/pmsm_foc_user_parameter.h"
+ 398              	 .file 10 "../PMSM_FOC/ControlModules/../MIDSys/pmsm_foc_current_threeshunt.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_directfoc_startup.c
+    {standard input}:20     .text.DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge:00000000 $t
+    {standard input}:25     .text.DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge:00000000 DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge
+    {standard input}:131    .text.DirectFOC_StartUp_Brake_Motor_Bootstrap_Charge:00000074 $d
+    {standard input}:140    .text.DirectFOCRotor_Pre_Positioning:00000000 $t
+    {standard input}:145    .text.DirectFOCRotor_Pre_Positioning:00000000 DirectFOCRotor_Pre_Positioning
+    {standard input}:369    .text.DirectFOCRotor_Pre_Positioning:000000e8 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_ui2f
+__aeabi_fcmpgt
+Get_ADCPhaseCurrent
+ADC
+SVM
+Motor
+Current
+Current_Reconstruction
+PWMSVM01_Update
+Init_Smooth_Transition_To_FOC
+FOC_SystemParameters_Init_OnceOnly
+Clarke_Transform
+Car2Polar
+PI_PLL
+User_Para
+PI_Torque
+PI_Flux
+FOCOutput

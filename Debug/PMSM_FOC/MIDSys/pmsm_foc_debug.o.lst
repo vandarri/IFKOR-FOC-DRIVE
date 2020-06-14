@@ -1,0 +1,1163 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_debug.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.CCU4_Debug3Output,"ax",%progbits
+  18              	 .align 2
+  19              	 .global CCU4_Debug3Output
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	CCU4_Debug3Output:
+  24              	.LFB241:
+  25              	 .file 1 "../PMSM_FOC/MIDSys/pmsm_foc_debug.c"
+   1:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /**
+   2:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @file pmsm_foc_debug.c
+   3:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @date 2016-01-18
+   4:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+   5:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @cond
+   6:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+   9:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * All rights reserved.
+  11:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  12:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * following conditions are met:
+  14:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  15:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   disclaimer.
+  17:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  18:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  21:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  24:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  32:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+  36:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  37:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @file pmsm_foc_debug.c
+  38:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @date 18 Jan, 2016
+  39:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @version 1.0.0
+  40:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  41:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  42:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  43:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * <b>Detailed description of file</b> <br>
+  44:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * APIs provided in this file mainly cover the following functionality:
+  45:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * ---- Filter, Hysterisis, Output inversion
+  46:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  47:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * History
+  48:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  49:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * 18 Jan 2016 Version 1.0.0 <br>:
+  50:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *      Initial version
+  51:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * @endcond
+  52:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  *
+  53:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  */
+  54:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  55:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /**************************************************************************************************
+  56:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * HEADER FILES
+  57:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+  58:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  59:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** #include <XMC1300.h>
+  60:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** #include "pmsm_foc_debug.h"
+  61:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  62:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /**************************************************************************************************
+  63:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * MACROS
+  64:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+  65:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  66:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  67:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /**************************************************************************************************
+  68:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * GLOBAL DATA
+  69:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** ***************************************************************************************************
+  70:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** extern ADCType ADC;
+  71:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** extern MotorControlType Motor;                     /* Motor control information */
+  72:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** int32_t Speed_in_rpm;
+  73:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** int32_t Motor_speed_in_rpm;
+  74:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /**************************************************************************************************
+  75:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  * API IMPLEMENTATION
+  76:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****  **************************************************************************************************
+  77:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  78:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /* API to use CCU4 Debug with 2 Outputs, P0.4 and P1.0 */
+  79:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** void CCU4_Debug3Output(int32_t In04, uint16_t In04_Flag, uint16_t In04_N, int32_t In10, uint16_t In
+  80:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****                        uint16_t In10_N)
+  81:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** {
+  26              	 .loc 1 81 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  82:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #if ((DEBUG_PWM_0_ENABLE == 1U) || (DEBUG_PWM_1_ENABLE == 1U))
+  83:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   int32_t Tmp_CRS;									/* Tmp for CCU4 debug. */
+  84:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #endif
+  85:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  86:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #if	(DEBUG_PWM_0_ENABLE == 1U)
+  87:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   /* Update CCU40.OUT0 (P1.0) duty-cycle for debug. */
+  88:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   if (In10_Flag == 0U)
+  89:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+  90:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = (In10 * DEBUG_PWM_PERIOD_CNTS) >> In10_N; /* In10 is a positive integer, In10 < 2^In1
+  91:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+  92:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   else
+  93:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+  94:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* In10 is a positive or negative integer, -2^In10_N < In10 < 2^In10_N. */
+  95:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = ((In10 + (1U << In10_N)) * DEBUG_PWM_PERIOD_CNTS) >> (In10_N + 1U);
+  96:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+  97:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+  98:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   if (Tmp_CRS < 0)
+  99:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 100:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = REVERSE_CRS_OR_0;
+ 101:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 102:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   XMC_CCU4_SLICE_SetTimerCompareMatch( DEBUG_PWM_0_SLICE, Tmp_CRS);		/* Update CCU41 Shadow Compare
+ 103:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   XMC_CCU4_EnableShadowTransfer(DEBUG_PWM_CCU4_MODULE, (uint32_t)DEBUG_PWM_0_SLICE_SHADOW_TRANS_ENA
+ 104:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #endif /* (DEBUG_PWM_0_ENABLE == 1) */
+ 105:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 106:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #if	(DEBUG_PWM_1_ENABLE == 1U)
+ 107:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   /* Update CCU40.OUT1 (P0.4) duty-cycle for debug. */
+ 108:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   if (In04_Flag == 0U)
+ 109:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 110:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = (In04 * DEBUG_PWM_PERIOD_CNTS) >> In04_N; /* In04 is a positive integer. */
+ 111:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 112:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   else
+ 113:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 114:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* In04 is a positive or negative integer. */
+ 115:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = ((In04 + (1U << In04_N)) * DEBUG_PWM_PERIOD_CNTS) >> (In04_N + 1U);
+ 116:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 117:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 118:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   if (Tmp_CRS < 0)
+ 119:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 120:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Tmp_CRS = REVERSE_CRS_OR_0;
+ 121:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 122:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   XMC_CCU4_SLICE_SetTimerCompareMatch( DEBUG_PWM_1_SLICE, Tmp_CRS);		/* Update CCU41 Shadow Compare
+ 123:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 124:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   XMC_CCU4_EnableShadowTransfer(DEBUG_PWM_CCU4_MODULE, (uint32_t)DEBUG_PWM_1_SLICE_SHADOW_TRANS_ENA
+ 125:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** #endif /* (DEBUG_PWM_1_ENABLE == 1) */
+ 126:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 127:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** }	/* End of CCU4_Debug3Output () */
+  29              	 .loc 1 127 0
+  30              	 
+  31 0000 7047     	 bx lr
+  32              	 .cfi_endproc
+  33              	.LFE241:
+  35 0002 C046     	 .section .text.UART_Set_POT_ADC,"ax",%progbits
+  36              	 .align 2
+  37              	 .global UART_Set_POT_ADC
+  38              	 .code 16
+  39              	 .thumb_func
+  41              	UART_Set_POT_ADC:
+  42              	.LFB242:
+ 128:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 129:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** /* Use UART to set POT ADC, and hence target motor speed
+ 130:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****    ** Execution time: ?? executed from RAM (O3 - Optimize most).
+ 131:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****      * ----------------------------------------------------------*/
+ 132:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** #if(UART_ENABLE != USIC_DISABLED_ALL)
+ 133:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** void UART_Set_POT_ADC(void)
+ 134:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** {
+  43              	 .loc 1 134 0
+  44              	 .cfi_startproc
+ 135:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   /* Init motor speed adjusted by POT ADC by default.*/
+ 136:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   static uint16_t UART_Received_Data = 'x';
+ 137:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 138:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 139:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 140:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #if(UART_ENABLE == USIC_DISABLED_ALL)
+ 141:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   uint16_t pot_adc_result;
+ 142:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   #endif
+ 143:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 144:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   /* EMPTY = 0, receive buffer is not empty.*/
+ 145:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   if ((USIC0_CHX_TRBSR & 0x00000008) == 0)
+  45              	 .loc 1 145 0
+  46 0000 8A22     	 mov r2,#138
+ 134:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   /* Init motor speed adjusted by POT ADC by default.*/
+  47              	 .loc 1 134 0
+  48 0002 38B5     	 push {r3,r4,r5,lr}
+  49              	 .cfi_def_cfa_offset 16
+  50              	 .cfi_offset 3,-16
+  51              	 .cfi_offset 4,-12
+  52              	 .cfi_offset 5,-8
+  53              	 .cfi_offset 14,-4
+  54              	 .loc 1 145 0
+  55 0004 854B     	 ldr r3,.L36
+  56 0006 5200     	 lsl r2,r2,#1
+  57 0008 9A58     	 ldr r2,[r3,r2]
+  58 000a 1207     	 lsl r2,r2,#28
+  59 000c 3AD5     	 bpl .L31
+ 146:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 147:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /*Data received via UART.*/
+ 148:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     UART_Received_Data = (USIC0_CHX_OUTR & 0x0000FFFF);
+ 149:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 150:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* Send carriage return, and new line.*/
+ 151:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     UART_TX_Return_NewLine(0x02);
+ 152:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* Debug information.*/
+ 153:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     UART_TX_String("Speed Ref (rpm)");
+ 154:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 155:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     if ((UART_Received_Data == 'x') || (UART_Received_Data == 'X'))
+ 156:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     {
+ 157:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       /* Motor speed adjusted by POT ADC. */
+ 158:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       UART_TX_String(" by POT ADC");
+ 159:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     }
+ 160:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     else
+ 161:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     {
+ 162:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       /* Use UART to adjust POT ADC, and hence target motor speed.*/
+ 163:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       switch (UART_Received_Data)
+ 164:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       {
+ 165:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         /* '0', or space bar (or blank or space key).*/
+ 166:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '0':
+ 167:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case ' ':
+ 168:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_0;
+ 169:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Speed 0rpm. Stop motor. */
+ 170:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_0);
+ 171:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->Stop");
+ 172:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 173:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 174:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '1':
+ 175:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_1;
+ 176:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 10% of max speed. */
+ 177:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_1);
+ 178:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->10%");
+ 179:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 180:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 181:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '2':
+ 182:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_2;
+ 183:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  20% of max speed.*/
+ 184:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_2);
+ 185:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->20%");
+ 186:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 187:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 188:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '3':
+ 189:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_3;
+ 190:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 30% of max speed. */
+ 191:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_3);
+ 192:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->30%");
+ 193:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 194:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 195:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '4':
+ 196:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_4;
+ 197:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  40% of max speed. */
+ 198:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_4);
+ 199:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->40%");
+ 200:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 201:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 202:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '5':
+ 203:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_5;
+ 204:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 50% of max speed. */
+ 205:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_5);
+ 206:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->50%");
+ 207:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 208:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 209:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '6':
+ 210:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_6;
+ 211:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 60% of max speed. */
+ 212:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_6);
+ 213:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->60%");
+ 214:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 215:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 216:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '7':
+ 217:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_7;
+ 218:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 70% of max speed. */
+ 219:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_7);
+ 220:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->70%");
+ 221:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 222:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 223:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '8':
+ 224:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_8;
+ 225:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 80% of max speed.*/
+ 226:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_8);
+ 227:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->80%");
+ 228:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 229:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 230:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '9':
+ 231:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_9;
+ 232:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 90% of max speed. */
+ 233:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_9);
+ 234:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->90%");
+ 235:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 236:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 237:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case 'a':
+ 238:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           ADC.ADC_POT = FOR_MOTOR_SPEED_A;
+ 239:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 100% of max speed. */
+ 240:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(MOTOR_SPEED_A);
+ 241:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->100%");
+ 242:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 243:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 244:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '=':
+ 245:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '+':
+ 246:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           if (ADC.ADC_POT <= (FOR_MOTOR_SPEED_A - ADC_FOR_STEP_50_RPM ))
+ 247:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 248:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             ADC.ADC_POT += ADC_FOR_STEP_50_RPM;
+ 249:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /* Speed + 50rpm */
+ 250:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" +50 rpm");
+ 251:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 252:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           else
+ 253:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 254:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             ADC.ADC_POT = FOR_MOTOR_SPEED_A;
+ 255:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /* 100% of max speed. */
+ 256:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_uint16_t(MOTOR_SPEED_A);
+ 257:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 258:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 259:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 260:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case '-':                 // '-'.
+ 261:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           if (ADC.ADC_POT >= (FOR_MOTOR_SPEED_1 + ADC_FOR_STEP_50_RPM ))
+ 262:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 263:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             ADC.ADC_POT -= ADC_FOR_STEP_50_RPM;
+ 264:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /* Speed - 50rpm. */
+ 265:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" -50 rpm");
+ 266:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 267:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           else
+ 268:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 269:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             ADC.ADC_POT = FOR_MOTOR_SPEED_1;
+ 270:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /*  10% of max speed. */
+ 271:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_uint16_t(MOTOR_SPEED_1);
+ 272:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 273:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 274:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 275:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         default:
+ 276:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Process for all other cases, no update of POT ADC. */
+ 277:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" no change");
+ 278:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 279:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       }
+ 280:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     }
+ 281:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 282:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   else
+ 283:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   {
+ 284:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* Receive buffer is empty.*/
+ 285:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     if ((UART_Received_Data == 'x') || (UART_Received_Data == 'X'))
+ 286:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     {
+ 287:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 288:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 289:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     }
+ 290:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 291:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     Motor.UART_Debug_Counter++;
+  60              	 .loc 1 291 0
+  61 000e 844C     	 ldr r4,.L36+4
+  62 0010 636D     	 ldr r3,[r4,#84]
+  63 0012 0133     	 add r3,r3,#1
+ 292:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     if (Motor.UART_Debug_Counter > UART_SPEED_UPDATE_RATE)
+  64              	 .loc 1 292 0
+  65 0014 5A2B     	 cmp r3,#90
+  66 0016 33D9     	 bls .L32
+ 293:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     {
+ 294:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       Motor.UART_Debug_Counter = 0;
+  67              	 .loc 1 294 0
+  68 0018 0023     	 mov r3,#0
+  69 001a 6365     	 str r3,[r4,#84]
+ 295:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 296:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       switch (Motor.State)
+  70              	 .loc 1 296 0
+  71 001c E36A     	 ldr r3,[r4,#44]
+  72 001e 022B     	 cmp r3,#2
+  73 0020 4ED0     	 beq .L25
+  74 0022 092B     	 cmp r3,#9
+  75 0024 48D0     	 beq .L33
+ 297:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       {
+ 298:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         /* CCU8 TRAP has occurred.*/
+ 299:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case TRAP_PROTECTION:
+ 300:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\r\n\n\nCCU8 Trap!, key in 0");
+ 301:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 302:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 303:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         case BRAKE_BOOTSTRAP:
+ 304:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\r\n ADC Bias:");
+ 305:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Bias of ADC Iu.*/
+ 306:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_Bias_Iu);
+ 307:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_Bias_Iv);
+ 308:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_Bias_Iw);
+ 309:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 310:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 311:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 312:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****         default:
+ 313:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Process for all other cases. Normal operation. */
+ 314:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\r\n rpm:");
+  76              	 .loc 1 314 0
+  77 0026 7F48     	 ldr r0,.L36+8
+  78 0028 FFF7FEFF 	 bl UART_TX_String
+  79              	.LVL1:
+ 315:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 316:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 317:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           Speed_in_rpm = (Motor.Speed * SPEED_TO_RPM ) >> SCALE_SPEED_TO_RPM;
+  80              	 .loc 1 317 0
+  81 002c A368     	 ldr r3,[r4,#8]
+  82 002e 7E4D     	 ldr r5,.L36+12
+  83 0030 D800     	 lsl r0,r3,#3
+  84 0032 C018     	 add r0,r0,r3
+  85 0034 8301     	 lsl r3,r0,#6
+  86 0036 C018     	 add r0,r0,r3
+  87 0038 C00A     	 lsr r0,r0,#11
+  88 003a 2860     	 str r0,[r5]
+ 318:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           Motor.speed_in_rpm = Speed_in_rpm;
+  89              	 .loc 1 318 0
+  90 003c 2061     	 str r0,[r4,#16]
+ 319:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Debug information, showing rotor speed in rpm. */
+ 320:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(Speed_in_rpm);
+  91              	 .loc 1 320 0
+  92 003e 80B2     	 uxth r0,r0
+  93 0040 FFF7FEFF 	 bl UART_TX_uint16_t
+  94              	.LVL2:
+ 321:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 322:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           Speed_in_rpm -= ((Motor.Ref_Speed * SPEED_TO_RPM ) >> SCALE_SPEED_TO_RPM);
+  95              	 .loc 1 322 0
+  96 0044 6368     	 ldr r3,[r4,#4]
+ 323:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\t\t Ref");
+  97              	 .loc 1 323 0
+  98 0046 7948     	 ldr r0,.L36+16
+ 322:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\t\t Ref");
+  99              	 .loc 1 322 0
+ 100 0048 DA00     	 lsl r2,r3,#3
+ 101 004a D218     	 add r2,r2,r3
+ 102 004c 9301     	 lsl r3,r2,#6
+ 103 004e D318     	 add r3,r2,r3
+ 104 0050 2A68     	 ldr r2,[r5]
+ 105 0052 DB0A     	 lsr r3,r3,#11
+ 106 0054 D31A     	 sub r3,r2,r3
+ 107 0056 2B60     	 str r3,[r5]
+ 108              	 .loc 1 323 0
+ 109 0058 FFF7FEFF 	 bl UART_TX_String
+ 110              	.LVL3:
+ 324:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           if (Speed_in_rpm < 0)
+ 111              	 .loc 1 324 0
+ 112 005c 2B68     	 ldr r3,[r5]
+ 113 005e 002B     	 cmp r3,#0
+ 114 0060 00DA     	 bge .LCB77
+ 115 0062 C8E0     	 b .L34
+ 116              	.LCB77:
+ 325:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 326:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             Speed_in_rpm = -Speed_in_rpm;
+ 327:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" -");
+ 328:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 329:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           else
+ 330:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 331:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" +");
+ 117              	 .loc 1 331 0
+ 118 0064 7248     	 ldr r0,.L36+20
+ 119 0066 FFF7FEFF 	 bl UART_TX_String
+ 120              	.LVL4:
+ 121              	.L28:
+ 332:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 333:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Debug information, showing speed error in rpm. */
+ 334:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(Speed_in_rpm);
+ 122              	 .loc 1 334 0
+ 123 006a 2888     	 ldrh r0,[r5]
+ 124 006c FFF7FEFF 	 bl UART_TX_uint16_t
+ 125              	.LVL5:
+ 335:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 336:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String("\t POT");
+ 126              	 .loc 1 336 0
+ 127 0070 7048     	 ldr r0,.L36+24
+ 128 0072 FFF7FEFF 	 bl UART_TX_String
+ 129              	.LVL6:
+ 337:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_POT);
+ 130              	 .loc 1 337 0
+ 131 0076 704B     	 ldr r3,.L36+28
+ 132 0078 188C     	 ldrh r0,[r3,#32]
+ 133 007a FFF7FEFF 	 bl UART_TX_uint16_t
+ 134              	.LVL7:
+ 338:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 339:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 135              	 .loc 1 339 0
+ 136 007e 00E0     	 b .L2
+ 137              	.L32:
+ 291:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     if (Motor.UART_Debug_Counter > UART_SPEED_UPDATE_RATE)
+ 138              	 .loc 1 291 0
+ 139 0080 6365     	 str r3,[r4,#84]
+ 140              	.L2:
+ 340:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       }
+ 341:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     }
+ 342:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****   }
+ 343:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** }
+ 141              	 .loc 1 343 0
+ 142              	 
+ 143 0082 38BD     	 pop {r3,r4,r5,pc}
+ 144              	.L31:
+ 148:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 145              	 .loc 1 148 0
+ 146 0084 8E22     	 mov r2,#142
+ 147 0086 5200     	 lsl r2,r2,#1
+ 148 0088 9B58     	 ldr r3,[r3,r2]
+ 149 008a 6C4C     	 ldr r4,.L36+32
+ 151:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* Debug information.*/
+ 150              	 .loc 1 151 0
+ 151 008c 0220     	 mov r0,#2
+ 148:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 152              	 .loc 1 148 0
+ 153 008e 2380     	 strh r3,[r4]
+ 151:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     /* Debug information.*/
+ 154              	 .loc 1 151 0
+ 155 0090 FFF7FEFF 	 bl UART_TX_Return_NewLine
+ 156              	.LVL8:
+ 153:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 157              	 .loc 1 153 0
+ 158 0094 6A48     	 ldr r0,.L36+36
+ 159 0096 FFF7FEFF 	 bl UART_TX_String
+ 160              	.LVL9:
+ 155:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     {
+ 161              	 .loc 1 155 0
+ 162 009a 2388     	 ldrh r3,[r4]
+ 163 009c 2022     	 mov r2,#32
+ 164 009e 191C     	 mov r1,r3
+ 165 00a0 9143     	 bic r1,r2
+ 166 00a2 5829     	 cmp r1,#88
+ 167 00a4 1AD0     	 beq .L35
+ 163:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       {
+ 168              	 .loc 1 163 0
+ 169 00a6 203B     	 sub r3,r3,#32
+ 170 00a8 9BB2     	 uxth r3,r3
+ 171 00aa 412B     	 cmp r3,#65
+ 172 00ac 00D9     	 bls .LCB131
+ 173 00ae 9EE0     	 b .L6
+ 174              	.LCB131:
+ 175 00b0 644A     	 ldr r2,.L36+40
+ 176 00b2 9B00     	 lsl r3,r3,#2
+ 177 00b4 D358     	 ldr r3,[r2,r3]
+ 178 00b6 9F46     	 mov pc,r3
+ 179              	 .section .rodata.UART_Set_POT_ADC,"a",%progbits
+ 180              	 .align 2
+ 181              	.L8:
+ 182 0000 FA000000 	 .word .L7
+ 183 0004 EE010000 	 .word .L6
+ 184 0008 EE010000 	 .word .L6
+ 185 000c EE010000 	 .word .L6
+ 186 0010 EE010000 	 .word .L6
+ 187 0014 EE010000 	 .word .L6
+ 188 0018 EE010000 	 .word .L6
+ 189 001c EE010000 	 .word .L6
+ 190 0020 EE010000 	 .word .L6
+ 191 0024 EE010000 	 .word .L6
+ 192 0028 EE010000 	 .word .L6
+ 193 002c 0E010000 	 .word .L9
+ 194 0030 EE010000 	 .word .L6
+ 195 0034 22010000 	 .word .L10
+ 196 0038 EE010000 	 .word .L6
+ 197 003c EE010000 	 .word .L6
+ 198 0040 FA000000 	 .word .L7
+ 199 0044 36010000 	 .word .L11
+ 200 0048 4C010000 	 .word .L12
+ 201 004c 60010000 	 .word .L13
+ 202 0050 74010000 	 .word .L14
+ 203 0054 88010000 	 .word .L15
+ 204 0058 9E010000 	 .word .L16
+ 205 005c B2010000 	 .word .L17
+ 206 0060 C6010000 	 .word .L18
+ 207 0064 DA010000 	 .word .L19
+ 208 0068 EE010000 	 .word .L6
+ 209 006c EE010000 	 .word .L6
+ 210 0070 EE010000 	 .word .L6
+ 211 0074 0E010000 	 .word .L9
+ 212 0078 EE010000 	 .word .L6
+ 213 007c EE010000 	 .word .L6
+ 214 0080 EE010000 	 .word .L6
+ 215 0084 EE010000 	 .word .L6
+ 216 0088 EE010000 	 .word .L6
+ 217 008c EE010000 	 .word .L6
+ 218 0090 EE010000 	 .word .L6
+ 219 0094 EE010000 	 .word .L6
+ 220 0098 EE010000 	 .word .L6
+ 221 009c EE010000 	 .word .L6
+ 222 00a0 EE010000 	 .word .L6
+ 223 00a4 EE010000 	 .word .L6
+ 224 00a8 EE010000 	 .word .L6
+ 225 00ac EE010000 	 .word .L6
+ 226 00b0 EE010000 	 .word .L6
+ 227 00b4 EE010000 	 .word .L6
+ 228 00b8 EE010000 	 .word .L6
+ 229 00bc EE010000 	 .word .L6
+ 230 00c0 EE010000 	 .word .L6
+ 231 00c4 EE010000 	 .word .L6
+ 232 00c8 EE010000 	 .word .L6
+ 233 00cc EE010000 	 .word .L6
+ 234 00d0 EE010000 	 .word .L6
+ 235 00d4 EE010000 	 .word .L6
+ 236 00d8 EE010000 	 .word .L6
+ 237 00dc EE010000 	 .word .L6
+ 238 00e0 EE010000 	 .word .L6
+ 239 00e4 EE010000 	 .word .L6
+ 240 00e8 EE010000 	 .word .L6
+ 241 00ec EE010000 	 .word .L6
+ 242 00f0 EE010000 	 .word .L6
+ 243 00f4 EE010000 	 .word .L6
+ 244 00f8 EE010000 	 .word .L6
+ 245 00fc EE010000 	 .word .L6
+ 246 0100 EE010000 	 .word .L6
+ 247 0104 E4000000 	 .word .L20
+ 248              	 .section .text.UART_Set_POT_ADC
+ 249              	.L33:
+ 300:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 250              	 .loc 1 300 0
+ 251 00b8 6348     	 ldr r0,.L36+44
+ 252 00ba FFF7FEFF 	 bl UART_TX_String
+ 253              	.LVL10:
+ 301:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 254              	 .loc 1 301 0
+ 255 00be E0E7     	 b .L2
+ 256              	.L25:
+ 304:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Bias of ADC Iu.*/
+ 257              	 .loc 1 304 0
+ 258 00c0 6248     	 ldr r0,.L36+48
+ 259 00c2 FFF7FEFF 	 bl UART_TX_String
+ 260              	.LVL11:
+ 306:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_Bias_Iv);
+ 261              	 .loc 1 306 0
+ 262 00c6 5C4C     	 ldr r4,.L36+28
+ 263 00c8 2089     	 ldrh r0,[r4,#8]
+ 264 00ca FFF7FEFF 	 bl UART_TX_uint16_t
+ 265              	.LVL12:
+ 307:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_uint16_t(ADC.ADC_Bias_Iw);
+ 266              	 .loc 1 307 0
+ 267 00ce A089     	 ldrh r0,[r4,#12]
+ 268 00d0 FFF7FEFF 	 bl UART_TX_uint16_t
+ 269              	.LVL13:
+ 308:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 270              	 .loc 1 308 0
+ 271 00d4 208A     	 ldrh r0,[r4,#16]
+ 272 00d6 FFF7FEFF 	 bl UART_TX_uint16_t
+ 273              	.LVL14:
+ 310:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 274              	 .loc 1 310 0
+ 275 00da D2E7     	 b .L2
+ 276              	.L35:
+ 158:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****     }
+ 277              	 .loc 1 158 0
+ 278 00dc 5C48     	 ldr r0,.L36+52
+ 279 00de FFF7FEFF 	 bl UART_TX_String
+ 280              	.LVL15:
+ 281 00e2 CEE7     	 b .L2
+ 282              	.L20:
+ 238:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 100% of max speed. */
+ 283              	 .loc 1 238 0
+ 284 00e4 8022     	 mov r2,#128
+ 285 00e6 544B     	 ldr r3,.L36+28
+ 286 00e8 5201     	 lsl r2,r2,#5
+ 240:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->100%");
+ 287              	 .loc 1 240 0
+ 288 00ea 5A48     	 ldr r0,.L36+56
+ 238:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 100% of max speed. */
+ 289              	 .loc 1 238 0
+ 290 00ec 1A62     	 str r2,[r3,#32]
+ 240:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->100%");
+ 291              	 .loc 1 240 0
+ 292 00ee FFF7FEFF 	 bl UART_TX_uint16_t
+ 293              	.LVL16:
+ 241:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 294              	 .loc 1 241 0
+ 295 00f2 5948     	 ldr r0,.L36+60
+ 296 00f4 FFF7FEFF 	 bl UART_TX_String
+ 297              	.LVL17:
+ 242:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 298              	 .loc 1 242 0
+ 299 00f8 C3E7     	 b .L2
+ 300              	.L7:
+ 168:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Speed 0rpm. Stop motor. */
+ 301              	 .loc 1 168 0
+ 302 00fa 0022     	 mov r2,#0
+ 303 00fc 4E4B     	 ldr r3,.L36+28
+ 170:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->Stop");
+ 304              	 .loc 1 170 0
+ 305 00fe 0020     	 mov r0,#0
+ 168:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* Speed 0rpm. Stop motor. */
+ 306              	 .loc 1 168 0
+ 307 0100 1A62     	 str r2,[r3,#32]
+ 170:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->Stop");
+ 308              	 .loc 1 170 0
+ 309 0102 FFF7FEFF 	 bl UART_TX_uint16_t
+ 310              	.LVL18:
+ 171:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 311              	 .loc 1 171 0
+ 312 0106 5548     	 ldr r0,.L36+64
+ 313 0108 FFF7FEFF 	 bl UART_TX_String
+ 314              	.LVL19:
+ 172:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 315              	 .loc 1 172 0
+ 316 010c B9E7     	 b .L2
+ 317              	.L9:
+ 246:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 318              	 .loc 1 246 0
+ 319 010e 8022     	 mov r2,#128
+ 320 0110 494B     	 ldr r3,.L36+28
+ 321 0112 5201     	 lsl r2,r2,#5
+ 322 0114 196A     	 ldr r1,[r3,#32]
+ 323 0116 9142     	 cmp r1,r2
+ 324 0118 73D8     	 bhi .L21
+ 250:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 325              	 .loc 1 250 0
+ 326 011a 5148     	 ldr r0,.L36+68
+ 327 011c FFF7FEFF 	 bl UART_TX_String
+ 328              	.LVL20:
+ 329 0120 AFE7     	 b .L2
+ 330              	.L10:
+ 261:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           {
+ 331              	 .loc 1 261 0
+ 332 0122 CC22     	 mov r2,#204
+ 333 0124 444B     	 ldr r3,.L36+28
+ 334 0126 5200     	 lsl r2,r2,#1
+ 335 0128 196A     	 ldr r1,[r3,#32]
+ 336 012a 9142     	 cmp r1,r2
+ 337 012c 6ED9     	 bls .L22
+ 265:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 338              	 .loc 1 265 0
+ 339 012e 4D48     	 ldr r0,.L36+72
+ 340 0130 FFF7FEFF 	 bl UART_TX_String
+ 341              	.LVL21:
+ 342 0134 A5E7     	 b .L2
+ 343              	.L11:
+ 175:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 10% of max speed. */
+ 344              	 .loc 1 175 0
+ 345 0136 9A22     	 mov r2,#154
+ 346 0138 3F4B     	 ldr r3,.L36+28
+ 347 013a FF32     	 add r2,r2,#255
+ 177:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->10%");
+ 348              	 .loc 1 177 0
+ 349 013c 4A48     	 ldr r0,.L36+76
+ 175:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 10% of max speed. */
+ 350              	 .loc 1 175 0
+ 351 013e 1A62     	 str r2,[r3,#32]
+ 177:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->10%");
+ 352              	 .loc 1 177 0
+ 353 0140 FFF7FEFF 	 bl UART_TX_uint16_t
+ 354              	.LVL22:
+ 178:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 355              	 .loc 1 178 0
+ 356 0144 4948     	 ldr r0,.L36+80
+ 357 0146 FFF7FEFF 	 bl UART_TX_String
+ 358              	.LVL23:
+ 179:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 359              	 .loc 1 179 0
+ 360 014a 9AE7     	 b .L2
+ 361              	.L12:
+ 182:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  20% of max speed.*/
+ 362              	 .loc 1 182 0
+ 363 014c 484A     	 ldr r2,.L36+84
+ 364 014e 3A4B     	 ldr r3,.L36+28
+ 184:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->20%");
+ 365              	 .loc 1 184 0
+ 366 0150 4848     	 ldr r0,.L36+88
+ 182:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  20% of max speed.*/
+ 367              	 .loc 1 182 0
+ 368 0152 1A62     	 str r2,[r3,#32]
+ 184:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->20%");
+ 369              	 .loc 1 184 0
+ 370 0154 FFF7FEFF 	 bl UART_TX_uint16_t
+ 371              	.LVL24:
+ 185:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 372              	 .loc 1 185 0
+ 373 0158 4748     	 ldr r0,.L36+92
+ 374 015a FFF7FEFF 	 bl UART_TX_String
+ 375              	.LVL25:
+ 186:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 376              	 .loc 1 186 0
+ 377 015e 90E7     	 b .L2
+ 378              	.L13:
+ 189:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 30% of max speed. */
+ 379              	 .loc 1 189 0
+ 380 0160 464A     	 ldr r2,.L36+96
+ 381 0162 354B     	 ldr r3,.L36+28
+ 191:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->30%");
+ 382              	 .loc 1 191 0
+ 383 0164 4648     	 ldr r0,.L36+100
+ 189:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 30% of max speed. */
+ 384              	 .loc 1 189 0
+ 385 0166 1A62     	 str r2,[r3,#32]
+ 191:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->30%");
+ 386              	 .loc 1 191 0
+ 387 0168 FFF7FEFF 	 bl UART_TX_uint16_t
+ 388              	.LVL26:
+ 192:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 389              	 .loc 1 192 0
+ 390 016c 4548     	 ldr r0,.L36+104
+ 391 016e FFF7FEFF 	 bl UART_TX_String
+ 392              	.LVL27:
+ 193:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 393              	 .loc 1 193 0
+ 394 0172 86E7     	 b .L2
+ 395              	.L14:
+ 196:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  40% of max speed. */
+ 396              	 .loc 1 196 0
+ 397 0174 444A     	 ldr r2,.L36+108
+ 398 0176 304B     	 ldr r3,.L36+28
+ 198:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->40%");
+ 399              	 .loc 1 198 0
+ 400 0178 4448     	 ldr r0,.L36+112
+ 196:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /*  40% of max speed. */
+ 401              	 .loc 1 196 0
+ 402 017a 1A62     	 str r2,[r3,#32]
+ 198:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->40%");
+ 403              	 .loc 1 198 0
+ 404 017c FFF7FEFF 	 bl UART_TX_uint16_t
+ 405              	.LVL28:
+ 199:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 406              	 .loc 1 199 0
+ 407 0180 4348     	 ldr r0,.L36+116
+ 408 0182 FFF7FEFF 	 bl UART_TX_String
+ 409              	.LVL29:
+ 200:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 410              	 .loc 1 200 0
+ 411 0186 7CE7     	 b .L2
+ 412              	.L15:
+ 203:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 50% of max speed. */
+ 413              	 .loc 1 203 0
+ 414 0188 8022     	 mov r2,#128
+ 415 018a 2B4B     	 ldr r3,.L36+28
+ 416 018c 1201     	 lsl r2,r2,#4
+ 205:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->50%");
+ 417              	 .loc 1 205 0
+ 418 018e 4148     	 ldr r0,.L36+120
+ 203:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 50% of max speed. */
+ 419              	 .loc 1 203 0
+ 420 0190 1A62     	 str r2,[r3,#32]
+ 205:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->50%");
+ 421              	 .loc 1 205 0
+ 422 0192 FFF7FEFF 	 bl UART_TX_uint16_t
+ 423              	.LVL30:
+ 206:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 424              	 .loc 1 206 0
+ 425 0196 4048     	 ldr r0,.L36+124
+ 426 0198 FFF7FEFF 	 bl UART_TX_String
+ 427              	.LVL31:
+ 207:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 428              	 .loc 1 207 0
+ 429 019c 71E7     	 b .L2
+ 430              	.L16:
+ 210:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 60% of max speed. */
+ 431              	 .loc 1 210 0
+ 432 019e 3F4A     	 ldr r2,.L36+128
+ 433 01a0 254B     	 ldr r3,.L36+28
+ 212:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->60%");
+ 434              	 .loc 1 212 0
+ 435 01a2 3F48     	 ldr r0,.L36+132
+ 210:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 60% of max speed. */
+ 436              	 .loc 1 210 0
+ 437 01a4 1A62     	 str r2,[r3,#32]
+ 212:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->60%");
+ 438              	 .loc 1 212 0
+ 439 01a6 FFF7FEFF 	 bl UART_TX_uint16_t
+ 440              	.LVL32:
+ 213:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 441              	 .loc 1 213 0
+ 442 01aa 3E48     	 ldr r0,.L36+136
+ 443 01ac FFF7FEFF 	 bl UART_TX_String
+ 444              	.LVL33:
+ 214:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 445              	 .loc 1 214 0
+ 446 01b0 67E7     	 b .L2
+ 447              	.L17:
+ 217:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 70% of max speed. */
+ 448              	 .loc 1 217 0
+ 449 01b2 3D4A     	 ldr r2,.L36+140
+ 450 01b4 204B     	 ldr r3,.L36+28
+ 219:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->70%");
+ 451              	 .loc 1 219 0
+ 452 01b6 3D48     	 ldr r0,.L36+144
+ 217:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 70% of max speed. */
+ 453              	 .loc 1 217 0
+ 454 01b8 1A62     	 str r2,[r3,#32]
+ 219:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->70%");
+ 455              	 .loc 1 219 0
+ 456 01ba FFF7FEFF 	 bl UART_TX_uint16_t
+ 457              	.LVL34:
+ 220:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 458              	 .loc 1 220 0
+ 459 01be 3C48     	 ldr r0,.L36+148
+ 460 01c0 FFF7FEFF 	 bl UART_TX_String
+ 461              	.LVL35:
+ 221:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 462              	 .loc 1 221 0
+ 463 01c4 5DE7     	 b .L2
+ 464              	.L18:
+ 224:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 80% of max speed.*/
+ 465              	 .loc 1 224 0
+ 466 01c6 3B4A     	 ldr r2,.L36+152
+ 467 01c8 1B4B     	 ldr r3,.L36+28
+ 226:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->80%");
+ 468              	 .loc 1 226 0
+ 469 01ca 3B48     	 ldr r0,.L36+156
+ 224:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 80% of max speed.*/
+ 470              	 .loc 1 224 0
+ 471 01cc 1A62     	 str r2,[r3,#32]
+ 226:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->80%");
+ 472              	 .loc 1 226 0
+ 473 01ce FFF7FEFF 	 bl UART_TX_uint16_t
+ 474              	.LVL36:
+ 227:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 475              	 .loc 1 227 0
+ 476 01d2 3A48     	 ldr r0,.L36+160
+ 477 01d4 FFF7FEFF 	 bl UART_TX_String
+ 478              	.LVL37:
+ 228:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 479              	 .loc 1 228 0
+ 480 01d8 53E7     	 b .L2
+ 481              	.L19:
+ 231:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 90% of max speed. */
+ 482              	 .loc 1 231 0
+ 483 01da 394A     	 ldr r2,.L36+164
+ 484 01dc 164B     	 ldr r3,.L36+28
+ 233:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->90%");
+ 485              	 .loc 1 233 0
+ 486 01de 3948     	 ldr r0,.L36+168
+ 231:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           /* 90% of max speed. */
+ 487              	 .loc 1 231 0
+ 488 01e0 1A62     	 str r2,[r3,#32]
+ 233:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           UART_TX_String(" ->90%");
+ 489              	 .loc 1 233 0
+ 490 01e2 FFF7FEFF 	 bl UART_TX_uint16_t
+ 491              	.LVL38:
+ 234:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 492              	 .loc 1 234 0
+ 493 01e6 3848     	 ldr r0,.L36+172
+ 494 01e8 FFF7FEFF 	 bl UART_TX_String
+ 495              	.LVL39:
+ 235:../PMSM_FOC/MIDSys/pmsm_foc_debug.c **** 
+ 496              	 .loc 1 235 0
+ 497 01ec 49E7     	 b .L2
+ 498              	.L6:
+ 277:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           break;
+ 499              	 .loc 1 277 0
+ 500 01ee 3748     	 ldr r0,.L36+176
+ 501 01f0 FFF7FEFF 	 bl UART_TX_String
+ 502              	.LVL40:
+ 278:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****       }
+ 503              	 .loc 1 278 0
+ 504 01f4 45E7     	 b .L2
+ 505              	.L34:
+ 326:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" -");
+ 506              	 .loc 1 326 0
+ 507 01f6 5B42     	 neg r3,r3
+ 327:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 508              	 .loc 1 327 0
+ 509 01f8 3548     	 ldr r0,.L36+180
+ 326:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             UART_TX_String(" -");
+ 510              	 .loc 1 326 0
+ 511 01fa 2B60     	 str r3,[r5]
+ 327:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 512              	 .loc 1 327 0
+ 513 01fc FFF7FEFF 	 bl UART_TX_String
+ 514              	.LVL41:
+ 515 0200 33E7     	 b .L28
+ 516              	.L21:
+ 256:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 517              	 .loc 1 256 0
+ 518 0202 1448     	 ldr r0,.L36+56
+ 254:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /* 100% of max speed. */
+ 519              	 .loc 1 254 0
+ 520 0204 1A62     	 str r2,[r3,#32]
+ 256:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 521              	 .loc 1 256 0
+ 522 0206 FFF7FEFF 	 bl UART_TX_uint16_t
+ 523              	.LVL42:
+ 524 020a 3AE7     	 b .L2
+ 525              	.L22:
+ 269:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /*  10% of max speed. */
+ 526              	 .loc 1 269 0
+ 527 020c 9A22     	 mov r2,#154
+ 271:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 528              	 .loc 1 271 0
+ 529 020e 1648     	 ldr r0,.L36+76
+ 269:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****             /*  10% of max speed. */
+ 530              	 .loc 1 269 0
+ 531 0210 FF32     	 add r2,r2,#255
+ 532 0212 1A62     	 str r2,[r3,#32]
+ 271:../PMSM_FOC/MIDSys/pmsm_foc_debug.c ****           }
+ 533              	 .loc 1 271 0
+ 534 0214 FFF7FEFF 	 bl UART_TX_uint16_t
+ 535              	.LVL43:
+ 536 0218 33E7     	 b .L2
+ 537              	.L37:
+ 538 021a C046     	 .align 2
+ 539              	.L36:
+ 540 021c 00020048 	 .word 1207960064
+ 541 0220 00000000 	 .word Motor
+ 542 0224 C4000000 	 .word .LC40
+ 543 0228 00000000 	 .word Speed_in_rpm
+ 544 022c CC000000 	 .word .LC43
+ 545 0230 D8000000 	 .word .LC47
+ 546 0234 DC000000 	 .word .LC49
+ 547 0238 00000000 	 .word ADC
+ 548 023c 00000000 	 .word .LANCHOR0
+ 549 0240 00000000 	 .word .LC1
+ 550 0244 00000000 	 .word .L8
+ 551 0248 98000000 	 .word .LC36
+ 552 024c B4000000 	 .word .LC38
+ 553 0250 10000000 	 .word .LC3
+ 554 0254 AEB70000 	 .word 47022
+ 555 0258 6C000000 	 .word .LC27
+ 556 025c 1C000000 	 .word .LC7
+ 557 0260 74000000 	 .word .LC29
+ 558 0264 80000000 	 .word .LC31
+ 559 0268 5E120000 	 .word 4702
+ 560 026c 24000000 	 .word .LC9
+ 561 0270 33030000 	 .word 819
+ 562 0274 BC240000 	 .word 9404
+ 563 0278 2C000000 	 .word .LC11
+ 564 027c CC040000 	 .word 1228
+ 565 0280 1A370000 	 .word 14106
+ 566 0284 34000000 	 .word .LC13
+ 567 0288 66060000 	 .word 1638
+ 568 028c 78490000 	 .word 18808
+ 569 0290 3C000000 	 .word .LC15
+ 570 0294 D75B0000 	 .word 23511
+ 571 0298 44000000 	 .word .LC17
+ 572 029c 99090000 	 .word 2457
+ 573 02a0 356E0000 	 .word 28213
+ 574 02a4 4C000000 	 .word .LC19
+ 575 02a8 330B0000 	 .word 2867
+ 576 02ac 93800000 	 .word 32915
+ 577 02b0 54000000 	 .word .LC21
+ 578 02b4 CC0C0000 	 .word 3276
+ 579 02b8 F1920000 	 .word 37617
+ 580 02bc 5C000000 	 .word .LC23
+ 581 02c0 660E0000 	 .word 3686
+ 582 02c4 4FA50000 	 .word 42319
+ 583 02c8 64000000 	 .word .LC25
+ 584 02cc 8C000000 	 .word .LC33
+ 585 02d0 D4000000 	 .word .LC45
+ 586              	 .cfi_endproc
+ 587              	.LFE242:
+ 589              	 .comm Motor_speed_in_rpm,4,4
+ 590              	 .comm Speed_in_rpm,4,4
+ 591              	 .section .rodata.str1.4,"aMS",%progbits,1
+ 592              	 .align 2
+ 593              	.LC1:
+ 594 0000 53706565 	 .ascii "Speed Ref (rpm)\000"
+ 594      64205265 
+ 594      66202872 
+ 594      706D2900 
+ 595              	.LC3:
+ 596 0010 20627920 	 .ascii " by POT ADC\000"
+ 596      504F5420 
+ 596      41444300 
+ 597              	.LC7:
+ 598 001c 202D3E53 	 .ascii " ->Stop\000"
+ 598      746F7000 
+ 599              	.LC9:
+ 600 0024 202D3E31 	 .ascii " ->10%\000"
+ 600      302500
+ 601 002b 00       	 .space 1
+ 602              	.LC11:
+ 603 002c 202D3E32 	 .ascii " ->20%\000"
+ 603      302500
+ 604 0033 00       	 .space 1
+ 605              	.LC13:
+ 606 0034 202D3E33 	 .ascii " ->30%\000"
+ 606      302500
+ 607 003b 00       	 .space 1
+ 608              	.LC15:
+ 609 003c 202D3E34 	 .ascii " ->40%\000"
+ 609      302500
+ 610 0043 00       	 .space 1
+ 611              	.LC17:
+ 612 0044 202D3E35 	 .ascii " ->50%\000"
+ 612      302500
+ 613 004b 00       	 .space 1
+ 614              	.LC19:
+ 615 004c 202D3E36 	 .ascii " ->60%\000"
+ 615      302500
+ 616 0053 00       	 .space 1
+ 617              	.LC21:
+ 618 0054 202D3E37 	 .ascii " ->70%\000"
+ 618      302500
+ 619 005b 00       	 .space 1
+ 620              	.LC23:
+ 621 005c 202D3E38 	 .ascii " ->80%\000"
+ 621      302500
+ 622 0063 00       	 .space 1
+ 623              	.LC25:
+ 624 0064 202D3E39 	 .ascii " ->90%\000"
+ 624      302500
+ 625 006b 00       	 .space 1
+ 626              	.LC27:
+ 627 006c 202D3E31 	 .ascii " ->100%\000"
+ 627      30302500 
+ 628              	.LC29:
+ 629 0074 202B3530 	 .ascii " +50 rpm\000"
+ 629      2072706D 
+ 629      00
+ 630 007d 000000   	 .space 3
+ 631              	.LC31:
+ 632 0080 202D3530 	 .ascii " -50 rpm\000"
+ 632      2072706D 
+ 632      00
+ 633 0089 000000   	 .space 3
+ 634              	.LC33:
+ 635 008c 206E6F20 	 .ascii " no change\000"
+ 635      6368616E 
+ 635      676500
+ 636 0097 00       	 .space 1
+ 637              	.LC36:
+ 638 0098 0D0A0A0A 	 .ascii "\015\012\012\012CCU8 Trap!, key in 0\000"
+ 638      43435538 
+ 638      20547261 
+ 638      70212C20 
+ 638      6B657920 
+ 639 00b1 000000   	 .space 3
+ 640              	.LC38:
+ 641 00b4 0D0A2041 	 .ascii "\015\012 ADC Bias:\000"
+ 641      44432042 
+ 641      6961733A 
+ 641      00
+ 642 00c1 000000   	 .space 3
+ 643              	.LC40:
+ 644 00c4 0D0A2072 	 .ascii "\015\012 rpm:\000"
+ 644      706D3A00 
+ 645              	.LC43:
+ 646 00cc 09092052 	 .ascii "\011\011 Ref\000"
+ 646      656600
+ 647 00d3 00       	 .space 1
+ 648              	.LC45:
+ 649 00d4 202D00   	 .ascii " -\000"
+ 650 00d7 00       	 .space 1
+ 651              	.LC47:
+ 652 00d8 202B00   	 .ascii " +\000"
+ 653 00db 00       	 .space 1
+ 654              	.LC49:
+ 655 00dc 0920504F 	 .ascii "\011 POT\000"
+ 655      5400
+ 656 00e2 0000     	 .section .data.UART_Received_Data.8849,"aw",%progbits
+ 657              	 .align 1
+ 658              	 .set .LANCHOR0,.+0
+ 661              	UART_Received_Data.8849:
+ 662 0000 7800     	 .short 120
+ 663              	 .text
+ 664              	.Letext0:
+ 665              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 666              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 667              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 668              	 .file 5 "../PMSM_FOC/MIDSys/..\\MCUInit\\adc.h"
+ 669              	 .file 6 "../PMSM_FOC/MIDSys/..\\ControlModules\\..\\MIDSys\\pmsm_foc_pwmsvm.h"
+ 670              	 .file 7 "../PMSM_FOC/MIDSys/..\\ControlModules\\pmsm_foc_functions.h"
+ 671              	 .file 8 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 672              	 .file 9 "../PMSM_FOC/MIDSys/..\\ControlModules\\..\\MCUInit\\uart.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_debug.c
+    {standard input}:18     .text.CCU4_Debug3Output:00000000 $t
+    {standard input}:23     .text.CCU4_Debug3Output:00000000 CCU4_Debug3Output
+    {standard input}:36     .text.UART_Set_POT_ADC:00000000 $t
+    {standard input}:41     .text.UART_Set_POT_ADC:00000000 UART_Set_POT_ADC
+    {standard input}:180    .rodata.UART_Set_POT_ADC:00000000 $d
+    {standard input}:540    .text.UART_Set_POT_ADC:0000021c $d
+                            *COM*:00000004 Speed_in_rpm
+                            *COM*:00000004 Motor_speed_in_rpm
+    {standard input}:592    .rodata.str1.4:00000000 $d
+    {standard input}:657    .data.UART_Received_Data.8849:00000000 $d
+    {standard input}:661    .data.UART_Received_Data.8849:00000000 UART_Received_Data.8849
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+UART_TX_String
+UART_TX_uint16_t
+UART_TX_Return_NewLine
+Motor
+ADC

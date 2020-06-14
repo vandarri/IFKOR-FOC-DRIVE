@@ -1,0 +1,209 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_current_singleshunt.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .ram_code,"ax",%progbits
+  18              	 .align 2
+  19              	 .global ADC34_TriggerSetting
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	ADC34_TriggerSetting:
+  24              	.LFB183:
+  25              	 .file 1 "../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c"
+   1:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** /**
+   2:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @file pmsm_foc_current_singleshunt.c
+   3:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @date 2015-12-23
+   4:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+   5:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @cond
+   6:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+   9:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * All rights reserved.
+  11:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  12:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * following conditions are met:
+  14:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  15:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   disclaimer.
+  17:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  18:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  21:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  24:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  32:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  36:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @file pmsm_foc_current_singleshunt.c
+  37:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @date 23 Dec, 2015
+  38:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  40:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  42:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  46:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * History
+  47:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  48:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * 23 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *      Initial version
+  50:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * @endcond
+  51:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  *
+  52:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  */
+  53:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  54:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * HEADER FILES
+  56:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** #include <XMC1300.h>
+  58:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** #include "pmsm_foc_current_singleshunt.h"
+  59:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  60:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** /* First CCU83 period, for ADC trigger */
+  61:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** #define CCU83_PERIOD_1ST  TZ_PZVX2
+  62:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** /* Second CCU83 period, for ADC trigger */
+  63:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** #define CCU83_PERIOD_2ND  (PERIOD_REG - CCU83_PERIOD_1ST-1)
+  64:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  65:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  66:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** /**************************************************************************************************
+  67:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  * API IMPLEMENTATION
+  68:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****  **************************************************************************************************
+  69:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  70:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** RAM_ATTRIBUTE void ADC34_TriggerSetting (ADCType* const HandlePtr)
+  71:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** {
+  26              	 .loc 1 71 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  72:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* Set ADC trigger for ADC3/4 of single-shunt current sensing: */
+  73:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* Second CCU83 period is a constant, e.g.: (Ts - 2Tz - 1). */
+  74:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->PRS = CCU83_PERIOD_2ND;
+  29              	 .loc 1 74 0
+  30 0000 074B     	 ldr r3,.L2
+  31 0002 084A     	 ldr r2,.L2+4
+  75:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADC 3 trigger. */
+  76:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->CR1S = HandlePtr->ADC3Trig_Point;
+  77:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADC 4 trigger. */
+  78:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->CR2S = HandlePtr->ADC4Trig_Point;
+  79:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* Enable shadow shadow transfer for slice 3 for CCU80 Kernel */
+  80:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80->GCSS = 0x1000;
+  81:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  82:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** }
+  32              	 .loc 1 82 0
+  33              	 
+  74:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADC 3 trigger. */
+  34              	 .loc 1 74 0
+  35 0004 5A63     	 str r2,[r3,#52]
+  76:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADC 4 trigger. */
+  36              	 .loc 1 76 0
+  37 0006 4822     	 mov r2,#72
+  38 0008 825A     	 ldrh r2,[r0,r2]
+  39 000a DA63     	 str r2,[r3,#60]
+  78:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* Enable shadow shadow transfer for slice 3 for CCU80 Kernel */
+  40              	 .loc 1 78 0
+  41 000c 4A22     	 mov r2,#74
+  42 000e 825A     	 ldrh r2,[r0,r2]
+  43 0010 5A64     	 str r2,[r3,#68]
+  80:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  44              	 .loc 1 80 0
+  45 0012 8022     	 mov r2,#128
+  46 0014 A023     	 mov r3,#160
+  47 0016 5201     	 lsl r2,r2,#5
+  48 0018 DB05     	 lsl r3,r3,#23
+  49 001a 1A61     	 str r2,[r3,#16]
+  50              	 .loc 1 82 0
+  51 001c 7047     	 bx lr
+  52              	.L3:
+  53 001e C046     	 .align 2
+  54              	.L2:
+  55 0020 00040050 	 .word 1342178304
+  56 0024 FF0E0000 	 .word 3839
+  57              	 .cfi_endproc
+  58              	.LFE183:
+  60              	 .align 2
+  61              	 .global ADCTZ12_TriggerSetting
+  62              	 .code 16
+  63              	 .thumb_func
+  65              	ADCTZ12_TriggerSetting:
+  66              	.LFB184:
+  83:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  84:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  85:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** RAM_ATTRIBUTE void ADCTZ12_TriggerSetting (void)
+  86:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** {
+  67              	 .loc 1 86 0
+  68              	 .cfi_startproc
+  87:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* First CCU83 period is a constant, e.g.: 2Tz. */
+  88:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->PRS = CCU83_PERIOD_1ST;
+  69              	 .loc 1 88 0
+  70 0028 D522     	 mov r2,#213
+  71 002a 064B     	 ldr r3,.L5
+  72 002c 5200     	 lsl r2,r2,#1
+  73 002e 5A63     	 str r2,[r3,#52]
+  89:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADCTz1 trigger. */
+  90:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->CR1S = TRIGGER_POINT;
+  74              	 .loc 1 90 0
+  75 0030 F53A     	 sub r2,r2,#245
+  76 0032 DA63     	 str r2,[r3,#60]
+  91:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* For ADCTz2 trigger. */
+  92:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80_CC83->CR2S = TZ_PZV + TRIGGER_POINT;
+  77              	 .loc 1 92 0
+  78 0034 D532     	 add r2,r2,#213
+  79 0036 5A64     	 str r2,[r3,#68]
+  93:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   /* Enable shadow transfer for slice 3 for CCU80 Kernel.*/
+  94:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c ****   CCU80->GCSS = 0x1000;
+  80              	 .loc 1 94 0
+  81 0038 8022     	 mov r2,#128
+  82 003a A023     	 mov r3,#160
+  83 003c 5201     	 lsl r2,r2,#5
+  84 003e DB05     	 lsl r3,r3,#23
+  85 0040 1A61     	 str r2,[r3,#16]
+  95:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** 
+  96:../PMSM_FOC/MIDSys/pmsm_foc_current_singleshunt.c **** }
+  86              	 .loc 1 96 0
+  87              	 
+  88 0042 7047     	 bx lr
+  89              	.L6:
+  90              	 .align 2
+  91              	.L5:
+  92 0044 00040050 	 .word 1342178304
+  93              	 .cfi_endproc
+  94              	.LFE184:
+  96              	 .text
+  97              	.Letext0:
+  98              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  99              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 100              	 .file 4 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 101              	 .file 5 "../PMSM_FOC/MIDSys/../MCUInit/adc.h"
+ 102              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_current_singleshunt.c
+    {standard input}:18     .ram_code:00000000 $t
+    {standard input}:23     .ram_code:00000000 ADC34_TriggerSetting
+    {standard input}:55     .ram_code:00000020 $d
+    {standard input}:60     .ram_code:00000028 $t
+    {standard input}:65     .ram_code:00000028 ADCTZ12_TriggerSetting
+    {standard input}:92     .ram_code:00000044 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

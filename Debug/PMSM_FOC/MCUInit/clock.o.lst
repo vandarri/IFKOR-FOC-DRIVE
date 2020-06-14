@@ -1,0 +1,1609 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "clock.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.Reset_Clock_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global Reset_Clock_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	Reset_Clock_Init:
+  24              	.LFB48:
+  25              	 .file 1 "../PMSM_FOC/MCUInit/clock.c"
+   1:../PMSM_FOC/MCUInit/clock.c **** /**
+   2:../PMSM_FOC/MCUInit/clock.c ****  * @file clock.c
+   3:../PMSM_FOC/MCUInit/clock.c ****  * @date 2015-12-16
+   4:../PMSM_FOC/MCUInit/clock.c ****  *
+   5:../PMSM_FOC/MCUInit/clock.c ****  * @cond
+   6:../PMSM_FOC/MCUInit/clock.c ****  **************************************************************************************************
+   7:../PMSM_FOC/MCUInit/clock.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/MCUInit/clock.c ****  *
+   9:../PMSM_FOC/MCUInit/clock.c ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:../PMSM_FOC/MCUInit/clock.c ****  * All rights reserved.
+  11:../PMSM_FOC/MCUInit/clock.c ****  *
+  12:../PMSM_FOC/MCUInit/clock.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/MCUInit/clock.c ****  * following conditions are met:
+  14:../PMSM_FOC/MCUInit/clock.c ****  *
+  15:../PMSM_FOC/MCUInit/clock.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  16:../PMSM_FOC/MCUInit/clock.c ****  *   disclaimer.
+  17:../PMSM_FOC/MCUInit/clock.c ****  *
+  18:../PMSM_FOC/MCUInit/clock.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  19:../PMSM_FOC/MCUInit/clock.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  20:../PMSM_FOC/MCUInit/clock.c ****  *
+  21:../PMSM_FOC/MCUInit/clock.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  22:../PMSM_FOC/MCUInit/clock.c ****  *   products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/MCUInit/clock.c ****  *
+  24:../PMSM_FOC/MCUInit/clock.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/MCUInit/clock.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/MCUInit/clock.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/MCUInit/clock.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/MCUInit/clock.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/MCUInit/clock.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/MCUInit/clock.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/MCUInit/clock.c ****  *
+  32:../PMSM_FOC/MCUInit/clock.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/MCUInit/clock.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  34:../PMSM_FOC/MCUInit/clock.c ****  **************************************************************************************************
+  35:../PMSM_FOC/MCUInit/clock.c ****  *
+  36:../PMSM_FOC/MCUInit/clock.c ****  * @file clock.c
+  37:../PMSM_FOC/MCUInit/clock.c ****  * @date 16 Dec, 2015
+  38:../PMSM_FOC/MCUInit/clock.c ****  * @version 1.0.0
+  39:../PMSM_FOC/MCUInit/clock.c ****  *
+  40:../PMSM_FOC/MCUInit/clock.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/MCUInit/clock.c ****  *
+  42:../PMSM_FOC/MCUInit/clock.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/MCUInit/clock.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/MCUInit/clock.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/MCUInit/clock.c ****  *
+  46:../PMSM_FOC/MCUInit/clock.c ****  * History
+  47:../PMSM_FOC/MCUInit/clock.c ****  *
+  48:../PMSM_FOC/MCUInit/clock.c ****  * 16 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/MCUInit/clock.c ****  *      Initial version
+  50:../PMSM_FOC/MCUInit/clock.c ****  * @endcond
+  51:../PMSM_FOC/MCUInit/clock.c ****  *
+  52:../PMSM_FOC/MCUInit/clock.c ****  */
+  53:../PMSM_FOC/MCUInit/clock.c **** 
+  54:../PMSM_FOC/MCUInit/clock.c **** /**************************************************************************************************
+  55:../PMSM_FOC/MCUInit/clock.c ****  * HEADER FILES
+  56:../PMSM_FOC/MCUInit/clock.c ****  **************************************************************************************************
+  57:../PMSM_FOC/MCUInit/clock.c **** 
+  58:../PMSM_FOC/MCUInit/clock.c **** #include <XMC1300.h>              /* SFR declarations of the selected device */
+  59:../PMSM_FOC/MCUInit/clock.c **** #include "clock.h"
+  60:../PMSM_FOC/MCUInit/clock.c **** 
+  61:../PMSM_FOC/MCUInit/clock.c **** /**************************************************************************************************
+  62:../PMSM_FOC/MCUInit/clock.c ****  * DATA STRUCTURES
+  63:../PMSM_FOC/MCUInit/clock.c ****  **************************************************************************************************
+  64:../PMSM_FOC/MCUInit/clock.c **** /**
+  65:../PMSM_FOC/MCUInit/clock.c ****  *  Data Structure initialization - Clock Configuration.
+  66:../PMSM_FOC/MCUInit/clock.c ****  */
+  67:../PMSM_FOC/MCUInit/clock.c **** XMC_SCU_CLOCK_CONFIG_t clock_config =
+  68:../PMSM_FOC/MCUInit/clock.c **** {
+  69:../PMSM_FOC/MCUInit/clock.c **** 	.idiv = 0x01U,
+  70:../PMSM_FOC/MCUInit/clock.c **** 	.pclk_src = XMC_SCU_CLOCK_PCLKSRC_DOUBLE_MCLK,
+  71:../PMSM_FOC/MCUInit/clock.c **** 	.rtc_src = XMC_SCU_CLOCK_RTCCLKSRC_DCO2
+  72:../PMSM_FOC/MCUInit/clock.c **** };
+  73:../PMSM_FOC/MCUInit/clock.c **** 
+  74:../PMSM_FOC/MCUInit/clock.c **** /**************************************************************************************************
+  75:../PMSM_FOC/MCUInit/clock.c ****  * GLOBAL DATA
+  76:../PMSM_FOC/MCUInit/clock.c **** ***************************************************************************************************
+  77:../PMSM_FOC/MCUInit/clock.c **** /* Global variable, MCU Reset Status Information, reason of last reset */
+  78:../PMSM_FOC/MCUInit/clock.c **** uint32_t g_mcu_reset_status;    // Global variable. MCU Reset Status Information, reason of last re
+  79:../PMSM_FOC/MCUInit/clock.c **** 
+  80:../PMSM_FOC/MCUInit/clock.c **** /**************************************************************************************************
+  81:../PMSM_FOC/MCUInit/clock.c ****  * API IMPLEMENTATION
+  82:../PMSM_FOC/MCUInit/clock.c ****  **************************************************************************************************
+  83:../PMSM_FOC/MCUInit/clock.c **** 
+  84:../PMSM_FOC/MCUInit/clock.c **** /* API to initialize clock module and read reset status */
+  85:../PMSM_FOC/MCUInit/clock.c **** void Reset_Clock_Init(void)
+  86:../PMSM_FOC/MCUInit/clock.c **** {
+  26              	 .loc 1 86 0
+  27              	 .cfi_startproc
+  28 0000 08B5     	 push {r3,lr}
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 3,-8
+  31              	 .cfi_offset 14,-4
+  32              	.LBB8:
+  33              	.LBB9:
+  34              	 .file 2 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc_scu.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @file xmc_scu.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @date 2015-10-09
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @cond
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMClib v2.1.0 - XMC Peripheral Driver Library 
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * All rights reserved.                        
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                                             
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * following conditions are met:   
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                                                                              
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * disclaimer.                        
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * 
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * 
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                                                                              
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                                                                              
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Change History
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * --------------
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * 2015-02-20:
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *     - Initial <br>
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * 2015-05-20:
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *     - Documentation improved <br>
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *     - XMC_ASSERT() hanging issues have fixed for XMC4 devices. <br>
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * 2015-06-20:
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *     - Removed STATIC_INLINE property for the below APIs and declared as void
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *       XMC_SCU_INTERRUPT_EnableEvent, XMC_SCU_INTERRUPT_DisableEvent,
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *       XMC_SCU_INTERRUPT_TriggerEvent, XMC_SCU_INTERUPT_GetEventStatus,
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *       XMC_SCU_INTERUPT_ClearEventStatus
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *      
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @endcond 
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #ifndef XMC_SCU_H
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #define XMC_SCU_H
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * HEADER FILES
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #include <xmc_common.h>
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @addtogroup XMClib XMC Peripheral Library
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @{
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @addtogroup SCU
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @brief System Control Unit(SCU) driver for XMC microcontroller family.
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * System control unit is the SoC power, reset and a clock manager with additional responsibility o
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * providing system stability protection and other auxiliary functions.<br>
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * SCU provides the following features,
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Power control
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4 
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Hibernate control 
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Reset control
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Clock control
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Miscellaneous control(boot mode, system interrupts etc.)<br><br>
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The SCU driver is divided in to clock control logic, reset control logic, system interrupt contr
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * , hibernate control logic, trap control logic, parity control logic 
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * and miscellaneous control logic.<br>
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Clock driver features:
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows clock configuration using the structure XMC_SCU_CLOCK_CONFIG_t and API XMC_SCU_CLOCK_I
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides structure XMC_SCU_CLOCK_SYSPLL_CONFIG_t for configuring the system PLL
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows selection of clock source for system PLL, XMC_SCU_CLOCK_GetSystemPllClockSource()
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides APIs for configuring different module clock frequencies XMC_SCU_CLOCK_SetWdtClockDiv
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows selection of clock source for external output, XMC_SCU_CLOCK_SetExternalOutputClockSou
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides APIs for enabling external high power oscillator and ultra low power oscillator, XMC
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides APIs for getting various clock frequencies XMC_SCU_CLOCK_GetPeripheralClockFrequency
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  XMC_SCU_CLOCK_GetCpuClockFrequency(), XMC_SCU_CLOCK_GetSystemClockFrequency()<br>
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC1
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows selection of peripheral clock frequency, XMC_SCU_CLOCK_SetFastPeripheralClockSource()
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides API to get the peripheral clock frequency, XMC_SCU_CLOCK_GetFastPeripheralClockFrequ
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Reset driver features:
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows to handle peripheral reset XMC_SCU_RESET_AssertPeripheralReset(), XMC_SCU_RESET_Deasse
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows configuration of NMI generation for selected events, XMC_SCU_INTERRUPT_EnableNmiReques
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC1
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows to trigger device reset XMC_SCU_RESET_AssertMasterReset()
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows to configure multiple sources for reset, XMC_SCU_RESET_EnableResetRequest()
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif <br>
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Interrupt driver features:
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides APIs for enabling/ disabling interrupt event generation XMC_SCU_INTERRUPT_EnableEven
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  XMC_SCU_INTERRUPT_DisableEvent()
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides API for registering callback function for events XMC_SCU_INTERRUPT_SetEventHandler()
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Hibernate driver features:
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows configuration of hibernate domain XMC_SCU_HIB_EnableHibernateDomain(), XMC_SCU_HIB_Dis
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows selection of standby clock source, XMC_SCU_HIB_SetStandbyClockSource()
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows selection of RTC clock source, XMC_SCU_HIB_SetRtcClockSource()
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Provides API for enabling slow internal clock used for backup clock, XMC_SCU_HIB_EnableIntern
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Trap driver features:
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows handling of trap XMC_SCU_TRAP_Enable(), XMC_SCU_TRAP_GetStatus(), XMC_SCU_TRAP_Trigger
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Parity driver features:
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Parity error generated by on-chip RAM can be monitored, XMC_SCU_PARITY_Enable(), XMC_SCU_PARI
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows configuration of trap generation on detection of parity error, XMC_SCU_PARITY_EnableTr
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Power driver features:
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows to power the USB module XMC_SCU_POWER_EnableUsb(), XMC_SCU_POWER_DisableUsb()
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Miscellaneous features:
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows to trigger multiple capture compare unit(CCU) channels to be started together XMC_SCU_
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC4
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Enables configuration of out of range comparator (ORC) XMC_SCU_EnableOutOfRangeComparator()
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Enables configuration of die temperature sensor XMC_SCU_EnableTemperatureSensor(), XMC_SCU_Ca
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Enables configuration of device boot mode XMC_SCU_SetBootMode()<br>
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \if XMC1
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Enables configuration of die temperature sensor XMC_SCU_StartTempMeasurement(), XMC_SCU_SetRa
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows configuring supply monitor unit using the structure XMC_SCU_SUPPLYMONITOR_t and API XM
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * -# Allows handling of protected bits XMC_SCU_LockProtectedBits(), XMC_SCU_UnlockProtectedBits()<
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  \endif
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @{
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * MACROS
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * ENUMS
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *  Defines the status of SCU API execution, used to verify the SCU related API calls.
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** typedef enum XMC_SCU_STATUS 
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** {
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   XMC_SCU_STATUS_OK   = 0UL, /**< SCU related operation successfully completed.*/
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   XMC_SCU_STATUS_ERROR,      /**< SCU related operation failed. When API cannot fulfill request, th
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   XMC_SCU_STATUS_BUSY    ,   /**< Cannot execute the SCU related operation request because
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****                                   another operation is in progress. \a XMC_SCU_STATUS_BUSY is retur
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****                                   processing another request. */
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** } XMC_SCU_STATUS_t;
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * DATA TYPES
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Function pointer type used for registering callback functions on SCU event occurence.
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** typedef void (*XMC_SCU_INTERRUPT_EVENT_HANDLER_t)(void);
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * DEVICE EXTENSIONS
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #if (UC_FAMILY == XMC1)
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #include <xmc1_scu.h>
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #elif (UC_FAMILY == XMC4)
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #include <xmc4_scu.h>
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #else
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #error "Unspecified chipset"
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #endif
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**************************************************************************************************
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * API Prototypes
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  **************************************************************************************************
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #ifdef __cplusplus
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** extern "C" {
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** #endif
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param trigger    CCU slices to be triggered synchronously via software. The value is a bitmask 
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    in the register CCUCON. <br>
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    \b Range: Use type @ref XMC_SCU_CCU_TRIGGER_t for bitmask of individual CCU s
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    combined using \a OR operation.
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Generates active edge(low to high) trigger for multiple CCU units at the same time.\n\n
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Before executing this API, all the required CCU timers should configure external start.
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The edge of the start signal should be selected as active edge.
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The input signal for the CCU slice should be selected as SCU input.
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The above mentioned configurations can be made using the CCU LLD API XMC_CCU4_SLICE_StartConfig(
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * CCU timer slice should be started using XMC_CCU4_SLICE_StartTimer() before triggering 
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * the timer using this API.<BR>
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_CCU4_SLICE_StartConfig(), XMC_CCU4_SLICE_SetInput(), XMC_SCU_SetCcuTriggerLow()\n\n\n
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** __STATIC_INLINE void XMC_SCU_SetCcuTriggerHigh(const uint32_t trigger)
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** {
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   SCU_GENERAL->CCUCON |= (uint32_t)trigger;
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** }
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param trigger  CCU slices to be triggered synchronously via software. The value is a bitmask of
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    in the register CCUCON. <br>
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    \b Range: Use type @ref XMC_SCU_CCU_TRIGGER_t for bitmask of individual CCU s
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                    combined using \a OR operation.
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Generates passive edge(high to low) trigger for multiple CCU units at the same time.\n\n
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Before executing this API, all the required CCU timers should configure external start.
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The edge of the start signal should be selected as passive edge.
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The input signal for the CCU slice should be selected as SCU input.
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The above mentioned configurations can be made using the CCU LLD API XMC_CCU4_SLICE_StartConfig(
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * CCU timer slice should be started using XMC_CCU4_SLICE_StartTimer() before triggering 
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * the timer using this API.<BR>
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_CCU4_SLICE_StartConfig(), XMC_CCU4_SLICE_SetInput(), XMC_SCU_SetCcuTriggerHigh()\n\n\n
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** __STATIC_INLINE void XMC_SCU_SetCcuTriggerLow(const uint32_t trigger)
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** {
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   SCU_GENERAL->CCUCON &= (uint32_t)~trigger;
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** }
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param config Pointer to structure holding the clock prescaler values and divider values for 
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                configuring clock generators and clock tree.\n
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                \b Range: Configure the members of structure @ref XMC_SCU_CLOCK_CONFIG_t for vari
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                parameters of clock setup.
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Initializes clock generators and clock tree.\n\n
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \if XMC1
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Peripheral clock and system clock are configured based on the input configuration \a config.
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The system clock frequency is tuned by configuring the FDIV and IDIV values of CLKCR register.
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The values of FDIV and IDIV can be provided as part of input configuration.
+ 269:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The PCLK divider determines the ratio of peripheral clock to the system clock. 
+ 270:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The source of RTC clock is set based on the input configuration. 
+ 271:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \a SystemCoreClock variable will be updated with the value of
+ 272:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * system clock frequency. Access to protected bit fields are handled internally.
+ 273:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \endif
+ 274:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \if XMC4
+ 275:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Enables the high precision oscillator(fOHP) input and configures the system and peripheral clock
+ 276:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Based on the system clock source selected in \a config, either fPLL or fOFI will be chosen as sy
+ 277:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Based on PLL mode(normal or prescaler mode) used, PLL ramps up in steps to achieve target freque
+ 278:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The clock dividers for CPU, CCU and peripheral clocks will be set based on the input configurati
+ 279:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The \a SystemCoreClock variable is set with the value of system clock frequency.
+ 280:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \endif
+ 281:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 282:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_SCU_CLOCK_GetPeripheralClockFrequency(), XMC_SCU_CLOCK_GetCpuClockFrequency() \n\n\n
+ 283:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 284:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** void XMC_SCU_CLOCK_Init(const XMC_SCU_CLOCK_CONFIG_t *const config);
+ 285:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 286:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 287:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 288:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param event  Bit mask of the event to enable. \b Range: Use type @ref XMC_SCU_INTERRUPT_EVENT_t
+ 289:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                for providing the input value. Multiple events can be combined using the \a OR op
+ 290:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 291:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 292:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 293:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 294:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Enables the generation of interrupt for the input events.\n\n
+ 295:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The events are enabled by setting the respective bit fields in the SRMSK register. \n
+ 296:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Note: User should separately enable the NVIC node responsible for handling the SCU interrupt.
+ 297:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The interrupt will be generated when the respective event occurs.
+ 298:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 299:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * NVIC_EnableIRQ(), XMC_SCU_INTERRUPT_DisableEvent()\n\n\n
+ 300:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 301:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** void XMC_SCU_INTERRUPT_EnableEvent(const XMC_SCU_INTERRUPT_EVENT_t event);
+ 302:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 303:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 304:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 305:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 306:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param event  Bit mask of the event to disable. \b Range: Use type @ref XMC_SCU_INTERRUPT_EVENT_
+ 307:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                for providing the input value. Multiple events can be combined using the \a OR op
+ 308:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 309:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 310:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 311:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 312:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Disables generation of interrupt on occurence of the input event.\n\n
+ 313:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The events are disabled by resetting the respective bit fields in the SRMSK register. \n
+ 314:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 315:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * NVIC_DisableIRQ(), XMC_SCU_INTERRUPT_EnableEvent()\n\n\n
+ 316:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 317:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** void XMC_SCU_INTERRUPT_DisableEvent(const XMC_SCU_INTERRUPT_EVENT_t event);
+ 318:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 319:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 320:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 321:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param event Bit mask of the event to be triggered. \b Range: Use type @ref XMC_SCU_INTERRUPT_EV
+ 322:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                for providing the input value. Multiple events can be combined using the \a OR op
+ 323:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 324:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 325:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 326:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 327:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Triggers the event as if the hardware raised it.\n\n
+ 328:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Event will be triggered by setting the respective bitfield in the SRSET register.\n
+ 329:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Note: User should enable the NVIC node that handles the respective event for interrupt generatio
+ 330:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 331:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * NVIC_EnableIRQ(), XMC_SCU_INTERUPT_GetEventStatus(), XMC_SCU_INTERRUPT_ClearEventStatus() \n\n\n
+ 332:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 333:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** void XMC_SCU_INTERRUPT_TriggerEvent(const XMC_SCU_INTERRUPT_EVENT_t  event);
+ 334:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 335:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 336:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return uint32_t  Status of the SCU events.
+ 337:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 338:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 339:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Provides the status of all SCU events.\n\n
+ 340:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The status is read from the SRRAW register. To check the status of a particular 
+ 341:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * event, the returned value should be masked with the bit mask of the event. The bitmask
+ 342:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * of events can be obtained using the type @ref XMC_SCU_INTERRUPT_EVENT_t. Multiple events'
+ 343:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * status can be checked by combining the bit masks using \a OR operation. 
+ 344:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * After detecting the event, the event status should be cleared using software to detect the event
+ 345:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 346:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_SCU_INTERRUPT_ClearEventStatus(), XMC_SCU_INTERRUPT_TriggerEvent(), XMC_SCU_INTERRUPT_SetEve
+ 347:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 348:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** XMC_SCU_INTERRUPT_EVENT_t XMC_SCU_INTERUPT_GetEventStatus(void);
+ 349:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 350:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 351:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 352:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @param event  Bit mask of the events to clear. \b Range: Use type @ref XMC_SCU_INTERRUPT_EVENT_t
+ 353:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *                for providing the input value. Multiple events can be combined using the \a OR op
+ 354:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 355:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None
+ 356:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 357:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 358:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Clears the event status bit in SRRAW register.\n\n
+ 359:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The events are cleared by writing value 1 to their bit positions in the SRCLR register.
+ 360:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The API can be used when polling method is used. After detecting the event, the event status
+ 361:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * should be cleared using software to detect the event again.
+ 362:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 363:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 364:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_SCU_INTERUPT_GetEventStatus(), XMC_SCU_INTERRUPT_TriggerEvent() \n\n\n
+ 365:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 366:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** void XMC_SCU_INTERRUPT_ClearEventStatus(const XMC_SCU_INTERRUPT_EVENT_t event);
+ 367:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** 
+ 368:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 369:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 370:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return uint32_t  Status representing the reason for device reset.
+ 371:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 372:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 373:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Provides the value representing the reason for device reset.\n\n
+ 374:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The return value is an encoded word, which can indicate multiple reasons for the last reset. Eac
+ 375:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * returned word is representative of a last reset cause. The returned value should be appropriatel
+ 376:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * the cause of reset. 
+ 377:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * The cause of the last reset gets automatically stored in 
+ 378:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * the \a SCU_RSTSTAT register. The reset status shall be reset after each
+ 379:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * startup in order to ensure consistent source indication after the next reset.
+ 380:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \b Range: The type @ref XMC_SCU_RESET_REASON_t can be used to get the bit masks of the reset cau
+ 381:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 382:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_SCU_RESET_ClearDeviceResetReason() \n\n\n
+ 384:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 385:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** __STATIC_INLINE uint32_t XMC_SCU_RESET_GetDeviceResetReason(void)
+ 386:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** {
+ 387:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   return ((SCU_RESET->RSTSTAT) & SCU_RESET_RSTSTAT_RSTSTAT_Msk);
+  35              	 .loc 2 387 0
+  36 0002 094B     	 ldr r3,.L2
+  37              	.LBE9:
+  38              	.LBE8:
+  87:../PMSM_FOC/MCUInit/clock.c **** 	uint32_t Reset_Status;
+  88:../PMSM_FOC/MCUInit/clock.c **** 
+  89:../PMSM_FOC/MCUInit/clock.c **** 	/* Reset status, get reason of last reset */
+  90:../PMSM_FOC/MCUInit/clock.c **** 	Reset_Status = XMC_SCU_RESET_GetDeviceResetReason();
+  91:../PMSM_FOC/MCUInit/clock.c **** 
+  92:../PMSM_FOC/MCUInit/clock.c **** 	/* Record MCU Reset Status Information by a global variable */
+  93:../PMSM_FOC/MCUInit/clock.c **** 	g_mcu_reset_status = Reset_Status;
+  39              	 .loc 1 93 0
+  40 0004 0949     	 ldr r1,.L2+4
+  41              	.LBB12:
+  42              	.LBB10:
+  43              	 .loc 2 387 0
+  44 0006 1A68     	 ldr r2,[r3]
+  45              	.LBE10:
+  46              	.LBE12:
+  94:../PMSM_FOC/MCUInit/clock.c **** 
+  95:../PMSM_FOC/MCUInit/clock.c **** 	/* Clear reset status, to ensure a clear indication of cause of next reset */
+  96:../PMSM_FOC/MCUInit/clock.c **** 	XMC_SCU_RESET_ClearDeviceResetReason();
+  97:../PMSM_FOC/MCUInit/clock.c **** 
+  98:../PMSM_FOC/MCUInit/clock.c **** 	/* Enable reset triggered by critical events: Flash ECC error, loss of clock, 16kbytes SRAM parity
+  99:../PMSM_FOC/MCUInit/clock.c **** 	XMC_SCU_RESET_EnableResetRequest((uint32_t)XMC_SCU_RESET_REQUEST_FLASH_ECC_ERROR |
+ 100:../PMSM_FOC/MCUInit/clock.c **** 	                                 (uint32_t)XMC_SCU_RESET_REQUEST_CLOCK_LOSS |
+ 101:../PMSM_FOC/MCUInit/clock.c **** 	                                 (uint32_t)XMC_SCU_RESET_REQUEST_SRAM_PARITY_ERROR);
+ 102:../PMSM_FOC/MCUInit/clock.c **** 
+ 103:../PMSM_FOC/MCUInit/clock.c **** 	/* 32MHz MCLK, PCLK = 2 x MCLK = 64MHz, RTC clock is standby clock, Counter Adjustment = 1024 cloc
+ 104:../PMSM_FOC/MCUInit/clock.c **** 	XMC_SCU_CLOCK_Init(&clock_config);
+  47              	 .loc 1 104 0
+  48 0008 0948     	 ldr r0,.L2+8
+  49              	.LBB13:
+  50              	.LBB11:
+  51              	 .loc 2 387 0
+  52 000a 9205     	 lsl r2,r2,#22
+  53 000c 920D     	 lsr r2,r2,#22
+  54              	.LBE11:
+  55              	.LBE13:
+  93:../PMSM_FOC/MCUInit/clock.c **** 
+  56              	 .loc 1 93 0
+  57 000e 0A60     	 str r2,[r1]
+  58              	.LBB14:
+  59              	.LBB15:
+ 388:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** }
+ 389:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** /**
+ 390:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * @return None 
+ 391:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 392:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Description</b><br>
+ 393:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Clears the reset reason bits in the reset status register. \n\n
+ 394:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * Clearing of the reset status information in the \a SCU_RSTSTAT register via register bit \a RSTC
+ 395:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * recommended to ensure a clear indication of the cause of next reset.
+ 396:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  *
+ 397:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 398:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  * XMC_SCU_RESET_GetDeviceResetReason() \n\n\n
+ 399:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****  */
+ 400:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** __STATIC_INLINE void XMC_SCU_RESET_ClearDeviceResetReason(void)
+ 401:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h **** {
+ 402:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   /* Clear RSTSTAT.RSTSTAT bitfield */
+ 403:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc_scu.h ****   SCU_RESET->RSTCLR |= (uint32_t)SCU_RESET_RSTCLR_RSCLR_Msk;
+  60              	 .loc 2 403 0
+  61 0010 0122     	 mov r2,#1
+  62 0012 9968     	 ldr r1,[r3,#8]
+  63              	.LBE15:
+  64              	.LBE14:
+ 105:../PMSM_FOC/MCUInit/clock.c **** 
+ 106:../PMSM_FOC/MCUInit/clock.c **** }
+  65              	 .loc 1 106 0
+  66              	 
+  67              	.LBB17:
+  68              	.LBB16:
+  69              	 .loc 2 403 0
+  70 0014 0A43     	 orr r2,r1
+  71 0016 9A60     	 str r2,[r3,#8]
+  72              	.LVL0:
+  73              	.LBE16:
+  74              	.LBE17:
+  75              	.LBB18:
+  76              	.LBB19:
+  77              	 .file 3 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc/xmc1_scu.h"
+   1:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+   2:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @file xmc1_scu.h
+   3:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @date 2015-10-09
+   4:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+   5:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @cond
+   6:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** ***************************************************************************************************
+   7:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMClib v2.1.0 - XMC Peripheral Driver Library
+   8:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+   9:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * All rights reserved.
+  11:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  12:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * following conditions are met:
+  14:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  15:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * disclaimer.
+  17:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  18:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.
+  20:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  21:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * products derived from this software without specific prior written permission.
+  23:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  24:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  32:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Infineon Technologies AG dave@infineon.com).
+  34:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+  35:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  36:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Change History
+  37:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * --------------
+  38:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  39:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * 2015-02-20:
+  40:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *     - Initial
+  41:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  42:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * 2015-05-20:
+  43:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *     - Description updated <br>
+  44:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  45:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * 2015-06-20:
+  46:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *     - XMC_SCU_INTERRUPT_EVENT enum elements are typecasted to int64_t
+  47:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  48:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * 2015-06-20:
+  49:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *     - Added support for XMC1400
+  50:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  51:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @endcond
+  52:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+  53:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+  54:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  55:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #ifndef XMC1_SCU_H
+  56:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC1_SCU_H
+  57:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  58:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**************************************************************************************************
+  59:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * HEADER FILES
+  60:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+  61:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #include "xmc_common.h"
+  62:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  63:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if UC_FAMILY == XMC1
+  64:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  65:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+  66:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @addtogroup XMClib XMC Peripheral Library
+  67:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @{
+  68:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+  69:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  70:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+  71:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @addtogroup SCU
+  72:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @{
+  73:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+  74:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  75:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**************************************************************************************************
+  76:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * MACROS
+  77:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+  78:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+  79:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+  80:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * List of events
+  81:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+  82:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_WDT_WARN         SCU_INTERRUPT_SRMSK_PRWARN_Msk /**< WDT pre-warnin
+  83:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTC_PERIODIC     SCU_INTERRUPT_SRCLR_PI_Msk     /**< RTC periodic e
+  84:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTC_ALARM        SCU_INTERRUPT_SRCLR_AI_Msk     /**< RTC alarm even
+  85:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_VDDPI            SCU_INTERRUPT_SRMSK_VDDPI_Msk  /**< VDDP pre-warni
+  86:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(COMPARATOR)
+  87:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ACMP0            SCU_INTERRUPT_SRMSK_ACMP0I_Msk /**< Analog compara
+  88:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ACMP1            SCU_INTERRUPT_SRMSK_ACMP1I_Msk /**< Analog compara
+  89:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ACMP2            SCU_INTERRUPT_SRMSK_ACMP2I_Msk /**< Analog compara
+  90:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if UC_SERIES == XMC14
+  91:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ACMP3            (((int64_t)SCU_INTERRUPT_SRMSK1_ACMP3I_Msk) << 32U
+  92:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+  93:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+  94:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_VDROP            SCU_INTERRUPT_SRMSK_VDROPI_Msk  /**< VDROP event. 
+  95:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if UC_SERIES != XMC11
+  96:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC0             SCU_INTERRUPT_SRMSK_ORC0I_Msk   /**< Out of range 
+  97:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC1             SCU_INTERRUPT_SRMSK_ORC1I_Msk   /**< Out of range 
+  98:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC2             SCU_INTERRUPT_SRMSK_ORC2I_Msk   /**< Out of range 
+  99:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC3             SCU_INTERRUPT_SRMSK_ORC3I_Msk   /**< Out of range 
+ 100:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC4             SCU_INTERRUPT_SRMSK_ORC4I_Msk   /**< Out of range 
+ 101:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC5             SCU_INTERRUPT_SRMSK_ORC5I_Msk   /**< Out of range 
+ 102:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC6             SCU_INTERRUPT_SRMSK_ORC6I_Msk   /**< Out of range 
+ 103:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_ORC7             SCU_INTERRUPT_SRMSK_ORC7I_Msk   /**< Out of range 
+ 104:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 105:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_LOCI             SCU_INTERRUPT_SRMSK_LOCI_Msk    /**< Loss of clock
+ 106:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_PESRAM           SCU_INTERRUPT_SRMSK_PESRAMI_Msk /**< PSRAM Parity 
+ 107:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_PEUSIC0          SCU_INTERRUPT_SRMSK_PEU0I_Msk   /**< USIC0 Parity 
+ 108:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 109:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_PEUSIC1          (((int64_t)SCU_INTERRUPT_SRMSK1_PEU1I_Msk) << 32U)
+ 110:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 111:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_FLASH_ERROR      SCU_INTERRUPT_SRMSK_FLECC2I_Msk /**< Flash ECC dou
+ 112:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_FLASH_COMPLETED  SCU_INTERRUPT_SRCLR_FLCMPLTI_Msk /**< Flash operat
+ 113:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_VCLIP            SCU_INTERRUPT_SRMSK_VCLIPI_Msk  /**< VCLIP event. 
+ 114:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_STDBYCLKFAIL     SCU_INTERRUPT_SRMSK_SBYCLKFI_Msk  /**< Standby clo
+ 115:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTCCTR_UPDATED   SCU_INTERRUPT_SRMSK_RTC_CTR_Msk  /**< RTCCTR regis
+ 116:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTCATIM0_UPDATED SCU_INTERRUPT_SRMSK_RTC_ATIM0_Msk  /**< RTCATIM0 r
+ 117:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTCATIM1_UPDATED SCU_INTERRUPT_SRMSK_RTC_ATIM1_Msk  /**< RTCATIM1 r
+ 118:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTCTIM0_UPDATED  SCU_INTERRUPT_SRMSK_RTC_TIM0_Msk  /**< RTCTIM0 reg
+ 119:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_RTCTIM1_UPDATED  SCU_INTERRUPT_SRMSK_RTC_TIM1_Msk  /**< RTCTIM1 reg
+ 120:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_TSE_DONE         SCU_INTERRUPT_SRMSK_TSE_DONE_Msk  /**< Temperature
+ 121:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_TSE_HIGH         SCU_INTERRUPT_SRMSK_TSE_HIGH_Msk  /**< Temperature
+ 122:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_TSE_LOW          SCU_INTERRUPT_SRMSK_TSE_LOW_Msk /**< Temperature t
+ 123:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 124:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_PEMCAN           (((int64_t)SCU_INTERRUPT_SRMSK1_PEMCI_Msk) << 32U)
+ 125:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 126:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 127:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_LOSS_EXT_CLOCK   (((int64_t)SCU_INTERRUPT_SRMSK1_LOECI_Msk) << 32U)
+ 128:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #define XMC_SCU_INTERRUPT_EVENT_DCO1_OUT_SYNC    (((int64_t)SCU_INTERRUPT_SRMSK1_DCO1OFSI_Msk) << 3
+ 129:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 130:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 131:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**************************************************************************************************
+ 132:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * ENUMS
+ 133:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+ 134:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 135:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 136:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines the cause of last reset. The cause of last reset gets automatically stored in
+ 137:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  the \a SCU_RSTSTAT register and can be checked by user software to determine the state of the s
+ 138:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  purpose. All the enum items are tabulated as per bits present in \a SCU_RSTSTAT register.
+ 139:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Use type \a XMC_SCU_RESET_REASON_t for accessing these enum parameters.
+ 140:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 141:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_RESET_REASON
+ 142:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 143:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_PORST        = (1UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos),  /**< Reset due to Po
+ 144:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_MASTER       = (2UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos),  /**< Reset due to Ma
+ 145:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_SW           = (4UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos),  /**< Reset due to So
+ 146:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_LOCKUP       = (8UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos),  /**< Reset due to CP
+ 147:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_FLASH        = (16UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos), /**< Reset due to fl
+ 148:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_WATCHDOG     = (32UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos), /**< Reset due to wa
+ 149:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_CLOCK_LOSS   = (64UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos), /**< Reset due to cl
+ 150:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REASON_PARITY_ERROR = (128UL << SCU_RESET_RSTSTAT_RSTSTAT_Pos) /**< Reset due to RA
+ 151:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_RESET_REASON_t;
+ 152:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 153:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 154:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines the reset sources that can cause device reset. These enums can be used to configure res
+ 155:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  control \a RSTCON register which enables different reset sources to identify the reset cause. T
+ 156:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  register can be checked by user software to determine the state of the system and for debug
+ 157:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  purpose. Use type \a XMC_SCU_SYSTEM_RESET_REQUEST_t for accessing these enum parameters.
+ 158:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 159:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_SYSTEM_RESET_REQUEST
+ 160:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 161:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REQUEST_FLASH_ECC_ERROR = SCU_RESET_RSTCON_ECCRSTEN_Msk,        /**< Reset when ECC
+ 162:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REQUEST_CLOCK_LOSS = SCU_RESET_RSTCON_LOCRSTEN_Msk,             /**< Reset when los
+ 163:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REQUEST_SRAM_PARITY_ERROR = SCU_RESET_RSTCON_SPERSTEN_Msk,      /**< Reset when SRA
+ 164:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_RESET_REQUEST_USIC_SRAM_PARITY_ERROR = SCU_RESET_RSTCON_U0PERSTEN_Msk /**< Reset when USI
+ 165:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_SYSTEM_RESET_REQUEST_t;
+ 166:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 167:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 168:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines list of events that can generate SCU interrupt. These enums can be used to configure ev
+ 169:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  in \a SRMSK register for assertion of interrupt. All the enum items are tabulated as per bits p
+ 170:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  in \a SRMSK register. Use type \a XMC_SCU_INTERRUPT_EVENT_t for accessing these enum parameters
+ 171:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  enums can also be used for checking the status of events from the \a SRSTAT register.
+ 172:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 173:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 174:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef uint64_t XMC_SCU_INTERRUPT_EVENT_t;
+ 175:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #else
+ 176:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef uint32_t XMC_SCU_INTERRUPT_EVENT_t;
+ 177:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 178:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 179:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 180:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines possible sources of RTC clock. These enums can be used to configure \a RTCCLKSEL bits o
+ 181:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Register. Use type \a XMC_SCU_CLOCK_RTCCLKSRC_t for accessing these enum parameters.
+ 182:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 183:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_RTCCLKSRC
+ 184:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 185:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_DCO2 = (0x0UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos), /**< RTC clock source is s
+ 186:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_ERU_IOUT0 = (0x1UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos), /**< RTC clock source
+ 187:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                                                                    ERU0.IOUT0. */
+ 188:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_ACMP0_OUT = (0x2UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos), /**< RTC clock source
+ 189:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                                                                    ACMP0.OUT. */
+ 190:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_ACMP1_OUT = (0x3UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos), /**< RTC clock source
+ 191:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                                                                   ACMP1.OUT. */
+ 192:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_ACMP2_OUT = (0x4UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos), /**< RTC clock source
+ 193:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                                                                   ACMP2.OUT. */
+ 194:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 195:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_OSCLP = (0x5UL << SCU_CLK_CLKCR_RTCCLKSEL_Pos) /**< 32.768kHz XTAL clock 
+ 196:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 197:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_RTCCLKSRC_t;
+ 198:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 199:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 200:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines possible sources of peripheral clock (PCLK). These enums can be used to configure \a PC
+ 201:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Clock Control Register. Use type \a XMC_SCU_CLOCK_PCLKSRC_t for accessing these enum parameters
+ 202:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 203:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_PCLKSRC
+ 204:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 205:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_PCLKSRC_MCLK = (0UL << SCU_CLK_CLKCR_PCLKSEL_Pos), /**< MCLK as the source for PCLK
+ 206:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_PCLKSRC_DOUBLE_MCLK = (1UL << SCU_CLK_CLKCR_PCLKSEL_Pos) /**< Source of PCLK is twi
+ 207:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_PCLKSRC_t;
+ 208:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 209:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 210:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 211:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * DCLK clock source selection
+ 212:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @Note: Only available in XMC1400 series
+ 213:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 214:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_DCLKSRC
+ 215:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 216:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_DCLKSRC_DCO1 = 0UL << SCU_CLK_CLKCR1_DCLKSEL_Pos, /**< Internal oscillator DCO1 (48
+ 217:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_DCLKSRC_EXT_XTAL = 1UL << SCU_CLK_CLKCR1_DCLKSEL_Pos, /**< External crystal oscilla
+ 218:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_DCLKSRC_t;
+ 219:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 220:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 221:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * OSCHP mode
+ 222:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @Note: Only available in XMC1400 series
+ 223:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 224:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_OSCHP_MODE
+ 225:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 226:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCHP_MODE_OSC = 0UL << SCU_ANALOG_ANAOSCHPCTRL_MODE_Pos, /**< Oscillator is enable
+ 227:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCHP_MODE_DIRECT = 1UL << SCU_ANALOG_ANAOSCHPCTRL_MODE_Pos, /**< Oscillator in pow
+ 228:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCHP_MODE_DISABLED = 3UL << SCU_ANALOG_ANAOSCHPCTRL_MODE_Pos, /**< Oscillator in p
+ 229:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_OSCHP_MODE_t;
+ 230:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 231:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 232:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * OSCLP mode
+ 233:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @Note: Only available in XMC1400 series
+ 234:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 235:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_OSCLP_MODE
+ 236:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 237:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCLP_MODE_OSC = 0UL << SCU_ANALOG_ANAOSCLPCTRL_MODE_Pos, /**< Oscillator is enable
+ 238:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCLP_MODE_DISABLED = 3UL << SCU_ANALOG_ANAOSCLPCTRL_MODE_Pos, /**< Oscillator in p
+ 239:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_OSCLP_MODE_t;
+ 240:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 241:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 242:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Clock source for synchronization
+ 243:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @Note: Only available in XMC1400 series
+ 244:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 245:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CLOCK_SYNC_CLKSRC
+ 246:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 247:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_SYNC_CLKSRC_OSCLP = 0U << SCU_ANALOG_ANASYNC1_XTAL_SEL_Pos,
+ 248:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_SYNC_CLKSRC_OSCHP = 1U << SCU_ANALOG_ANASYNC1_XTAL_SEL_Pos,
+ 249:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_SYNC_CLKSRC_t;
+ 250:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 251:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif /* (UC_SERIES == XMC14) */
+ 252:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 253:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 254:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines th list of various sources that support gating of clock to peripherals. After a master 
+ 255:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  and PORT peripheral are not clock gated. The rest of the peripherals are default clock gated.
+ 256:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  All the enum items are tabulated as per bits present in \a CGATSTAT0 register.
+ 257:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Use type \a XMC_SCU_PERIPHERAL_CLOCK_t for accessing these enum parameters.
+ 258:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 259:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_PERIPHERAL_CLOCK
+ 260:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 261:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(VADC)
+ 262:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_VADC   = SCU_CLK_CGATSTAT0_VADC_Msk, /**< VADC peripheral clock gate. */
+ 263:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 264:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 265:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_CCU80  = SCU_CLK_CGATSTAT0_CCU80_Msk, /**< CCU80 peripheral clock gate. 
+ 266:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 267:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU40)
+ 268:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_CCU40  = SCU_CLK_CGATSTAT0_CCU40_Msk, /**< CCU40 peripheral clock gate. 
+ 269:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 270:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC0)
+ 271:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_USIC0  = SCU_CLK_CGATSTAT0_USIC0_Msk, /**< USIC0 peripheral clock gate. 
+ 272:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 273:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(BCCU0)
+ 274:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_BCCU0  = SCU_CLK_CGATSTAT0_BCCU0_Msk, /**< BCCU0 peripheral clock gate. 
+ 275:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 276:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS0)
+ 277:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_LEDTS0 = SCU_CLK_CGATSTAT0_LEDTS0_Msk, /**< LEDTS0 peripheral clock gate
+ 278:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 279:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS1)
+ 280:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_LEDTS1 = SCU_CLK_CGATSTAT0_LEDTS1_Msk, /**< LEDTS1 peripheral clock gate
+ 281:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 282:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0)
+ 283:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_POSIF0 = SCU_CLK_CGATSTAT0_POSIF0_Msk, /**< POSIF0 peripheral clock gate
+ 284:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 285:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(MATH)
+ 286:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_MATH   = SCU_CLK_CGATSTAT0_MATH_Msk, /**< MATH peripheral clock gate. */
+ 287:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 288:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_WDT    = SCU_CLK_CGATSTAT0_WDT_Msk, /**< WDT peripheral clock gate. */
+ 289:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_RTC    = SCU_CLK_CGATSTAT0_RTC_Msk, /**< RTC peripheral clock gate. */
+ 290:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU81)
+ 291:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_CCU81  = SCU_CLK_CGATSTAT0_CCU81_Msk, /**< CCU80 peripheral clock gate. 
+ 292:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 293:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 294:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_CCU41  = SCU_CLK_CGATSTAT0_CCU41_Msk, /**< CCU80 peripheral clock gate. 
+ 295:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 296:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 297:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_USIC1  = SCU_CLK_CGATSTAT0_USIC1_Msk, /**< USIC0 peripheral clock gate. 
+ 298:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 299:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS2)
+ 300:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_LEDTS2 = SCU_CLK_CGATSTAT0_LEDTS2_Msk, /**< LEDTS1 peripheral clock gate
+ 301:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 302:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF1)
+ 303:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_POSIF1 = SCU_CLK_CGATSTAT0_POSIF1_Msk, /**< POSIF0 peripheral clock gate
+ 304:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 305:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 306:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_PERIPHERAL_CLOCK_MCAN = SCU_CLK_CGATSTAT0_MCAN0_Msk, /**< POSIF0 peripheral clock gate. *
+ 307:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 308:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_PERIPHERAL_CLOCK_t;
+ 309:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 310:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 311:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 312:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines options for Capture/Compare unit timer slice trigger that enables synchronous start fun
+ 313:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  \a CCUCON register. Use type \a XMC_SCU_CCU_TRIGGER_t for accessing these enum parameters.
+ 314:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 315:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_CCU_TRIGGER
+ 316:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 317:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CCU_TRIGGER_CCU40 = SCU_GENERAL_CCUCON_GSC40_Msk, /**< Trigger CCU40 peripheral. */
+ 318:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 319:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CCU_TRIGGER_CCU80 = SCU_GENERAL_CCUCON_GSC80_Msk, /**< Trigger CCU80 peripheral. */
+ 320:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 321:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 322:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CCU_TRIGGER_CCU41 = SCU_GENERAL_CCUCON_GSC41_Msk, /**< Trigger CCU40 peripheral. */
+ 323:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 324:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU81)
+ 325:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CCU_TRIGGER_CCU81 = SCU_GENERAL_CCUCON_GSC81_Msk, /**< Trigger CCU80 peripheral. */
+ 326:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 327:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CCU_TRIGGER_t;
+ 328:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 329:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 330:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 331:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Selects the interrupt source for interrupt node.
+ 332:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @Note: Only available for XMC1400 series
+ 333:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 334:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef enum XMC_SCU_IRQCTRL
+ 335:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 336:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR0_IRQ0              = (0U << 8U) | 0U, /**< SCU_SR0 connected to IRQ0 */
+ 337:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 338:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR0_IRQ0             = (0U << 8U) | 1U, /**< CAN0_SR0 connected to IRQ0 */
+ 339:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 340:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR0_IRQ0            = (0U << 8U) | 2U, /**< CCU40_SR0 connected to IRQ0 */
+ 341:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 342:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR0_OR_CAN0_SR0_IRQ0  = (0U << 8U) | 3U, /**< SCU_SR0 and CAN_SR0 are both co
+ 343:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 344:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 345:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR1_IRQ1              = (1U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 346:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 347:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR1_IRQ1             = (1U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 348:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 349:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 350:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR0_IRQ1            = (1U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 351:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 352:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 353:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR1_OR_CAN0_SR1_IRQ1  = (1U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 354:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 355:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 356:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR2_IRQ2              = (2U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 357:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 358:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR2_IRQ2             = (2U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 359:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 360:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 361:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR1_IRQ2            = (2U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 362:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 363:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 364:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_SCU_SR2_OR_CAN0_SR2_IRQ2  = (2U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 365:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 366:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 367:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR0_IRQ3             = (3U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 368:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU1_SR0_IRQ3             = (3U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 369:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 370:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR0_IRQ3             = (3U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 371:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 372:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR0_OR_ERU1_SR0_IRQ3 = (3U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 373:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 374:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR1_IRQ4             = (4U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 375:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU1_SR1_IRQ4             = (4U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 376:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 377:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR1_IRQ4             = (4U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 378:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 379:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR1_OR_ERU1_SR1_IRQ4 = (4U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 380:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 381:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR2_IRQ5             = (5U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 382:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU1_SR2_IRQ5             = (5U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 383:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 384:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR2_IRQ5             = (5U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 385:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 386:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR2_OR_ERU1_SR2_IRQ5 = (5U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 387:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 388:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR3_IRQ6             = (6U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 389:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU1_SR3_IRQ6             = (6U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 390:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 391:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR3_IRQ6             = (6U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 392:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 393:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR3_OR_ERU1_SR3_IRQ6 = (6U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 394:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 395:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(MATH)
+ 396:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_MATH_SR0_IRQ7                = (7U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 397:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 398:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 399:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR3_IRQ7                = (7U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 400:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 401:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR1_IRQ7               = (7U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 402:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(MATH) && defined(CAN)
+ 403:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_MATH_SR0_OR_CAN0_SR3_IRQ7    = (7U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 404:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 405:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 406:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS2)
+ 407:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS2_SR0_IRQ8              = (8U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 408:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 409:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR0_IRQ8               = (8U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 410:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 411:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR0_IRQ8               = (8U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 412:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 413:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS2)
+ 414:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS2_SR0_OR_CCU40_SR0_IRQ8 = (8U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 415:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 416:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 417:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR0_IRQ9               = (9U << 8U) | 0U, /**< Trigger CCU40 peripheral. */
+ 418:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 419:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR0_IRQ9               = (9U << 8U) | 1U, /**< Trigger CCU40 peripheral. */
+ 420:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 421:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR0_IRQ9                = (9U << 8U) | 2U, /**< Trigger CCU40 peripheral. */
+ 422:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 423:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR0_OR_USIC1_SR0_IRQ9  = (9U << 8U) | 3U, /**< Trigger CCU40 peripheral. */
+ 424:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 425:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 426:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR1_IRQ10              = (10U << 8U) | 0U, /**< Trigger CCU40 peripheral. *
+ 427:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 428:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR1_IRQ10              = (10U << 8U) | 1U, /**< Trigger CCU40 peripheral. *
+ 429:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 430:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR1_IRQ10               = (10U << 8U) | 2U, /**< Trigger CCU40 peripheral. *
+ 431:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 432:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR1_OR_USIC1_SR1_IRQ10 = (10U << 8U) | 3U, /**< Trigger CCU40 peripheral. *
+ 433:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 434:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 435:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR2_IRQ11              = (11U << 8U) | 0U, /**< Trigger CCU40 peripheral. *
+ 436:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 437:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR2_IRQ11              = (11U << 8U) | 1U, /**< Trigger CCU40 peripheral. *
+ 438:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 439:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR2_IRQ11               = (11U << 8U) | 2U, /**< Trigger CCU40 peripheral. *
+ 440:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 441:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR2_OR_USIC1_SR2_IRQ11 = (11U << 8U) | 3U, /**< Trigger CCU40 peripheral. *
+ 442:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 443:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 444:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR3_IRQ12              = (12U << 8U) | 0U, /**< Trigger CCU40 peripheral. *
+ 445:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 446:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR3_IRQ12              = (12U << 8U) | 1U, /**< Trigger CCU40 peripheral. *
+ 447:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 448:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR3_IRQ12               = (12U << 8U) | 2U, /**< Trigger CCU40 peripheral. *
+ 449:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 450:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR3_OR_USIC1_SR3_IRQ12 = (12U << 8U) | 3U, /**< Trigger CCU40 peripheral. *
+ 451:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 452:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 453:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR4_IRQ13              = (13U << 8U) | 0U, /**< Trigger CCU40 peripheral. *
+ 454:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 455:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR4_IRQ13              = (13U << 8U) | 1U, /**< Trigger CCU40 peripheral. *
+ 456:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 457:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 458:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR1_IRQ13              = (13U << 8U) | 2U, /**< Trigger CCU40 peripheral. *
+ 459:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 460:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 461:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR4_OR_USIC1_SR4_IRQ13 = (13U << 8U) | 3U, /**< Trigger CCU40 peripheral. *
+ 462:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 463:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 464:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR5_IRQ14              = (14U << 8U) | 0U, /**< Trigger CCU40 peripheral. *
+ 465:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 466:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC1_SR5_IRQ14              = (14U << 8U) | 1U, /**< Trigger CCU40 peripheral. *
+ 467:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 468:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0)
+ 469:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR0_IRQ14             = (14U << 8U) | 2U, /**< Trigger CCU40 peripheral. *
+ 470:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 471:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(USIC1)
+ 472:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR5_OR_USIC1_SR5_IRQ14 = (14U << 8U) | 3U, /**< Trigger CCU40 peripheral. *
+ 473:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 474:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 475:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_C0SR0_IRQ15              = (15U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 476:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR0_IRQ15                = (15U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 477:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0)
+ 478:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR1_IRQ15               = (15U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 479:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 480:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_C0SR0_OR_USIC0_SR0_IRQ15 = (15U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 481:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 482:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_C0SR1_IRQ16              = (16U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 483:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR1_IRQ16                = (16U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 484:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR2_IRQ16                = (16U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 485:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_C0SR1_OR_USIC0_SR1_IRQ16 = (16U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 486:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 487:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G0SR0_IRQ17              = (17U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 488:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR2_IRQ17                = (17U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 489:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 490:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR0_IRQ17                 = (17U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 491:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 492:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G0SR0_OR_USIC0_SR2_IRQ17 = (17U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 493:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 494:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G0SR1_IRQ18              = (18U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 495:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR3_IRQ18                = (18U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 496:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 497:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR1_IRQ18                 = (18U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 498:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 499:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G0SR1_OR_USIC0_SR3_IRQ18 = (18U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 500:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 501:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G1SR0_IRQ19              = (19U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 502:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR4_IRQ19                = (19U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 503:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 504:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR2_IRQ19                 = (19U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 505:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 506:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G1SR0_OR_USIC0_SR4_IRQ19 = (19U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 507:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 508:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G1SR1_IRQ20              = (20U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 509:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR5_IRQ20                = (20U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 510:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CAN)
+ 511:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CAN0_SR4_IRQ20                 = (20U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 512:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 513:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_VADC0_G1SR1_OR_USIC0_SR5_IRQ20 = (20U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 514:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 515:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR0_IRQ21                = (21U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 516:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 517:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU41_SR0_IRQ21                = (21U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 518:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 519:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR0_IRQ21                = (21U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 520:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 521:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR0_OR_CCU41_SR0_IRQ21   = (21U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 522:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 523:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 524:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR1_IRQ22                = (22U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 525:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 526:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU41_SR1_IRQ22                = (22U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 527:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 528:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR1_IRQ22                = (22U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 529:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 530:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR0_OR_CCU41_SR0_IRQ22   = (22U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 531:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 532:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 533:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR2_IRQ23                = (23U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 534:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 535:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU41_SR2_IRQ23                = (23U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 536:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 537:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR2_IRQ23                = (23U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 538:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 539:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR2_OR_CCU41_SR2_IRQ23   = (23U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 540:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 541:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 542:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR3_IRQ24                = (24U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 543:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 544:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU41_SR3_IRQ24                = (24U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 545:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 546:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR3_IRQ24                = (24U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 547:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU41)
+ 548:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR3_OR_CCU41_SR3_IRQ24   = (24U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 549:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 550:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 551:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 552:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR0_IRQ25                = (25U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 553:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 554:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU81)
+ 555:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU81_SR0_IRQ25                = (25U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 556:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 557:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR4_IRQ25                = (25U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 558:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80) && defined(CCU81)
+ 559:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR0_OR_CCU81_SR0_IRQ25   = (25U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 560:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 561:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 562:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80)
+ 563:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR1_IRQ26                = (26U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 564:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 565:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU81)
+ 566:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU81_SR1_IRQ26                = (26U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 567:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 568:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_USIC0_SR5_IRQ26                = (26U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 569:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(CCU80) && defined(CCU81)
+ 570:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU80_SR1_OR_CCU81_SR1_IRQ26   = (26U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 571:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 572:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 573:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0)
+ 574:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR0_IRQ27               = (27U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 575:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 576:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF1)
+ 577:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF1_SR0_IRQ27               = (27U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 578:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 579:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR3_IRQ27                = (27U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 580:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0) && defined(POSIF1)
+ 581:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR0_OR_POSIF1_SR0_IRQ27 = (27U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 582:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 583:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 584:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0)
+ 585:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR1_IRQ28               = (28U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 586:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 587:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF1)
+ 588:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF1_SR1_IRQ28               = (28U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 589:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 590:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR0_IRQ28                 = (28U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 591:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(POSIF0) && defined(POSIF1)
+ 592:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_POSIF0_SR1_OR_POSIF1_SR1_IRQ28 = (28U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 593:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 594:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 595:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS0)
+ 596:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS0_SR0_IRQ29               = (29U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 597:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 598:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR1_IRQ29                = (29U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 599:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR1_IRQ29                 = (29U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 600:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS0)
+ 601:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS0_SR0_OR_CCU40_SR1_IRQ29  = (29U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 602:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 603:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 604:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS1)
+ 605:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS1_SR0_IRQ30               = (30U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 606:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 607:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR2_IRQ30                = (30U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 608:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR2_IRQ30                 = (30U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 609:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(LEDTS1)
+ 610:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_LEDTS0_SR0_OR_CCU40_SR1_IRQ30  = (30U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 611:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 612:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 613:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(BCCU0)
+ 614:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_BCCU0_SR0_IRQ31                = (31U << 8U) | 0U, /**< Trigger CCU40 peripheral.
+ 615:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 616:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_CCU40_SR3_IRQ31                = (31U << 8U) | 1U, /**< Trigger CCU40 peripheral.
+ 617:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_ERU0_SR3_IRQ31                 = (31U << 8U) | 2U, /**< Trigger CCU40 peripheral.
+ 618:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if defined(BCCU0)
+ 619:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_IRQCTRL_BCCU0_SR0_OR_CCU40_SR3_IRQ31   = (31U << 8U) | 3U, /**< Trigger CCU40 peripheral.
+ 620:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 621:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_IRQCTRL_t;
+ 622:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif /* XMC_SERIES = XMC14 */
+ 623:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 624:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 625:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**************************************************************************************************
+ 626:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * DATA STRUCTURES
+ 627:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+ 628:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 629:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines a data structure for initializing the data of the supply voltage monitoring block.
+ 630:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Supply voltage monitoring block consists of 2 detectors namely External voltage detector (VDEL)
+ 631:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  detector (BDE) in the EVR that are used to monitor the VDDP. \a VDEL detector compares the supp
+ 632:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  pre-warning threshold voltage.
+ 633:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Use type \a XMC_SCU_SUPPLYMONITOR_t for accessing these structure parameters.
+ 634:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 635:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef struct XMC_SCU_SUPPLYMONITOR
+ 636:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 637:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint32_t ext_supply_threshold;   /**<  External supply range (VDEL Range Select).\n
+ 638:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                          \b Range:\n
+ 639:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                          00B sets threshold value to 2.25V, 01B sets threshold valu
+ 640:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                          10B sets threshold value to 4.4V */
+ 641:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint32_t ext_supply_monitor_speed; /**<  Speed of the voltage monitor(VDEL Timing Setting).\n
+ 642:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                            \b Range: \n
+ 643:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                            00B sets monitor speed typ 1�s - slowest response time
+ 644:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                            speed typ 500n,  10B sets monitor speed typ 250n, 11B se
+ 645:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                            with no delay - fastest response time. */
+ 646:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   bool     enable_prewarning_int;    /**< Configure pre-warning interrupt generation.\n
+ 647:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                           \b Range: \a true to enable the interrupt.*/
+ 648:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   bool     enable_vdrop_int;         /**< Configure VDROP interrupt generation. \n
+ 649:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                           \b Range: \a true to enable the interrupt.*/
+ 650:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   bool     enable_vclip_int;         /**< Configure VCLIP interrupt .
+ 651:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                           \b Range: \a true to enable the interrupt.*/
+ 652:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   bool     enable_at_init;           /**< Whether the monitor has to be enabled (VDEL unit Enable)
+ 653:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                           after initialization. \n
+ 654:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                           \b Range: \a true to enable after initialization.*/
+ 655:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_SUPPLYMONITOR_t;
+ 656:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 657:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 658:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines a data structure for initializing the data of the clock functional block.
+ 659:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Clock functional block configures clock dividers, peripheral and RTC clock source by configurin
+ 660:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  bits in \a CLKCR clock control register.
+ 661:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Use type \a XMC_SCU_CLOCK_CONFIG_t for accessing these structure parameters.
+ 662:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 663:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef struct XMC_SCU_CLOCK_CONFIG
+ 664:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 665:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 666:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint16_t fdiv; /**<  Fractional clock divider (FDIV). \b Range: 0 to 1023. */
+ 667:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #else
+ 668:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint8_t fdiv; /**<  Fractional clock divider (FDIV). \b Range: 0 to 255. */
+ 669:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 670:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint8_t idiv; /**<  Integer clock divider (IDIV). \b Range: 0 to 255. */
+ 671:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #if (UC_SERIES == XMC14)
+ 672:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_DCLKSRC_t dclk_src; /**< DCLK clock source selection. @Note: Only available in XMC1
+ 673:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCHP_MODE_t oschp_mode; /**< OSCHP mode. @Note: Only available in XMC1400 series *
+ 674:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_OSCLP_MODE_t osclp_mode; /**< OSCLP mode. @Note: Only available in XMC1400 series *
+ 675:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 676:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_PCLKSRC_t pclk_src; /**<  Source of PCLK Clock */
+ 677:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   XMC_SCU_CLOCK_RTCCLKSRC_t rtc_src; /**<  Source of RTC Clock */
+ 678:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_CONFIG_t;
+ 679:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 680:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 681:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Defines the data structure for initializing the deep sleep mode.
+ 682:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  During deep sleep mode peripheral clock is disabled and flash is powered down.
+ 683:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *  Use type \a XMC_SCU_CLOCK_DEEP_SLEEP_t for accessing these structure parameters.
+ 684:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 685:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** typedef struct XMC_SCU_CLOCK_DEEP_SLEEP
+ 686:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 687:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   bool     flash_power_down;   /**< Whether the device flash memory has to be powered down
+ 688:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                     during deep sleep mode.\n
+ 689:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                     \b Range: Set true to disable flash in deep sleep mode.*/
+ 690:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   uint32_t clock_gating_mask; /**< Configures mask value of clocks to be gated during deep sleep.\n
+ 691:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                     \b Range: Use type @ref XMC_SCU_PERIPHERAL_CLOCK_t to get the b
+ 692:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                     of the peripheral clocks. Multiple peripherals can be combined 
+ 693:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****                                     using the \a OR operation.*/
+ 694:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** } XMC_SCU_CLOCK_DEEP_SLEEP_t;
+ 695:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 696:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**************************************************************************************************
+ 697:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * API PROTOTYPES
+ 698:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **************************************************************************************************
+ 699:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 700:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #ifdef __cplusplus
+ 701:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** extern "C" {
+ 702:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** #endif
+ 703:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 704:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 705:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 706:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 707:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_CLOCK_SetMCLKFrequency(uint32_t freq_khz);
+ 708:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 709:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 710:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 711:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 712:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_CLOCK_ScaleMCLKFrequency(uint32_t idiv, uint32_t fdiv);
+ 713:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 714:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 715:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 716:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 717:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 718:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 719:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Locks access to protected bit fields of the SCU.\n\n
+ 720:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The bit protection scheme prevents changing selected register bits by unauthorized code.
+ 721:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Bit protection scheme is enabled by writing 000000C3H to \a PASSWD register. By writing
+ 722:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * this value, the API is setting the \a MODE bit field to bit protection enabled state.\n
+ 723:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * List of Protected Register Bit Fields are mentioned below. \n
+ 724:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * <table>
+ 725:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> \a Register    </td> <td>\a Bit fields                  </td></tr>
+ 726:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CLKCR      </td> <td> FDIV, IDIV, PCLKSEL, RTCLKSEL </td></tr>
+ 727:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CGATSET0   </td> <td> All bits                      </td></tr>
+ 728:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CGATCLR0   </td> <td> All bits                      </td></tr>
+ 729:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_ANAOFFSET  </td> <td> ADJL_OFFSET                   </td></tr>
+ 730:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> VADC0_ACCPROT0 </td> <td> All bits                      </td></tr>
+ 731:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> VADC0_ACCPROT1 </td> <td> All bits                      </td></tr>
+ 732:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * </table>
+ 733:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 734:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 735:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_UnlockProtectedBits() \n\n\n
+ 736:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 737:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_LockProtectedBits(void);
+ 738:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 739:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 740:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 741:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 742:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 743:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 744:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Unlocks access to protected bit fields of the SCU.\n\n
+ 745:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The bit protection scheme prevents changing selected register bits by unauthorized code.
+ 746:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Bit protection scheme can be temporarily(for 32 MCLK cycles) disabled by writing 000000C0H to \a
+ 747:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * By writing this value, the API is setting the \a MODE bit field to bit protection disabled state
+ 748:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * waits for the protection to be disabled after changing the \a MODE.\n
+ 749:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * User can change the values of the protected bit fields within 32 MCLK cycles. After 32 MCLK cycl
+ 750:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * be enabled automatically.
+ 751:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * List of Protected Register Bit Fields are mentioned below. \n
+ 752:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * <table>
+ 753:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> \a Register    </td> <td>\a Bit fields                  </td></tr>
+ 754:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CLKCR      </td> <td> FDIV, IDIV, PCLKSEL, RTCLKSEL </td></tr>
+ 755:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CGATSET0   </td> <td> All bits                      </td></tr>
+ 756:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_CGATCLR0   </td> <td> All bits                      </td></tr>
+ 757:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> SCU_ANAOFFSET  </td> <td> ADJL_OFFSET                   </td></tr>
+ 758:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> VADC0_ACCPROT0 </td> <td> All bits                      </td></tr>
+ 759:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *   <tr><td> VADC0_ACCPROT1 </td> <td> All bits                      </td></tr>
+ 760:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * </table>
+ 761:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 762:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 763:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_LockProtectedBits() \n\n\n
+ 764:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 765:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_UnlockProtectedBits(void);
+ 766:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 767:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 768:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 769:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param obj   Pointer to data structure consisting voltage monitoring block configuration.\n
+ 770:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *               \b Range: Use type @ref XMC_SCU_SUPPLYMONITOR_t for detailed description of struct
+ 771:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 772:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 773:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 774:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 775:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Initializes power supply monitoring unit.\n\n
+ 776:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Supply voltage monitoring block consist of 2 detectors namely External voltage detector (VDEL) a
+ 777:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * detector (BDE) in the EVR that are used to monitor the VDDP. \a VDEL detector compares the suppl
+ 778:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * pre-warning threshold voltage \a ext_supply_threshold. The threshold level is programmable via r
+ 779:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * if enabled via \a enable_prewarning_int, will be triggered if a level below this threshold is de
+ 780:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * in SRRAW register bit is set. Similarly interrupts can be enabled for the events of VCLIP and pr
+ 781:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \a enable_vclip_int and \a enable_prewarning_int.  The handlers for these interrupts have to be 
+ 782:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * the API XMC_SCU_INTERRUPT_SetEventHandler().
+ 783:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 784:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_INTERRUPT_SetEventHandler()\n\n\n
+ 785:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 786:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_SupplyMonitorInit(const XMC_SCU_SUPPLYMONITOR_t *obj);
+ 787:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 788:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 789:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param limit Kelvin degree temperature lower compare limit in range [233,388]
+ 790:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return XMC_SCU_STATUS_t status of limit installation
+ 791:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 792:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 793:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Set lower temperature compare limit. 
+ 794:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * A low temperature interrupt (SCU_IRQ1) is triggered if Tchip < limit and the event and interrupt
+ 795:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Alternatively XMC_SCU_LowTemperature() can be used to check the status.
+ 796:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 797:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_LowTemperature()\n\n\n
+ 798:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 799:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **/
+ 800:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** XMC_SCU_STATUS_t XMC_SCU_SetTempLowLimit(uint32_t limit);
+ 801:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 802:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 803:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param limit Kelvin degree temperature higher compare limit in range [233,388]
+ 804:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return XMC_SCU_STATUS_t status of limit installation
+ 805:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 806:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 807:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Set higher temperature compare limit. 
+ 808:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * A high temperature interrupt (SCU_IRQ1) is triggered if Tchip > limit and the event and interrup
+ 809:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Alternatively XMC_SCU_HighTemperature() can be used to check the status.
+ 810:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 811:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_HighTemperature()\n\n\n
+ 812:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 813:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  **/
+ 814:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** XMC_SCU_STATUS_t XMC_SCU_SetTempHighLimit(uint32_t limit);
+ 815:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 816:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 817:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 818:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param lower_temp  Lower threshold value for the die temperature.\n
+ 819:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          \b Range: 0 to 65535(16 bit unsigned value).
+ 820:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param upper_temp  Upper threshold value for the die temperature.\n
+ 821:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          \b Range: 0 to 65535(16 bit unsigned value).
+ 822:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 823:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 824:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 825:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 826:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Configures upper and lower thresholds of die temperature as raw digital values into temperature 
+ 827:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API configures \a ANATSEIH and \a ANATSEIL registers for upper and lower die temperature thr
+ 828:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * respectively.\n
+ 829:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * It is recommended to use following steps:\n
+ 830:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Call \a XMC_SCU_StopTempMeasurement to stop temperature measurement if it was started previous
+ 831:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Call \a XMC_SCU_SetRawTempLimits with desired lower and upper temperature threshold limit valu
+ 832:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Finally call \a XMC_SCU_StartTempMeasurement to start temperature measurement.\n
+ 833:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 834:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 835:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StopTempMeasurement(), XMC_SCU_StartTempMeasurement() \n\n\n
+ 836:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 837:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 838:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_SetRawTempLimits(const uint32_t lower_temp, const uint32_t upper_temp);
+ 839:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 840:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** // /* API to program temperature limits in centigrade into temperature sensor unit */ // need to im
+ 841:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** // void XMC_SCU_SetTempLimits(const uint32_t lower_temp, const uint32_t upper_temp);
+ 842:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 843:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 844:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return XMC_SCU_STATUS_t   Status of starting the temperature measurement.\n
+ 845:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *                  \b Range: Use type @ref XMC_SCU_STATUS_t to identify the result.\n
+ 846:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *                  XMC_SCU_STATUS_OK- Temperature measurement started successfully.\n
+ 847:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *                  Always returns the above status.
+ 848:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 849:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 850:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Starts die temperature measurement using internal temperature sensor.\n\n
+ 851:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API, enables die temperature measurement and waits for about 10000 cycles until
+ 852:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * temperature measurement result is available on \a SCU_ANALOG->ANATSEMON bit fields.\n
+ 853:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * It is recommended to use following steps:\n
+ 854:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Call \a XMC_SCU_StopTempMeasurement to stop temperature measurement if it was started previous
+ 855:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Call \a XMC_SCU_SetRawTempLimits with desired lower and upper temperature threshold limit valu
+ 856:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Call \a XMC_SCU_StartTempMeasurement to start temperature measurement.\n
+ 857:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * - Read die temperature value using \a XMC_SCU_GetTemperature API.\n
+ 858:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 859:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StopTempMeasurement(), XMC_SCU_SetRawTempLimits(), XMC_SCU_GetTemperature() \n\n\n
+ 860:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 861:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_StartTempMeasurement(void);
+ 862:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 863:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 864:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 865:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 866:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 867:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Stops the die temperature measurement.\n\n
+ 868:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Die temperature measurement is stopped by disabling the sensor using \a TSE_EN bit of
+ 869:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \a ANATSECTRL register.
+ 870:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 871:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StartTempMeasurement(), XMC_SCU_SetRawTempLimits(), XMC_SCU_GetTemperature() \n\n\n
+ 872:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 873:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** void XMC_SCU_StopTempMeasurement(void);
+ 874:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 875:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 876:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 877:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return bool  Result of checking whether the die temperature is more than the upper threshold.\n
+ 878:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *            \b Range: \a false if temperature is below the upper threshold. \a true if temperatur
+ 879:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *            has exceeded the upper threshold configured in \a ANATSEIH register.
+ 880:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 881:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 882:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Check if the temperature has exceeded the upper threshold value.\n\n
+ 883:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API checks for \a TSE_HIGH bit (TSE Compare High Temperature Event Status bit) of \a SRRAW r
+ 884:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The bit will be set when the \a TSE_MON value in \a ANATSEMON register exceeds the value of
+ 885:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \a TSE_IH value in \a ANATSEIH register.
+ 886:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 887:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StartTempMeasurement(), XMC_SCU_SetRawTempLimits(), XMC_SCU_GetTemperature(), XMC_SCU_Lo
+ 888:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 889:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** bool XMC_SCU_HighTemperature(void);
+ 890:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 891:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 892:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 893:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return bool  Result of checking whether the die temperature is less than the lower threshold.\n
+ 894:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *            \b Range: \a false if temperature is higher than the lower threshold. \a true if temp
+ 895:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *            has dropped below the lower threshold configured in \a ANATSEIL register.
+ 896:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 897:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 898:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Check if the temperature has dropped below the lower threshold value.\n\n
+ 899:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API checks for \a TSE_LOW bit (TSE Compare Low Temperature Event Status bit) of \a SRRAW reg
+ 900:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The bit will be set when the \a TSE_MON value in \a ANATSEMON register drops below the value of
+ 901:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \a TSE_IL value in \a ANATSEIL register.
+ 902:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 903:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StartTempMeasurement(), XMC_SCU_SetRawTempLimits(), XMC_SCU_GetTemperature(), XMC_SCU_Hi
+ 904:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 905:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** bool XMC_SCU_LowTemperature(void);
+ 906:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 907:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 908:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return uint32_t  Raw die temperature value. \b Range: 16 bit value.
+ 909:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 910:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 911:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Provides the raw die temperature value.\n\n
+ 912:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API reads temperature measurement result from \a SCU_ANALOG->ANATSEMON bit fields.
+ 913:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 914:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StartTempMeasurement() \n\n\n
+ 915:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 916:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** uint32_t XMC_SCU_GetTemperature(void);
+ 917:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 918:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 919:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return uint32_t  Calculate die temperature value. \b Range: 16 bit value.
+ 920:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 921:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 922:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Calculates the die temperature value using ROM function.\n\n
+ 923:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 924:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_StartTempMeasurement() \n\n\n
+ 925:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 926:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** uint32_t XMC_SCU_CalcTemperature(void);
+ 927:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 928:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 929:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 930:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return
+ 931:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 932:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** __STATIC_INLINE bool XMC_SCU_IsTempMeasurementDone(void)
+ 933:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 934:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   return ((SCU_INTERRUPT->SRRAW & SCU_INTERRUPT_SRRAW_TSE_DONE_Msk) != 0U);
+ 935:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** }
+ 936:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** 
+ 937:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 938:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 939:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 940:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 941:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Trigger device master reset.\n\n
+ 942:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API triggers master reset by setting the \a MRSTEN bit of \a RSTCON register.
+ 943:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * It also internally triggers system reset. Almost all the logics of the device are affected by th
+ 944:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 945:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_RESET_EnableResetRequest() \n\n\n
+ 946:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 947:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** __STATIC_INLINE void XMC_SCU_RESET_AssertMasterReset(void)
+ 948:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 949:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   SCU_RESET->RSTCON |= SCU_RESET_RSTCON_MRSTEN_Msk;
+ 950:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** }
+ 951:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** /**
+ 952:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 953:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @param request  Reset source to trigger the device reset.\n
+ 954:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          \b Range: Use type @ref XMC_SCU_SYSTEM_RESET_REQUEST_t to identify the reset source.\n
+ 955:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          XMC_SCU_RESET_REQUEST_FLASH_ECC_ERROR- Reset when flash memory double bit error is dete
+ 956:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          XMC_SCU_RESET_REQUEST_CLOCK_LOSS- Reset when loss of clock is detected.\n
+ 957:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          XMC_SCU_RESET_REQUEST_SRAM_PARITY_ERROR- Reset when SRAM parity error is detected.\n
+ 958:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *          XMC_SCU_RESET_REQUEST_USIC_SRAM_PARITY_ERROR- Reset when USIC0 SRAM parity error is det
+ 959:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 960:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * @return None
+ 961:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  *
+ 962:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Description</b><br>
+ 963:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Configures trigger for system reset from the selected source.\n\n
+ 964:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * The API configures the reset source specific bit in the \a RSTCON register.
+ 965:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * Multiple reset sources can be combined using \a OR operation. By enabling
+ 966:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * the reset using this API will not trigger the reset. The reset will happen when
+ 967:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * the configured source event is detected.
+ 968:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * \par<b>Related APIs:</b><BR>
+ 969:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  * XMC_SCU_RESET_AssertMasterReset() \n\n\n
+ 970:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****  */
+ 971:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** __STATIC_INLINE void XMC_SCU_RESET_EnableResetRequest(uint32_t request)
+ 972:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h **** {
+ 973:C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/XMCLib/inc\xmc1_scu.h ****   SCU_RESET->RSTCON |= request;
+  78              	 .loc 3 973 0
+  79 0018 0722     	 mov r2,#7
+  80 001a D968     	 ldr r1,[r3,#12]
+  81 001c 0A43     	 orr r2,r1
+  82 001e DA60     	 str r2,[r3,#12]
+  83              	.LBE19:
+  84              	.LBE18:
+ 104:../PMSM_FOC/MCUInit/clock.c **** 
+  85              	 .loc 1 104 0
+  86 0020 FFF7FEFF 	 bl XMC_SCU_CLOCK_Init
+  87              	.LVL1:
+  88              	 .loc 1 106 0
+  89 0024 08BD     	 pop {r3,pc}
+  90              	.L3:
+  91 0026 C046     	 .align 2
+  92              	.L2:
+  93 0028 00040140 	 .word 1073808384
+  94 002c 00000000 	 .word g_mcu_reset_status
+  95 0030 00000000 	 .word .LANCHOR0
+  96              	 .cfi_endproc
+  97              	.LFE48:
+  99              	 .comm g_mcu_reset_status,4,4
+ 100              	 .global clock_config
+ 101              	 .section .data.clock_config,"aw",%progbits
+ 102              	 .align 2
+ 103              	 .set .LANCHOR0,.+0
+ 106              	clock_config:
+ 107 0000 00       	 .space 1
+ 108 0001 01       	 .byte 1
+ 109 0002 0000     	 .space 2
+ 110 0004 00000100 	 .word 65536
+ 111 0008 00000000 	 .word 0
+ 112              	 .text
+ 113              	.Letext0:
+ 114              	 .file 4 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 115              	 .file 5 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 116              	 .file 6 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 117              	 .file 7 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 clock.c
+    {standard input}:18     .text.Reset_Clock_Init:00000000 $t
+    {standard input}:23     .text.Reset_Clock_Init:00000000 Reset_Clock_Init
+    {standard input}:93     .text.Reset_Clock_Init:00000028 $d
+                            *COM*:00000004 g_mcu_reset_status
+    {standard input}:106    .data.clock_config:00000000 clock_config
+    {standard input}:102    .data.clock_config:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_SCU_CLOCK_Init

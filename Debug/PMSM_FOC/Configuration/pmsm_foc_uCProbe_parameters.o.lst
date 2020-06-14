@@ -1,0 +1,556 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pmsm_foc_uCProbe_parameters.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.MotorControl_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global MotorControl_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	MotorControl_Init:
+  24              	.LFB201:
+  25              	 .file 1 "../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c"
+   1:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /**
+   2:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @file pmsm_foc_uCProbe_parameters.c
+   3:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @date 2015-12-16
+   4:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+   5:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @cond
+   6:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  **************************************************************************************************
+   7:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * PMSM FOC Motor Control Library
+   8:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+   9:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * All rights reserved.
+  11:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  12:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * following conditions are met:
+  14:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  15:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * disclaimer.
+  17:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  18:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * disclaimer in the documentation and/or other materials provided with the distribution.
+  20:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  21:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * products derived from this software without specific prior written permission.
+  23:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  24:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  32:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * Infineon Technologies AG dave@infineon.com).
+  34:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  **************************************************************************************************
+  35:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  36:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @file pmsm_foc_uCProbe_parameters.c
+  37:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @date 17 Dec, 2015
+  38:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @version 1.0.0
+  39:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  40:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @brief ACMP low level driver API prototype definition for XMC1 <br>
+  41:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  42:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * <b>Detailed description of file</b> <br>
+  43:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * APIs provided in this file mainly cover the following functionality:
+  44:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * ---- Filter, Hysterisis, Output inversion
+  45:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  46:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * History
+  47:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  48:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * 17 Dec 2015 Version 1.0.0 <br>:
+  49:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *      Initial version
+  50:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * @endcond
+  51:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  *
+  52:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  */
+  53:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  54:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /**************************************************************************************************
+  55:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * HEADER FILES
+  56:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  **************************************************************************************************
+  57:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  58:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include <XMC1300.h>
+  59:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "..\PMSM_FOC\ControlModules\pmsm_foc_functions.h"
+  60:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "..\PMSM_FOC\MCUInit\adc.h"
+  61:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "..\PMSM_FOC\MIDSys\pmsm_foc_current_threeshunt.h"
+  62:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "pmsm_foc_uCProbe_parameters.h"
+  63:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "pmsm_foc_user_mcuhwconfig.h"
+  64:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #include "pmsm_foc_user_parameter.h"
+  65:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  66:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /**************************************************************************************************
+  67:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * GLOBAL DATA
+  68:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  **************************************************************************************************
+  69:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  70:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /* Global variables: */
+  71:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern ADCType ADC; /* ADC results, trigger positions. */
+  72:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** MotorControlType Motor; /* Motor control information */
+  73:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern CurrentType Current; /* Motor current and current space vector. */
+  74:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern Car2PolType Car2Polar;
+  75:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  76:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern TripType Trip; /* For trip / over-current detection, and protection. */
+  77:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern StallType Stall; /* For motor startup lock / fail / stall detection, and protection. */
+  78:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern HallType Hall;
+  79:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** extern SVMType SVM; /* SVM information, such as sector 0 ~ 5 (A ~ F) in SVM space vector hexagon. *
+  80:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /* extern PLL_EstimatorType PLL_Estimator; */
+  81:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /* extern PI_Coefs_Type PI_PLL;          // PLL rotor speed PI controller. */
+  82:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  83:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** FOCInputType FOCInput; /* Parameters input for FOC LIB. */
+  84:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** FOCOutputType FOCOutput; /* Output for FOC LIB. */
+  85:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  86:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  87:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /**************************************************************************************************
+  88:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  * API IMPLEMENTATION
+  89:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****  **************************************************************************************************
+  90:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /*###* Init for motor control ####
+  91:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 	 * ---------------------------*/
+  92:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** void MotorControl_Init (void)
+  93:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** {
+  26              	 .loc 1 93 0
+  27              	 .cfi_startproc
+  28              	.LBB4:
+  29              	.LBB5:
+  94:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  95:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  96:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.State = BRAKE_BOOTSTRAP;/*
+  97:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                  * First brake the motor before motor startup.
+  98:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                  * Charge gate driver bootstrap capacitors (if any).
+  99:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                  */
+ 100:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 101:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Rotation_Dir = DIRECTION_INC; /* Motor rotation direction - rotor angle increasing. */
+ 102:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 103:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 	Variables_Init ();								/* Init variables. */
+ 104:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 	Get_Current_Bias();
+ 105:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 106:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** } /* End of MotorControl_Init () */
+ 107:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 108:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 109:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** /* Init variables */
+ 110:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 111:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** void Variables_Init (void)
+ 112:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** {
+ 113:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Mode_Flag = MOTOR_TRANSITION;				// Motor in transition mode.
+ 114:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 115:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.L_METPLL = L_OMEGALI;						// Motor inductance per phase
+  30              	 .loc 1 115 0
+  31 0000 1A21     	 mov r1,#26
+  32              	.LBE5:
+  33              	.LBE4:
+  93:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  34              	 .loc 1 93 0
+  35 0002 08B5     	 push {r3,lr}
+  36              	 .cfi_def_cfa_offset 8
+  37              	 .cfi_offset 3,-8
+  38              	 .cfi_offset 14,-4
+  96:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                  * First brake the motor before motor startup.
+  39              	 .loc 1 96 0
+  40 0004 1C4B     	 ldr r3,.L2
+  41 0006 0222     	 mov r2,#2
+  42              	.LBB11:
+  43              	.LBB6:
+  44              	 .loc 1 115 0
+  45 0008 1960     	 str r1,[r3]
+ 116:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                      //Using L_OMEGALI instead of Motor.L_METPLL in multiplication 
+ 117:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 118:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Counter = 0;								// Init counters.
+ 119:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Counter = 0;
+ 120:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Alignment_Counter = 0;
+ 121:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Non_RealTime_Counter = 1;
+  46              	 .loc 1 121 0
+  47 000a 1939     	 sub r1,r1,#25
+  48 000c 9964     	 str r1,[r3,#72]
+ 122:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.UART_Counter = 0;
+ 123:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.UART_Debug_Counter = 0;
+ 124:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 125:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Speed = DEFAULT_SPEED_STARTUP;			// Init for V/f ramp-up.
+ 126:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.FG_Speed = Motor.Speed;					// Motor speed for Frequency Generation (FG) only.
+ 127:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ref_Speed = 0;
+ 128:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Speed_by_POT_PWM = SPEED_LOW_LIMIT;
+  49              	 .loc 1 128 0
+  50 000e 9121     	 mov r1,#145
+  51 0010 8900     	 lsl r1,r1,#2
+  52 0012 D960     	 str r1,[r3,#12]
+ 129:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 130:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Up_Rate = RAMPUP_RATE << RATIO_S;	// Slower ramp up and ramp down for S-curve profile.
+  53              	 .loc 1 130 0
+  54 0014 1021     	 mov r1,#16
+  55 0016 5962     	 str r1,[r3,#36]
+ 131:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Dn_Rate = RAMPDOWN_RATE << (RATIO_S - 1);
+  56              	 .loc 1 131 0
+  57 0018 0839     	 sub r1,r1,#8
+  58              	.LBE6:
+  59              	.LBE11:
+  96:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                  * First brake the motor before motor startup.
+  60              	 .loc 1 96 0
+  61 001a DA62     	 str r2,[r3,#44]
+  62              	.LBB12:
+  63              	.LBB7:
+  64              	 .loc 1 131 0
+  65 001c 9962     	 str r1,[r3,#40]
+  66              	.LBE7:
+  67              	.LBE12:
+ 101:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  68              	 .loc 1 101 0
+  69 001e 0022     	 mov r2,#0
+  70              	.LBB13:
+  71              	.LBB8:
+ 132:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 133:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 134:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_DutyCycle = 0;
+ 135:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Speed_Raw = 0;
+ 136:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Freq = 20;							// Init PWM frequency 20Hz.
+  72              	 .loc 1 136 0
+  73 0020 0C31     	 add r1,r1,#12
+  74 0022 1962     	 str r1,[r3,#32]
+ 137:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 138:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.SVM_Angle16 = (DEGREE_X >> 16U);		// Init Vref angle θ = X°.
+  75              	 .loc 1 138 0
+  76 0024 8021     	 mov r1,#128
+ 125:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.FG_Speed = Motor.Speed;					// Motor speed for Frequency Generation (FG) only.
+  77              	 .loc 1 125 0
+  78 0026 9A60     	 str r2,[r3,#8]
+ 127:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Speed_by_POT_PWM = SPEED_LOW_LIMIT;
+  79              	 .loc 1 127 0
+  80 0028 5A60     	 str r2,[r3,#4]
+ 134:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Speed_Raw = 0;
+  81              	 .loc 1 134 0
+  82 002a 5A61     	 str r2,[r3,#20]
+ 135:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Freq = 20;							// Init PWM frequency 20Hz.
+  83              	 .loc 1 135 0
+  84 002c DA61     	 str r2,[r3,#28]
+  85              	.LBE8:
+  86              	.LBE13:
+ 101:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  87              	 .loc 1 101 0
+  88 002e 1A86     	 strh r2,[r3,#48]
+  89              	.LBB14:
+  90              	.LBB9:
+ 113:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+  91              	 .loc 1 113 0
+  92 0030 5A86     	 strh r2,[r3,#50]
+ 118:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Counter = 0;
+  93              	 .loc 1 118 0
+  94 0032 DA63     	 str r2,[r3,#60]
+ 119:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Alignment_Counter = 0;
+  95              	 .loc 1 119 0
+  96 0034 1A64     	 str r2,[r3,#64]
+ 120:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Non_RealTime_Counter = 1;
+  97              	 .loc 1 120 0
+  98 0036 5A64     	 str r2,[r3,#68]
+ 122:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.UART_Debug_Counter = 0;
+  99              	 .loc 1 122 0
+ 100 0038 1A65     	 str r2,[r3,#80]
+ 123:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 101              	 .loc 1 123 0
+ 102 003a 5A65     	 str r2,[r3,#84]
+ 126:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ref_Speed = 0;
+ 103              	 .loc 1 126 0
+ 104 003c 9A65     	 str r2,[r3,#88]
+ 105              	 .loc 1 138 0
+ 106 003e 0F4B     	 ldr r3,.L2+4
+ 107 0040 C901     	 lsl r1,r1,#7
+ 108 0042 5983     	 strh r1,[r3,#26]
+ 139:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 140:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31 = Car2Polar.SVM_Angle16 << 16U;
+ 109              	 .loc 1 140 0
+ 110 0044 8021     	 mov r1,#128
+ 111 0046 C905     	 lsl r1,r1,#23
+ 141:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31_Previous = Car2Polar.Vref_AngleQ31;
+ 142:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 143:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 144:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.SVM_Vref16 = 0;
+ 112              	 .loc 1 144 0
+ 113 0048 1A83     	 strh r2,[r3,#24]
+ 140:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31_Previous = Car2Polar.Vref_AngleQ31;
+ 114              	 .loc 1 140 0
+ 115 004a D960     	 str r1,[r3,#12]
+ 141:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31_Previous = Car2Polar.Vref_AngleQ31;
+ 116              	 .loc 1 141 0
+ 117 004c 5961     	 str r1,[r3,#20]
+ 145:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 146:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADCTrig_Point = (uint32_t)(PERIOD_REG) >> 1;			// For ADC trigger for 2or3-shunt current sens
+ 118              	 .loc 1 146 0
+ 119 004e 0C4B     	 ldr r3,.L2+8
+ 120 0050 0C49     	 ldr r1,.L2+12
+ 121              	.LBE9:
+ 122              	.LBE14:
+ 106:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 123              	 .loc 1 106 0
+ 124              	 
+ 125              	.LBB15:
+ 126              	.LBB10:
+ 127              	 .loc 1 146 0
+ 128 0052 9983     	 strh r1,[r3,#28]
+ 147:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 148:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_DCLink = ADC_DCLINK_IDEAL;
+ 129              	 .loc 1 148 0
+ 130 0054 B421     	 mov r1,#180
+ 131 0056 0901     	 lsl r1,r1,#4
+ 132 0058 5962     	 str r1,[r3,#36]
+ 149:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 150:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #if(CURRENT_SENSING == USER_SINGLE_SHUNT_CONV)
+ 151:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC3Trig_Point = 0;           /* For ADC 3 trigger, of single-shunt current sensing.*/
+ 152:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC4Trig_Point = 0;           /* For ADC 4 trigger. */
+ 153:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 154:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_Result1 = 0;
+ 155:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_Result2 = 0;
+ 156:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_ResultTz1 = 0;
+ 157:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_ResultTz2 = 0;
+ 158:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_Result3 = 0;
+ 159:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.ADC_Result4 = 0;
+ 160:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   SVM.SVM_Flag = SVM_USE_PZV;        /* Init using SVM with Pseudo Zero Vectors (PZV). */
+ 161:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   ADC.Result_Flag = RESULTS_ADCTZ12;
+ 162:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** #endif
+ 163:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 164:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   /* Init motor phase currents */
+ 165:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Current.I_U = 0;
+ 133              	 .loc 1 165 0
+ 134 005a 0B4B     	 ldr r3,.L2+16
+ 135 005c 1A60     	 str r2,[r3]
+ 166:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Current.I_V = 0;
+ 136              	 .loc 1 166 0
+ 137 005e 5A60     	 str r2,[r3,#4]
+ 167:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Current.I_W = 0;
+ 138              	 .loc 1 167 0
+ 139 0060 9A60     	 str r2,[r3,#8]
+ 168:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 169:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   SVM.PreviousSectorNo = 0;						// Init SVM sector No.
+ 140              	 .loc 1 169 0
+ 141 0062 0A4B     	 ldr r3,.L2+20
+ 142 0064 5A80     	 strh r2,[r3,#2]
+ 170:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 171:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   SVM.Flag_3or2_ADC = USE_ALL_ADC;				// Init to use all (e.g.: three) ADC samplings for current re
+ 143              	 .loc 1 171 0
+ 144 0066 9A80     	 strh r2,[r3,#4]
+ 172:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 173:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   PI_controller_Init();							// Init parameters (Kp / Ki, limits) of PI controllers.
+ 145              	 .loc 1 173 0
+ 146 0068 FFF7FEFF 	 bl PI_controller_Init
+ 147              	.LVL0:
+ 174:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 175:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 176:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   FOC_SystemParameters_Init_OnceOnly();
+ 148              	 .loc 1 176 0
+ 149 006c FFF7FEFF 	 bl FOC_SystemParameters_Init_OnceOnly
+ 150              	.LVL1:
+ 151              	.LBE10:
+ 152              	.LBE15:
+ 104:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 153              	 .loc 1 104 0
+ 154 0070 FFF7FEFF 	 bl Get_Current_Bias
+ 155              	.LVL2:
+ 106:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 156              	 .loc 1 106 0
+ 157 0074 08BD     	 pop {r3,pc}
+ 158              	.L3:
+ 159 0076 C046     	 .align 2
+ 160              	.L2:
+ 161 0078 00000000 	 .word Motor
+ 162 007c 00000000 	 .word Car2Polar
+ 163 0080 00000000 	 .word ADC
+ 164 0084 55080000 	 .word 2133
+ 165 0088 00000000 	 .word Current
+ 166 008c 00000000 	 .word SVM
+ 167              	 .cfi_endproc
+ 168              	.LFE201:
+ 170              	 .section .text.Variables_Init,"ax",%progbits
+ 171              	 .align 2
+ 172              	 .global Variables_Init
+ 173              	 .code 16
+ 174              	 .thumb_func
+ 176              	Variables_Init:
+ 177              	.LFB202:
+ 112:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Mode_Flag = MOTOR_TRANSITION;				// Motor in transition mode.
+ 178              	 .loc 1 112 0
+ 179              	 .cfi_startproc
+ 115:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                      //Using L_OMEGALI instead of Motor.L_METPLL in multiplication 
+ 180              	 .loc 1 115 0
+ 181 0000 1A21     	 mov r1,#26
+ 113:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 182              	 .loc 1 113 0
+ 183 0002 1A4A     	 ldr r2,.L5
+ 112:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Mode_Flag = MOTOR_TRANSITION;				// Motor in transition mode.
+ 184              	 .loc 1 112 0
+ 185 0004 08B5     	 push {r3,lr}
+ 186              	 .cfi_def_cfa_offset 8
+ 187              	 .cfi_offset 3,-8
+ 188              	 .cfi_offset 14,-4
+ 115:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****                                      //Using L_OMEGALI instead of Motor.L_METPLL in multiplication 
+ 189              	 .loc 1 115 0
+ 190 0006 1160     	 str r1,[r2]
+ 121:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.UART_Counter = 0;
+ 191              	 .loc 1 121 0
+ 192 0008 1939     	 sub r1,r1,#25
+ 193 000a 9164     	 str r1,[r2,#72]
+ 128:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 194              	 .loc 1 128 0
+ 195 000c 9121     	 mov r1,#145
+ 196 000e 8900     	 lsl r1,r1,#2
+ 197 0010 D160     	 str r1,[r2,#12]
+ 130:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Dn_Rate = RAMPDOWN_RATE << (RATIO_S - 1);
+ 198              	 .loc 1 130 0
+ 199 0012 1021     	 mov r1,#16
+ 200 0014 5162     	 str r1,[r2,#36]
+ 131:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 201              	 .loc 1 131 0
+ 202 0016 0839     	 sub r1,r1,#8
+ 113:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 203              	 .loc 1 113 0
+ 204 0018 0023     	 mov r3,#0
+ 131:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 205              	 .loc 1 131 0
+ 206 001a 9162     	 str r1,[r2,#40]
+ 136:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 207              	 .loc 1 136 0
+ 208 001c 0C31     	 add r1,r1,#12
+ 209 001e 1162     	 str r1,[r2,#32]
+ 138:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 210              	 .loc 1 138 0
+ 211 0020 8021     	 mov r1,#128
+ 125:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.FG_Speed = Motor.Speed;					// Motor speed for Frequency Generation (FG) only.
+ 212              	 .loc 1 125 0
+ 213 0022 9360     	 str r3,[r2,#8]
+ 127:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Speed_by_POT_PWM = SPEED_LOW_LIMIT;
+ 214              	 .loc 1 127 0
+ 215 0024 5360     	 str r3,[r2,#4]
+ 134:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Speed_Raw = 0;
+ 216              	 .loc 1 134 0
+ 217 0026 5361     	 str r3,[r2,#20]
+ 135:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.PWM_Freq = 20;							// Init PWM frequency 20Hz.
+ 218              	 .loc 1 135 0
+ 219 0028 D361     	 str r3,[r2,#28]
+ 113:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 220              	 .loc 1 113 0
+ 221 002a 5386     	 strh r3,[r2,#50]
+ 118:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ramp_Counter = 0;
+ 222              	 .loc 1 118 0
+ 223 002c D363     	 str r3,[r2,#60]
+ 119:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Alignment_Counter = 0;
+ 224              	 .loc 1 119 0
+ 225 002e 1364     	 str r3,[r2,#64]
+ 120:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Non_RealTime_Counter = 1;
+ 226              	 .loc 1 120 0
+ 227 0030 5364     	 str r3,[r2,#68]
+ 122:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.UART_Debug_Counter = 0;
+ 228              	 .loc 1 122 0
+ 229 0032 1365     	 str r3,[r2,#80]
+ 123:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 230              	 .loc 1 123 0
+ 231 0034 5365     	 str r3,[r2,#84]
+ 126:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Motor.Ref_Speed = 0;
+ 232              	 .loc 1 126 0
+ 233 0036 9365     	 str r3,[r2,#88]
+ 138:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 234              	 .loc 1 138 0
+ 235 0038 0D4A     	 ldr r2,.L5+4
+ 236 003a C901     	 lsl r1,r1,#7
+ 237 003c 5183     	 strh r1,[r2,#26]
+ 140:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31_Previous = Car2Polar.Vref_AngleQ31;
+ 238              	 .loc 1 140 0
+ 239 003e 8021     	 mov r1,#128
+ 240 0040 C905     	 lsl r1,r1,#23
+ 144:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 241              	 .loc 1 144 0
+ 242 0042 1383     	 strh r3,[r2,#24]
+ 140:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Car2Polar.Vref_AngleQ31_Previous = Car2Polar.Vref_AngleQ31;
+ 243              	 .loc 1 140 0
+ 244 0044 D160     	 str r1,[r2,#12]
+ 141:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 245              	 .loc 1 141 0
+ 246 0046 5161     	 str r1,[r2,#20]
+ 146:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 247              	 .loc 1 146 0
+ 248 0048 0A4A     	 ldr r2,.L5+8
+ 249 004a 0B49     	 ldr r1,.L5+12
+ 177:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 178:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** }	// End of Variables_Init ()
+ 250              	 .loc 1 178 0
+ 251              	 
+ 146:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 252              	 .loc 1 146 0
+ 253 004c 9183     	 strh r1,[r2,#28]
+ 148:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 254              	 .loc 1 148 0
+ 255 004e B421     	 mov r1,#180
+ 256 0050 0901     	 lsl r1,r1,#4
+ 257 0052 5162     	 str r1,[r2,#36]
+ 165:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Current.I_V = 0;
+ 258              	 .loc 1 165 0
+ 259 0054 094A     	 ldr r2,.L5+16
+ 260 0056 1360     	 str r3,[r2]
+ 166:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c ****   Current.I_W = 0;
+ 261              	 .loc 1 166 0
+ 262 0058 5360     	 str r3,[r2,#4]
+ 167:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 263              	 .loc 1 167 0
+ 264 005a 9360     	 str r3,[r2,#8]
+ 169:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 265              	 .loc 1 169 0
+ 266 005c 084A     	 ldr r2,.L5+20
+ 267 005e 5380     	 strh r3,[r2,#2]
+ 171:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 268              	 .loc 1 171 0
+ 269 0060 9380     	 strh r3,[r2,#4]
+ 173:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 270              	 .loc 1 173 0
+ 271 0062 FFF7FEFF 	 bl PI_controller_Init
+ 272              	.LVL3:
+ 176:../PMSM_FOC/Configuration/pmsm_foc_uCProbe_parameters.c **** 
+ 273              	 .loc 1 176 0
+ 274 0066 FFF7FEFF 	 bl FOC_SystemParameters_Init_OnceOnly
+ 275              	.LVL4:
+ 276              	 .loc 1 178 0
+ 277 006a 08BD     	 pop {r3,pc}
+ 278              	.L6:
+ 279              	 .align 2
+ 280              	.L5:
+ 281 006c 00000000 	 .word Motor
+ 282 0070 00000000 	 .word Car2Polar
+ 283 0074 00000000 	 .word ADC
+ 284 0078 55080000 	 .word 2133
+ 285 007c 00000000 	 .word Current
+ 286 0080 00000000 	 .word SVM
+ 287              	 .cfi_endproc
+ 288              	.LFE202:
+ 290              	 .comm FOCOutput,48,4
+ 291              	 .comm FOCInput,124,4
+ 292              	 .comm Motor,100,4
+ 293              	 .text
+ 294              	.Letext0:
+ 295              	 .file 2 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 296              	 .file 3 "c:\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 297              	 .file 4 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\mcuinit\\adc.h"
+ 298              	 .file 5 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\midsys\\pmsm_foc_pwmsvm.h"
+ 299              	 .file 6 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\controlmodules\\pmsm_foc_functions.h"
+ 300              	 .file 7 "C:/Users/choeoliv/Desktop/IFKOR FOC DRIVE/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 301              	 .file 8 "c:\\users\\choeoliv\\desktop\\ifkor foc drive\\pmsm_foc\\midsys\\pmsm_foc_current_threeshunt.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pmsm_foc_uCProbe_parameters.c
+    {standard input}:18     .text.MotorControl_Init:00000000 $t
+    {standard input}:23     .text.MotorControl_Init:00000000 MotorControl_Init
+    {standard input}:161    .text.MotorControl_Init:00000078 $d
+                            *COM*:00000064 Motor
+    {standard input}:171    .text.Variables_Init:00000000 $t
+    {standard input}:176    .text.Variables_Init:00000000 Variables_Init
+    {standard input}:281    .text.Variables_Init:0000006c $d
+                            *COM*:00000030 FOCOutput
+                            *COM*:0000007c FOCInput
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+PI_controller_Init
+FOC_SystemParameters_Init_OnceOnly
+Get_Current_Bias
+Car2Polar
+ADC
+Current
+SVM
